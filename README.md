@@ -51,15 +51,6 @@ client.setConfig({
 });
 ```
 
-To point at a different server (e.g. staging or self-hosted), override the `baseUrl`:
-
-```typescript
-client.setConfig({
-  baseUrl: 'https://staging.proiect.ro',
-  auth: () => process.env.PROIECTRO_API_KEY,
-});
-```
-
 ## Workspace
 
 Most API operations are scoped to a workspace (tenant). Define it once and spread it into every call:
