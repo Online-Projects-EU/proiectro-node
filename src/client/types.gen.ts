@@ -745,6 +745,76 @@ export type OutputCustomerPortalPayments = {
 };
 
 /**
+ * OutputCustomerPortalAssets
+ *
+ * Customer portal assets view with customer locations and nested assets
+ */
+export type OutputCustomerPortalAssets = {
+    /**
+     * Customer Locations
+     */
+    customer_locations: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Unlocated Assets
+     */
+    unlocated_assets: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Org
+     */
+    org: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * OutputCustomerPortalAssetDetail
+ *
+ * Customer portal asset detail view
+ */
+export type OutputCustomerPortalAssetDetail = {
+    /**
+     * Asset
+     */
+    asset: {
+        [key: string]: unknown;
+    };
+    /**
+     * Org
+     */
+    org: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * OutputCustomerPortalAssetTickets
+ *
+ * Customer portal asset linked tickets (ESRs with reported_asset)
+ */
+export type OutputCustomerPortalAssetTickets = {
+    /**
+     * Tickets
+     */
+    tickets: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Asset Id
+     */
+    asset_id: string;
+    /**
+     * Org
+     */
+    org: {
+        [key: string]: unknown;
+    };
+};
+
+/**
  * TeamFilterSchema
  *
  * Filter schema for team members with comprehensive search and attribute filtering.
@@ -13930,6 +14000,14 @@ export type OutputInternalSupportRequest = {
      */
     work_item_hierarchy_id?: string | null;
     /**
+     * Reported Asset Name
+     */
+    reported_asset_name?: string | null;
+    /**
+     * Root Cause Asset Name
+     */
+    root_cause_asset_name?: string | null;
+    /**
      * Request Type
      */
     request_type: string;
@@ -14058,6 +14136,14 @@ export type OutputExternalSupportRequest = {
      */
     work_item_hierarchy_id?: string | null;
     /**
+     * Reported Asset Name
+     */
+    reported_asset_name?: string | null;
+    /**
+     * Root Cause Asset Name
+     */
+    root_cause_asset_name?: string | null;
+    /**
      * Request Type
      */
     request_type: string;
@@ -14161,6 +14247,10 @@ export type EditExternalSupportRequest = {
      * Request Severity
      */
     request_severity: string;
+    /**
+     * Root Cause Asset
+     */
+    root_cause_asset?: string | null;
 };
 
 /**
@@ -14289,6 +14379,10 @@ export type EditInternalSupportRequest = {
      * Request Severity
      */
     request_severity: string;
+    /**
+     * Root Cause Asset
+     */
+    root_cause_asset?: string | null;
 };
 
 /**
@@ -15520,6 +15614,14 @@ export type OutputOperationalItem = {
      */
     customer_name?: string | null;
     /**
+     * Customer Asset Id
+     */
+    customer_asset_id?: string | null;
+    /**
+     * Customer Asset Name
+     */
+    customer_asset_name?: string | null;
+    /**
      * Customer Visible
      */
     customer_visible?: boolean;
@@ -15716,6 +15818,10 @@ export type EditOperationalItem = {
      */
     customer?: string | null;
     /**
+     * Customer Asset
+     */
+    customer_asset?: string | null;
+    /**
      * Priority
      */
     priority?: 'critical' | 'high' | 'normal' | 'low';
@@ -15749,6 +15855,10 @@ export type AddOperationalItem = {
      * Customer
      */
     customer?: string | null;
+    /**
+     * Customer Asset
+     */
+    customer_asset?: string | null;
     /**
      * Priority
      */
@@ -15981,6 +16091,582 @@ export type EditComment = {
      * Content
      */
     content: string;
+};
+
+/**
+ * OutputAssetCategories
+ */
+export type OutputAssetCategories = {
+    /**
+     * Asset Categories
+     */
+    asset_categories: Array<OutputAssetCategory>;
+};
+
+/**
+ * OutputAssetCategory
+ */
+export type OutputAssetCategory = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+};
+
+/**
+ * AddAssetCategory
+ */
+export type AddAssetCategory = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+};
+
+/**
+ * EditAssetCategory
+ */
+export type EditAssetCategory = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+};
+
+/**
+ * OutputCustomerLocation
+ */
+export type OutputCustomerLocation = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Customer Id
+     */
+    customer_id: string;
+    /**
+     * Customer Name
+     */
+    customer_name: string;
+    /**
+     * Customer First Letter
+     */
+    customer_first_letter: string;
+    /**
+     * Location Id
+     */
+    location_id: string;
+    /**
+     * Location Path
+     */
+    location_path: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+    /**
+     * Asset Count
+     */
+    asset_count?: number;
+};
+
+/**
+ * OutputCustomerLocations
+ */
+export type OutputCustomerLocations = {
+    /**
+     * Customer Locations
+     */
+    customer_locations: Array<OutputCustomerLocation>;
+};
+
+/**
+ * AddCustomerLocation
+ */
+export type AddCustomerLocation = {
+    /**
+     * Customer
+     */
+    customer: string;
+    /**
+     * Location
+     */
+    location: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+};
+
+/**
+ * EditCustomerLocation
+ */
+export type EditCustomerLocation = {
+    /**
+     * Location
+     */
+    location: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+};
+
+/**
+ * OutputCustomerAsset
+ */
+export type OutputCustomerAsset = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Customer Id
+     */
+    customer_id: string;
+    /**
+     * Customer Name
+     */
+    customer_name: string;
+    /**
+     * Category Id
+     */
+    category_id: string;
+    /**
+     * Category Name
+     */
+    category_name: string;
+    /**
+     * Customer Location Id
+     */
+    customer_location_id?: string | null;
+    /**
+     * Customer Location Name
+     */
+    customer_location_name?: string | null;
+    /**
+     * Project Id
+     */
+    project_id?: string | null;
+    /**
+     * Project Name
+     */
+    project_name?: string | null;
+    /**
+     * Product Id
+     */
+    product_id?: string | null;
+    /**
+     * Product Name
+     */
+    product_name?: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Serial Number Or Uri
+     */
+    serial_number_or_uri?: string | null;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Status Display
+     */
+    status_display: string;
+    /**
+     * Installation Date
+     */
+    installation_date?: string | null;
+    /**
+     * Warranty Expiration
+     */
+    warranty_expiration?: string | null;
+    /**
+     * Is Customer Visible
+     */
+    is_customer_visible: boolean;
+    /**
+     * Is Parent
+     */
+    is_parent: boolean;
+    /**
+     * Depth
+     */
+    depth: number;
+    /**
+     * Hierarchy Id
+     */
+    hierarchy_id?: string | null;
+    /**
+     * Parent Id
+     */
+    parent_id?: string | null;
+    /**
+     * Parent Name
+     */
+    parent_name?: string | null;
+};
+
+/**
+ * OutputCustomerAssets
+ */
+export type OutputCustomerAssets = {
+    /**
+     * Customer Assets
+     */
+    customer_assets: Array<OutputCustomerAsset>;
+};
+
+/**
+ * AddCustomerAsset
+ */
+export type AddCustomerAsset = {
+    /**
+     * Customer
+     */
+    customer: string;
+    /**
+     * Category
+     */
+    category: string;
+    /**
+     * Customer Location
+     */
+    customer_location?: string | null;
+    /**
+     * Project
+     */
+    project?: string | null;
+    /**
+     * Product
+     */
+    product?: string | null;
+    /**
+     * Parent
+     */
+    parent?: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Serial Number Or Uri
+     */
+    serial_number_or_uri?: string | null;
+    /**
+     * Status
+     */
+    status?: string;
+    /**
+     * Installation Date
+     */
+    installation_date?: string | null;
+    /**
+     * Warranty Expiration
+     */
+    warranty_expiration?: string | null;
+    /**
+     * Is Customer Visible
+     */
+    is_customer_visible?: boolean;
+};
+
+/**
+ * EditCustomerAsset
+ */
+export type EditCustomerAsset = {
+    /**
+     * Category
+     */
+    category: string;
+    /**
+     * Customer Location
+     */
+    customer_location?: string | null;
+    /**
+     * Project
+     */
+    project?: string | null;
+    /**
+     * Product
+     */
+    product?: string | null;
+    /**
+     * Parent
+     */
+    parent?: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Serial Number Or Uri
+     */
+    serial_number_or_uri?: string | null;
+    /**
+     * Status
+     */
+    status?: string;
+    /**
+     * Installation Date
+     */
+    installation_date?: string | null;
+    /**
+     * Warranty Expiration
+     */
+    warranty_expiration?: string | null;
+    /**
+     * Is Customer Visible
+     */
+    is_customer_visible?: boolean;
+};
+
+/**
+ * CustomerAssetTicketItem
+ *
+ * A support request linked to a customer asset
+ */
+export type CustomerAssetTicketItem = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Public Reference
+     */
+    public_reference: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Status Name
+     */
+    status_name: string;
+    /**
+     * Status Lifecycle
+     */
+    status_lifecycle: string;
+    /**
+     * Type Name
+     */
+    type_name: string;
+    /**
+     * Severity Name
+     */
+    severity_name: string;
+    /**
+     * Link Type
+     */
+    link_type: string;
+    /**
+     * Is External
+     */
+    is_external: boolean;
+    /**
+     * Updated Formatted
+     */
+    updated_formatted: string;
+    /**
+     * Customer Name
+     */
+    customer_name?: string | null;
+};
+
+/**
+ * OutputCustomerAssetTickets
+ *
+ * Tickets linked to a customer asset (both ISR and ESR)
+ */
+export type OutputCustomerAssetTickets = {
+    /**
+     * Tickets
+     */
+    tickets: Array<CustomerAssetTicketItem>;
+    /**
+     * Ticket Count
+     */
+    ticket_count: number;
+};
+
+/**
+ * OutputTenantLocations
+ */
+export type OutputTenantLocations = {
+    /**
+     * Root Id
+     */
+    root_id?: string | null;
+    /**
+     * Locations
+     */
+    locations: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * AddLocation
+ */
+export type AddLocation = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Parent
+     */
+    parent?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+};
+
+/**
+ * EditLocation
+ */
+export type EditLocation = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Parent
+     */
+    parent?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
 };
 
 /**
@@ -16277,6 +16963,10 @@ export type AddExternalSupportRequest = {
      * Description
      */
     description: string;
+    /**
+     * Reported Asset
+     */
+    reported_asset?: string | null;
 };
 
 /**
@@ -16302,9 +16992,37 @@ export type AddExternalSupportRequestForProject = {
      */
     description: string;
     /**
+     * Reported Asset
+     */
+    reported_asset?: string | null;
+    /**
      * Project Id
      */
     project_id: string;
+};
+
+/**
+ * PortalEditExternalSupportRequest
+ *
+ * Portal-safe schema — excludes root_cause_asset (internal-only field).
+ */
+export type PortalEditExternalSupportRequest = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Description
+     */
+    description: string;
+    /**
+     * Request Type
+     */
+    request_type: string;
+    /**
+     * Request Severity
+     */
+    request_severity: string;
 };
 
 /**
@@ -16353,6 +17071,10 @@ export type CreateBridge = {
      * Grant Support Use
      */
     grant_support_use?: boolean | null;
+    /**
+     * Grant Asset View
+     */
+    grant_asset_view?: boolean | null;
     /**
      * Invitation Message
      */
@@ -16738,6 +17460,10 @@ export type AcceptBridge = {
      * Grant Support Use
      */
     grant_support_use?: boolean | null;
+    /**
+     * Grant Asset View
+     */
+    grant_asset_view?: boolean | null;
 };
 
 /**
@@ -16782,6 +17508,10 @@ export type EditBridgeGrants = {
      * Grant Support Use
      */
     grant_support_use?: boolean | null;
+    /**
+     * Grant Asset View
+     */
+    grant_asset_view?: boolean | null;
 };
 
 /**
@@ -17202,6 +17932,106 @@ export type PartnerPortalPayments = {
      * Grant Label
      */
     grant_label?: string | null;
+};
+
+/**
+ * PartnerPortalAssetItem
+ *
+ * Single asset in partner portal
+ */
+export type PartnerPortalAssetItem = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Category Name
+     */
+    category_name: string;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Status Display
+     */
+    status_display: string;
+    /**
+     * Installation Date
+     */
+    installation_date?: string | null;
+    /**
+     * Warranty Expiration
+     */
+    warranty_expiration?: string | null;
+};
+
+/**
+ * PartnerPortalAssets
+ *
+ * Partner's assets visible through bridge, grouped by location
+ */
+export type PartnerPortalAssets = {
+    /**
+     * Bridge Id
+     */
+    bridge_id: string;
+    /**
+     * Locations
+     */
+    locations: Array<PartnerPortalLocationWithAssets>;
+    /**
+     * Unlocated Assets
+     */
+    unlocated_assets: Array<PartnerPortalAssetItem>;
+    /**
+     * Partner Tenant Name
+     */
+    partner_tenant_name: string;
+    /**
+     * Grant Given By Partner
+     */
+    grant_given_by_partner?: boolean;
+    /**
+     * Grant Label
+     */
+    grant_label?: string | null;
+};
+
+/**
+ * PartnerPortalLocationWithAssets
+ *
+ * Location with its assets for partner portal
+ */
+export type PartnerPortalLocationWithAssets = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Assets
+     */
+    assets: Array<PartnerPortalAssetItem>;
 };
 
 /**
@@ -17646,6 +18476,10 @@ export type AddPartnerSupportRequest = {
      * Product Id
      */
     product_id?: string | null;
+    /**
+     * Reported Asset
+     */
+    reported_asset?: string | null;
 };
 
 /**
@@ -22600,9 +23434,17 @@ export type MyWorkItem = {
      */
     tenant_path: string;
     /**
+     * Hierarchy Id
+     */
+    hierarchy_id?: string | null;
+    /**
      * Item Type Name
      */
     item_type_name?: string | null;
+    /**
+     * Item Type Behaviour
+     */
+    item_type_behaviour?: string | null;
     /**
      * Urgency Group
      */
@@ -22772,6 +23614,10 @@ export type MyBookingItem = {
      */
     tenant_path: string;
     /**
+     * Member Id
+     */
+    member_id: string;
+    /**
      * Schedule Group
      */
     schedule_group: string;
@@ -22863,6 +23709,10 @@ export type MyOperationalItem = {
      * Created At
      */
     created_at: string;
+    /**
+     * Stage Age Hours
+     */
+    stage_age_hours?: number;
 };
 
 /**
@@ -23449,6 +24299,118 @@ export type TeamPreviewPortalPaymentsResponses = {
 };
 
 export type TeamPreviewPortalPaymentsResponse = TeamPreviewPortalPaymentsResponses[keyof TeamPreviewPortalPaymentsResponses];
+
+export type TeamPreviewPortalAssetsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Org External Id
+         */
+        customer_org_external_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/portal/{customer_org_external_id}/assets';
+};
+
+export type TeamPreviewPortalAssetsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssets;
+};
+
+export type TeamPreviewPortalAssetsResponse = TeamPreviewPortalAssetsResponses[keyof TeamPreviewPortalAssetsResponses];
+
+export type TeamPreviewPortalAssetDetailData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Org External Id
+         */
+        customer_org_external_id: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/portal/{customer_org_external_id}/asset_detail/{asset_id}';
+};
+
+export type TeamPreviewPortalAssetDetailResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssetDetail;
+};
+
+export type TeamPreviewPortalAssetDetailResponse = TeamPreviewPortalAssetDetailResponses[keyof TeamPreviewPortalAssetDetailResponses];
+
+export type TeamPreviewPortalAssetTicketsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Org External Id
+         */
+        customer_org_external_id: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/portal/{customer_org_external_id}/asset_tickets/{asset_id}';
+};
+
+export type TeamPreviewPortalAssetTicketsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssetTickets;
+};
+
+export type TeamPreviewPortalAssetTicketsResponse = TeamPreviewPortalAssetTicketsResponses[keyof TeamPreviewPortalAssetTicketsResponses];
+
+export type TeamPreviewPortalAssetClosedTicketsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Org External Id
+         */
+        customer_org_external_id: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/portal/{customer_org_external_id}/asset_closed_tickets/{asset_id}';
+};
+
+export type TeamPreviewPortalAssetClosedTicketsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssetTickets;
+};
+
+export type TeamPreviewPortalAssetClosedTicketsResponse = TeamPreviewPortalAssetClosedTicketsResponses[keyof TeamPreviewPortalAssetClosedTicketsResponses];
 
 export type TenantTeamData = {
     body?: never;
@@ -42210,6 +43172,31 @@ export type ListTasksResponses = {
 
 export type ListTasksResponse = ListTasksResponses[keyof ListTasksResponses];
 
+export type ListAssetOperationalItemsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_asset_operational_items/{asset_id}';
+};
+
+export type ListAssetOperationalItemsResponses = {
+    /**
+     * OK
+     */
+    200: OutputOperationalItems;
+};
+
+export type ListAssetOperationalItemsResponse = ListAssetOperationalItemsResponses[keyof ListAssetOperationalItemsResponses];
+
 export type DeleteTaskData = {
     body?: never;
     path: {
@@ -42588,6 +43575,559 @@ export type EditSupportRequestCommentResponses = {
 
 export type EditSupportRequestCommentResponse = EditSupportRequestCommentResponses[keyof EditSupportRequestCommentResponses];
 
+export type ListAssetCategoriesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_asset_categories';
+};
+
+export type ListAssetCategoriesResponses = {
+    /**
+     * OK
+     */
+    200: OutputAssetCategories;
+};
+
+export type ListAssetCategoriesResponse = ListAssetCategoriesResponses[keyof ListAssetCategoriesResponses];
+
+export type AddAssetCategoryData = {
+    body: AddAssetCategory;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_asset_category';
+};
+
+export type AddAssetCategoryResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddAssetCategoryResponse = AddAssetCategoryResponses[keyof AddAssetCategoryResponses];
+
+export type EditAssetCategoryData = {
+    body: EditAssetCategory;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Category Id
+         */
+        category_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_asset_category/{category_id}';
+};
+
+export type EditAssetCategoryResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditAssetCategoryResponse = EditAssetCategoryResponses[keyof EditAssetCategoryResponses];
+
+export type DeleteAssetCategoryData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Category Id
+         */
+        category_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_asset_category/{category_id}';
+};
+
+export type DeleteAssetCategoryResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteAssetCategoryResponse = DeleteAssetCategoryResponses[keyof DeleteAssetCategoryResponses];
+
+export type ListCustomerLocationsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Org Id
+         */
+        org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_customer_locations/{org_id}';
+};
+
+export type ListCustomerLocationsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerLocations;
+};
+
+export type ListCustomerLocationsResponse = ListCustomerLocationsResponses[keyof ListCustomerLocationsResponses];
+
+export type AddCustomerLocationData = {
+    body: AddCustomerLocation;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_customer_location';
+};
+
+export type AddCustomerLocationResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddCustomerLocationResponse = AddCustomerLocationResponses[keyof AddCustomerLocationResponses];
+
+export type EditCustomerLocationData = {
+    body: EditCustomerLocation;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Location Id
+         */
+        customer_location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_customer_location/{customer_location_id}';
+};
+
+export type EditCustomerLocationResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditCustomerLocationResponse = EditCustomerLocationResponses[keyof EditCustomerLocationResponses];
+
+export type DeleteCustomerLocationData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Location Id
+         */
+        customer_location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_customer_location/{customer_location_id}';
+};
+
+export type DeleteCustomerLocationResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteCustomerLocationResponse = DeleteCustomerLocationResponses[keyof DeleteCustomerLocationResponses];
+
+export type LocationCustomerLocationsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/location_customer_locations/{location_id}';
+};
+
+export type LocationCustomerLocationsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerLocations;
+};
+
+export type LocationCustomerLocationsResponse = LocationCustomerLocationsResponses[keyof LocationCustomerLocationsResponses];
+
+export type ListCustomerLocationAssetsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Location Id
+         */
+        customer_location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_customer_location_assets/{customer_location_id}';
+};
+
+export type ListCustomerLocationAssetsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerAssets;
+};
+
+export type ListCustomerLocationAssetsResponse = ListCustomerLocationAssetsResponses[keyof ListCustomerLocationAssetsResponses];
+
+export type ListCustomerAssetsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Org Id
+         */
+        org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_customer_assets/{org_id}';
+};
+
+export type ListCustomerAssetsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerAssets;
+};
+
+export type ListCustomerAssetsResponse = ListCustomerAssetsResponses[keyof ListCustomerAssetsResponses];
+
+export type AddCustomerAssetData = {
+    body: AddCustomerAsset;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_customer_asset';
+};
+
+export type AddCustomerAssetResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddCustomerAssetResponse = AddCustomerAssetResponses[keyof AddCustomerAssetResponses];
+
+export type EditCustomerAssetData = {
+    body: EditCustomerAsset;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_customer_asset/{asset_id}';
+};
+
+export type EditCustomerAssetResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditCustomerAssetResponse = EditCustomerAssetResponses[keyof EditCustomerAssetResponses];
+
+export type DeleteCustomerAssetData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: {
+        /**
+         * Delete Descendants
+         */
+        delete_descendants?: boolean;
+        /**
+         * Reparent Id
+         */
+        reparent_id?: string;
+    };
+    url: '/api/v1/{tenant_path}/delete_customer_asset/{asset_id}';
+};
+
+export type DeleteCustomerAssetErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+};
+
+export type DeleteCustomerAssetError = DeleteCustomerAssetErrors[keyof DeleteCustomerAssetErrors];
+
+export type DeleteCustomerAssetResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteCustomerAssetResponse = DeleteCustomerAssetResponses[keyof DeleteCustomerAssetResponses];
+
+export type ListCustomerAssetChildrenData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_customer_asset_children/{asset_id}';
+};
+
+export type ListCustomerAssetChildrenResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerAssets;
+};
+
+export type ListCustomerAssetChildrenResponse = ListCustomerAssetChildrenResponses[keyof ListCustomerAssetChildrenResponses];
+
+export type ListCustomerAssetTicketsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/list_customer_asset_tickets/{asset_id}';
+};
+
+export type ListCustomerAssetTicketsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerAssetTickets;
+};
+
+export type ListCustomerAssetTicketsResponse = ListCustomerAssetTicketsResponses[keyof ListCustomerAssetTicketsResponses];
+
+export type TenantLocationsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/locations';
+};
+
+export type TenantLocationsResponses = {
+    /**
+     * OK
+     */
+    200: OutputTenantLocations;
+};
+
+export type TenantLocationsResponse = TenantLocationsResponses[keyof TenantLocationsResponses];
+
+export type AddLocationData = {
+    body: AddLocation;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_location';
+};
+
+export type AddLocationResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddLocationResponse = AddLocationResponses[keyof AddLocationResponses];
+
+export type EditLocationData = {
+    body: EditLocation;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_location/{location_id}';
+};
+
+export type EditLocationResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditLocationResponse = EditLocationResponses[keyof EditLocationResponses];
+
+export type ReorderLocationUpData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/move_location_up/{location_id}';
+};
+
+export type ReorderLocationUpResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type ReorderLocationUpResponse = ReorderLocationUpResponses[keyof ReorderLocationUpResponses];
+
+export type ReorderLocationDownData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/move_location_down/{location_id}';
+};
+
+export type ReorderLocationDownResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type ReorderLocationDownResponse = ReorderLocationDownResponses[keyof ReorderLocationDownResponses];
+
+export type DeleteLocationData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: {
+        /**
+         * Delete Descendants
+         */
+        delete_descendants?: boolean;
+        /**
+         * Reparent Id
+         */
+        reparent_id?: string;
+    };
+    url: '/api/v1/{tenant_path}/delete_location/{location_id}';
+};
+
+export type DeleteLocationResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteLocationResponse = DeleteLocationResponses[keyof DeleteLocationResponses];
+
 export type UserNotificationsData = {
     body?: never;
     path?: never;
@@ -42841,6 +44381,102 @@ export type PortalPaymentsChartResponses = {
 };
 
 export type PortalPaymentsChartResponse = PortalPaymentsChartResponses[keyof PortalPaymentsChartResponses];
+
+export type PortalAssetsData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/assets';
+};
+
+export type PortalAssetsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssets;
+};
+
+export type PortalAssetsResponse = PortalAssetsResponses[keyof PortalAssetsResponses];
+
+export type PortalAssetDetailData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/asset_detail/{asset_id}';
+};
+
+export type PortalAssetDetailResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssetDetail;
+};
+
+export type PortalAssetDetailResponse = PortalAssetDetailResponses[keyof PortalAssetDetailResponses];
+
+export type PortalAssetTicketsData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/asset_tickets/{asset_id}';
+};
+
+export type PortalAssetTicketsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssetTickets;
+};
+
+export type PortalAssetTicketsResponse = PortalAssetTicketsResponses[keyof PortalAssetTicketsResponses];
+
+export type PortalAssetClosedTicketsData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/asset_closed_tickets/{asset_id}';
+};
+
+export type PortalAssetClosedTicketsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerPortalAssetTickets;
+};
+
+export type PortalAssetClosedTicketsResponse = PortalAssetClosedTicketsResponses[keyof PortalAssetClosedTicketsResponses];
 
 export type PortalProjectProductsData = {
     body?: never;
@@ -43301,7 +44937,7 @@ export type PortalReplySupportRequestCommentResponses = {
 export type PortalReplySupportRequestCommentResponse = PortalReplySupportRequestCommentResponses[keyof PortalReplySupportRequestCommentResponses];
 
 export type PortalEditSupportRequestData = {
-    body: EditExternalSupportRequest;
+    body: PortalEditExternalSupportRequest;
     path: {
         /**
          * Customer Org Id
@@ -44293,6 +45929,40 @@ export type PartnerPortalPaymentsChartResponses = {
      */
     200: unknown;
 };
+
+export type PartnerPortalAssetsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/assets';
+};
+
+export type PartnerPortalAssetsErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+};
+
+export type PartnerPortalAssetsError = PartnerPortalAssetsErrors[keyof PartnerPortalAssetsErrors];
+
+export type PartnerPortalAssetsResponses = {
+    /**
+     * OK
+     */
+    200: PartnerPortalAssets;
+};
+
+export type PartnerPortalAssetsResponse = PartnerPortalAssetsResponses[keyof PartnerPortalAssetsResponses];
 
 export type PartnerPortalSupportRequestsData = {
     body?: never;
