@@ -12,7 +12,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Verify release tag matches package version
         run: |
@@ -23,9 +23,11 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/setup-node@v4
+      # Node 24 ships npm >= 11.5, which authenticates to npm through the
+      # workflow's OIDC identity (trusted publisher) — no registry token.
+      - uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci
@@ -35,5 +37,3 @@ jobs:
       - run: npm run build
 
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
