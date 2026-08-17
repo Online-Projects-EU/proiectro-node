@@ -1,7 +1,12 @@
 {
   "name": "proiectro",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Official TypeScript/JavaScript SDK for the Proiect.ro API",
+  "author": {
+    "name": "Proiect.ro",
+    "email": "contact@proiect.ro",
+    "url": "https://proiect.ro"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -23,7 +28,7 @@
   ],
   "sideEffects": false,
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "build": "tsup",
@@ -37,7 +42,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Online-Projects-EU/proiectro-node"
+    "url": "git+https://github.com/Online-Projects-EU/proiectro-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Online-Projects-EU/proiectro-node/issues"
   },
   "homepage": "https://proiect.ro",
   "keywords": [

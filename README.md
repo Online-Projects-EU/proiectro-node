@@ -10,91 +10,112 @@ Full type safety for every endpoint, request, and response.
 npm install proiectro
 ```
 
+Requires Node.js >= 20 (uses native `fetch`). Works with TypeScript >= 5.0 or plain JavaScript.
+
 ## Quick Start
 
 ```typescript
-import { client, tenantOrgs, addSubtenant } from 'proiectro';
+import { client, tenantOrgs } from 'proiectro';
 
 // Authenticate (baseUrl defaults to https://proiect.ro)
 client.setConfig({
   auth: () => 'your_api_key_here',
 });
 
-// Define your workspace
+// Every workspace-scoped call takes the workspace path
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
-// List customers
 const { data, error } = await tenantOrgs(workspace);
 
 if (data) {
-  console.log('Customers:', data);
+  console.log('Customers:', data.orgs);
 }
 ```
 
 ## Authentication
 
-Create an API key in your workspace under **Settings > API Keys**. The SDK sends it as a Bearer token automatically.
+Create an API key in your workspace under **Settings > API Keys**. The SDK sends it as a Bearer token on every request.
 
 ```typescript
 import { client } from 'proiectro';
 
 client.setConfig({
-  auth: () => 'your_api_key_here',
-});
-```
-
-The `auth` callback is called on every authenticated request. You can return the key from an environment variable, a secret manager, or any async source:
-
-```typescript
-client.setConfig({
   auth: () => process.env.PROIECTRO_API_KEY,
 });
 ```
 
-## Workspace
+The `auth` callback runs on each request, so the key can come from an environment variable, a secret manager, or any async source.
 
-Most API operations are scoped to a workspace (tenant). Define it once and spread it into every call:
+An API key carries the scope it was created with (read-only or full CRUD, restricted to a team if you chose one). A call outside that scope returns `403`.
+
+## Calling conventions
+
+Every operation is a function named after its `operationId` in camelCase, taking one options object:
+
+| Key | Contents |
+|---|---|
+| `path` | Path parameters. Nearly always includes `tenant_path` (your workspace); entity IDs go here too. |
+| `body` | The JSON request body for `POST` / `PATCH` / `PUT`. |
+| `query` | Query-string filters on list endpoints (`search`, `owner`, `status`, date ranges, tags/labels …). |
+
+Every call returns `{ data, error, request, response }`. `data` is typed to the operation's `200` schema; `error` is typed to its documented error responses.
 
 ```typescript
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
+// path only
 await tenantOrgs(workspace);
-await addSubtenant({ ...workspace, body: { name: 'Acme Corp' } });
-await listProjects(workspace);
+
+// path + body
+await addTag({ ...workspace, body: { name: 'VIP', color: '#ff0000' } });
+
+// path with an entity id + body
+await markPaymentPaid({
+  path: { tenant_path: 'my-workspace', payment_id: 'payment-uuid' },
+  body: { paid_date: '2026-03-15' },
+});
+
+// path + query
+await listProjects({ ...workspace, query: { search: 'rollout', owner: 'member-uuid' } });
 ```
 
-A few operations are user-scoped (notifications, invitations) and don't need a workspace path.
+IDs are the `external_id` strings the API returns; dates are ISO 8601 strings (`YYYY-MM-DD` for dates, full timestamps for datetimes).
 
 ## Usage Examples
 
 ### Customers
 
 ```typescript
-import {
-  tenantOrgs,
-  addSubtenant,
-  editSubtenant,
-  deleteSubtenant,
-} from 'proiectro';
+import { tenantOrgs, addSubtenant, editSubtenant, deleteSubtenant } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
 // List all customers
-const { data: customers } = await tenantOrgs(workspace);
+const { data } = await tenantOrgs(workspace);
 
-// Create a customer
-const { data: created } = await addSubtenant({
+// Create a customer under your workspace
+await addSubtenant({
   ...workspace,
   body: {
+    parent_id: 'workspace-org-uuid',
     name: 'Acme Corp',
-    parent_id: 'org-uuid',
+    timezone: 'Europe/Bucharest',
+    default_currency: 'EUR',
+    country: 'RO',
+    manager: 'member-uuid',
   },
 });
 
-// Update a customer
+// Update a customer (send every field — this is a full update, not a patch)
 await editSubtenant({
   path: { tenant_path: 'my-workspace', subtenant_id: 'customer-uuid' },
-  body: { name: 'Acme Corporation' },
+  body: {
+    name: 'Acme Corporation',
+    timezone: 'Europe/Bucharest',
+    default_currency: 'EUR',
+    country: 'RO',
+    manager: 'member-uuid',
+  },
 });
 
 // Delete a customer
@@ -103,15 +124,45 @@ await deleteSubtenant({
 });
 ```
 
+### Leads
+
+```typescript
+import { addLead, tenantAllLeads, updateLeadStatus, markLeadConverted } from 'proiectro';
+
+const workspace = { path: { tenant_path: 'my-workspace' } };
+
+// Capture an inbound lead
+const { data: lead } = await addLead({
+  ...workspace,
+  body: {
+    name: 'Jane Doe',
+    company_name: 'Acme Corp',
+    email: 'jane@acme.example',
+    source: 'web_form',
+  },
+});
+
+// List leads, filtered
+await tenantAllLeads({ ...workspace, query: { status: 'new', has_email: true } });
+
+// Move a lead through the pipeline. `updated_at` is the value you last read —
+// the API rejects the write if someone else changed the lead in between.
+await updateLeadStatus({
+  path: { tenant_path: 'my-workspace', lead_id: 'lead-uuid' },
+  body: { status: 'qualified', updated_at: '2026-03-15T10:00:00Z' },
+});
+
+// Convert it into a customer
+await markLeadConverted({
+  path: { tenant_path: 'my-workspace', lead_id: 'lead-uuid' },
+  body: { new_org_name: 'Acme Corp', updated_at: '2026-03-15T10:05:00Z' },
+});
+```
+
 ### Proposals
 
 ```typescript
-import {
-  addProposal,
-  editProposal,
-  changeProposalStage,
-  orgProposals,
-} from 'proiectro';
+import { addProposal, orgProposals, changeProposalStage } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
@@ -125,37 +176,34 @@ await addProposal({
   ...workspace,
   body: {
     name: 'Q1 Consulting',
-    parent_id: 'customer-uuid',
-    funnel_id: 'funnel-uuid',
+    description: 'Discovery and rollout support',
+    customer: 'customer-uuid',
+    owner: 'member-uuid',
+    manager: 'member-uuid',
+    sales_stage: 'funnel-stage-uuid',
+    proposal_currency: 'EUR',
+    wbsconfiguration: 'wbs-configuration-uuid',
   },
 });
 
-// Move a proposal to the next stage
+// Move a proposal to another funnel stage
 await changeProposalStage({
-  ...workspace,
-  body: {
-    proposal_id: 'proposal-uuid',
-    stage_id: 'next-stage-uuid',
-  },
+  path: { tenant_path: 'my-workspace', proposal_id: 'proposal-uuid', stage_id: 'next-stage-uuid' },
+  body: {},
 });
 ```
 
 ### Projects & Work Items
 
 ```typescript
-import {
-  listProjects,
-  projectWorkItems,
-  addWorkItem,
-  updateWorkItemStatus,
-} from 'proiectro';
+import { listProjects, projectWorkItems, addWorkItem, updateWorkItemStatus, addWorkItemComment } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
-// List all projects
-const { data: projects } = await listProjects(workspace);
+// List projects (all filters are optional)
+const { data: projects } = await listProjects({ ...workspace, query: { lifecycle_status: ['active'] } });
 
-// Get work items for a project
+// Work items of a project
 const { data: workItems } = await projectWorkItems({
   path: { tenant_path: 'my-workspace', project_id: 'project-uuid' },
 });
@@ -166,97 +214,106 @@ await addWorkItem({
   body: {
     name: 'Design mockups',
     project_id: 'project-uuid',
-    work_item_type_id: 'type-uuid',
+    work_item_type_id: 'work-item-type-uuid',
+    planned_start_date: '2026-03-01',
+    planned_finish_date: '2026-03-10',
   },
 });
 
-// Update work item status
+// Report progress, or finish it
 await updateWorkItemStatus({
+  path: { tenant_path: 'my-workspace', work_item_id: 'work-item-uuid' },
+  body: { percent_complete: 60 },
+});
+await updateWorkItemStatus({
+  path: { tenant_path: 'my-workspace', work_item_id: 'work-item-uuid' },
+  body: { finished_at: '2026-03-10T16:00:00Z' },
+});
+
+// Comment on it
+await addWorkItemComment({
   ...workspace,
-  body: {
-    work_item_id: 'work-item-uuid',
-    status: 'in_progress',
-  },
+  body: { work_item_id: 'work-item-uuid', content: 'Mockups approved by the customer.' },
 });
 ```
 
 ### Payments
 
 ```typescript
-import {
-  addPayment,
-  markPaymentPaid,
-} from 'proiectro';
+import { addPayment, markPaymentPaid } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
-// Create a payment
+// Add a payment to a proposal's payment schedule
 await addPayment({
   ...workspace,
   body: {
-    proposal_id: 'proposal-uuid',
-    amount: '5000.00',
-    currency: 'EUR',
+    payment_schedule_block_id: 'schedule-block-uuid',
+    name: 'Milestone 1',
     due_date: '2026-03-15',
+    amount: '5000.00',
   },
 });
 
-// Mark a payment as paid
+// Mark it paid
 await markPaymentPaid({
-  ...workspace,
-  body: { payment_id: 'payment-uuid' },
+  path: { tenant_path: 'my-workspace', payment_id: 'payment-uuid' },
+  body: { paid_date: '2026-03-14' },
 });
+```
+
+### Documents
+
+```typescript
+import { tenantDocumentTemplatesList, generateProposalDocument, tenantDocumentsList } from 'proiectro';
+
+const workspace = { path: { tenant_path: 'my-workspace' } };
+
+// Templates available in the workspace
+const { data: templates } = await tenantDocumentTemplatesList(workspace);
+
+// Generate a numbered document for a proposal
+await generateProposalDocument({
+  path: { tenant_path: 'my-workspace', proposal_id: 'proposal-uuid' },
+  body: { template_id: 'template-uuid' },
+});
+
+// Documents, filtered
+await tenantDocumentsList({ ...workspace, query: { org_id: 'customer-uuid' } });
 ```
 
 ### Tags
 
 ```typescript
-import {
-  tenantTags,
-  addTag,
-  tagOrg,
-  untagOrg,
-} from 'proiectro';
+import { tenantTags, addTag, tagOrg, untagOrg } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
-// List all tags
 const { data: tags } = await tenantTags(workspace);
 
-// Create a tag
-await addTag({
-  ...workspace,
-  body: { name: 'VIP', color: '#ff0000' },
-});
+await addTag({ ...workspace, body: { name: 'VIP', color: '#ff0000' } });
 
-// Tag a customer
-await tagOrg({
-  ...workspace,
-  body: { org_id: 'customer-uuid', tag_id: 'tag-uuid' },
-});
+// Tagging is addressed by path: (entity, tag)
+await tagOrg({ path: { tenant_path: 'my-workspace', org_id: 'customer-uuid', tag_id: 'tag-uuid' } });
+await untagOrg({ path: { tenant_path: 'my-workspace', org_id: 'customer-uuid', tag_id: 'tag-uuid' } });
 ```
 
 ### Support Requests
 
 ```typescript
-import {
-  addInternalSupportRequest,
-  mySupportRequests,
-} from 'proiectro';
+import { addInternalSupportRequest, mySupportRequests } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
-// List my support requests
 const { data: tickets } = await mySupportRequests(workspace);
 
-// Create a support request
 await addInternalSupportRequest({
   ...workspace,
   body: {
     title: 'Server configuration issue',
     description: 'Need help with DNS setup',
-    type_id: 'type-uuid',
-    severity_id: 'severity-uuid',
+    request_type: 'request-type-uuid',
+    request_severity: 'severity-uuid',
   },
 });
 ```
@@ -264,26 +321,51 @@ await addInternalSupportRequest({
 ### Team
 
 ```typescript
-import {
-  tenantTeam,
-  inviteToTeam,
-} from 'proiectro';
+import { tenantTeam, inviteToTeam } from 'proiectro';
 
 const workspace = { path: { tenant_path: 'my-workspace' } };
 
-// List team members
 const { data: team } = await tenantTeam(workspace);
 
-// Invite someone to the team
-await inviteToTeam({
-  ...workspace,
-  body: { email: 'colleague@example.com' },
-});
+await inviteToTeam({ ...workspace, body: { email: 'colleague@example.com' } });
 ```
 
-## Error Handling
+### Webhooks
 
-Every SDK function returns `{ data, error, request, response }`:
+Subscribe to platform events instead of polling:
+
+```typescript
+import { addWebhook, tenantWebhooks } from 'proiectro';
+
+const workspace = { path: { tenant_path: 'my-workspace' } };
+
+await addWebhook({
+  ...workspace,
+  body: {
+    name: 'CRM sync',
+    target_url: 'https://example.com/hooks/proiectro',
+    event_types: ['changeProposalStage', 'markPaymentPaid'],
+    is_active: true,
+    is_secure: true,
+  },
+});
+
+const { data: hooks } = await tenantWebhooks(workspace);
+```
+
+## Namespaces
+
+| Area | Namespaces |
+|---|---|
+| Sales | `leads`, `proposals`, `orgs`, `rfp`, `bridge` (partnerships), `partnerportal` |
+| Delivery | `projects`, `work`, `operations`, `comments`, `timers`, `booking`, `capacity`, `resources`, `holidays`, `calendar` |
+| Money | `costs`, `exchange`, `analytics`, `kpis` |
+| Support & assets | `support`, `assets`, `locations`, `custom_forms` |
+| Documents & files | `documents`, `files`, `cdn` |
+| Workspace | `tenant`, `team`, `rbac`, `tags`, `labels`, `notifications`, `feed`, `welcome`, `auth` |
+| Automation | `webhooks`, `automation`, `integrations`, `portal` |
+
+## Error Handling
 
 ```typescript
 const { data, error, response } = await tenantOrgs({
@@ -298,6 +380,14 @@ if (error) {
 }
 ```
 
+Validation failures come back as `422` with a field-level detail list; a permission or feature-entitlement problem is `403`; a missing entity is `404`; a conflict with the current state (a stage transition that is not allowed, a delete blocked by dependants) is `409`.
+
+To have the SDK throw instead of returning `error`, pass `throwOnError`:
+
+```typescript
+const { data } = await tenantOrgs({ path: { tenant_path: 'my-workspace' }, throwOnError: true });
+```
+
 ## Interceptors
 
 Add request/response interceptors for logging, retries, or custom headers:
@@ -305,13 +395,11 @@ Add request/response interceptors for logging, retries, or custom headers:
 ```typescript
 import { client } from 'proiectro';
 
-// Log all requests
 client.interceptors.request.use((request) => {
   console.log(`${request.method} ${request.url}`);
   return request;
 });
 
-// Log all responses
 client.interceptors.response.use((response) => {
   console.log(`${response.status} ${response.url}`);
   return response;
@@ -320,20 +408,19 @@ client.interceptors.response.use((response) => {
 
 ## TypeScript
 
-Every request and response is fully typed. Your editor will autocomplete path parameters, body fields, and response shapes:
+Every request and response is fully typed. Your editor autocompletes path parameters, body fields, query filters, and response shapes:
 
 ```typescript
-import type { OutputTenantInfo, AddSubtenantData } from 'proiectro';
+import type { OutputTenantInfo, AddSubtenantData, AddLeadData } from 'proiectro';
 ```
-
-## Requirements
-
-- Node.js >= 18 (uses native `fetch`)
-- TypeScript >= 5.0 (optional, works with plain JavaScript too)
 
 ## API Documentation
 
 Full API reference is available at [proiect.ro/api/v1/docs](https://proiect.ro/api/v1/docs).
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
