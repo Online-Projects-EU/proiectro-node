@@ -256,6 +256,18 @@ export type OutputTenantPortalSettings = {
      * Portal Icon Color
      */
     portal_icon_color?: string | null;
+    /**
+     * Portal Orders Auto Accept
+     */
+    portal_orders_auto_accept?: boolean;
+    /**
+     * Portal Orders Payment Terms
+     */
+    portal_orders_payment_terms?: string;
+    /**
+     * Portal Orders Payment Days
+     */
+    portal_orders_payment_days?: number;
 };
 
 /**
@@ -287,23 +299,23 @@ export type EditTenant = {
     /**
      * Name
      */
-    name: string;
+    name?: string | null;
     /**
      * Timezone
      */
-    timezone: string;
+    timezone?: string | null;
     /**
      * Default Currency
      */
-    default_currency: string;
+    default_currency?: string | null;
     /**
      * Country
      */
-    country: string;
+    country?: string | null;
     /**
      * Minimum Acceptable Margin
      */
-    minimum_acceptable_margin: number | string;
+    minimum_acceptable_margin?: number | string | null;
     /**
      * Bridge Requests Allowed
      */
@@ -312,6 +324,18 @@ export type EditTenant = {
      * Lead Visibility
      */
     lead_visibility?: 'open' | 'own_and_pool' | 'own_and_lists' | null;
+    /**
+     * Geo Capture Max Accuracy M
+     */
+    geo_capture_max_accuracy_m?: number | null;
+    /**
+     * Geofence Enabled
+     */
+    geofence_enabled?: boolean | null;
+    /**
+     * Geofence Radius M
+     */
+    geofence_radius_m?: number | null;
 };
 
 /**
@@ -467,6 +491,38 @@ export type EditTenantProjectDefaults = {
 };
 
 /**
+ * PydanticDetail
+ *
+ * Field-level validation errors: one entry per field that was refused.
+ */
+export type PydanticDetail = {
+    /**
+     * Detail
+     */
+    detail: Array<PydanticDetailItem>;
+};
+
+/**
+ * PydanticDetailItem
+ *
+ * One per-field error inside a 422 ``detail`` array.
+ */
+export type PydanticDetailItem = {
+    /**
+     * Type
+     */
+    type: string;
+    /**
+     * Loc
+     */
+    loc: Array<string>;
+    /**
+     * Msg
+     */
+    msg: string;
+};
+
+/**
  * EditTenantPortalSettings
  *
  * Schema for updating customer portal customization settings.
@@ -536,6 +592,50 @@ export type EditTenantPortalSettings = {
      * Portal Icon Color
      */
     portal_icon_color?: string | null;
+    /**
+     * Portal Order Funnel
+     */
+    portal_order_funnel?: string | null;
+    /**
+     * Portal Orders Auto Accept
+     */
+    portal_orders_auto_accept?: boolean | null;
+    /**
+     * Portal Orders Payment Terms
+     */
+    portal_orders_payment_terms?: 'none' | 'on_accept' | 'on_delivery' | null;
+    /**
+     * Portal Orders Payment Days
+     */
+    portal_orders_payment_days?: number | null;
+    /**
+     * Portal Orders New Org Default
+     */
+    portal_orders_new_org_default?: boolean | null;
+    /**
+     * Portal Quote Requests New Org Default
+     */
+    portal_quote_requests_new_org_default?: boolean | null;
+    /**
+     * Portal Orders New Bridge Default
+     */
+    portal_orders_new_bridge_default?: boolean | null;
+    /**
+     * Portal New Org Price List
+     */
+    portal_new_org_price_list?: string | null;
+    /**
+     * Portal New Bridge Price List
+     */
+    portal_new_bridge_price_list?: string | null;
+    /**
+     * Portal Quote Requests New Bridge Default
+     */
+    portal_quote_requests_new_bridge_default?: boolean | null;
+    /**
+     * Portal Quote Funnel
+     */
+    portal_quote_funnel?: string | null;
 };
 
 /**
@@ -681,8 +781,8 @@ export type OutputBusinessProcessesList = {
 /**
  * FormerTeamMember
  *
- * A tombstoned membership (excluded, member disconnected). Carries the retained real name and
- * when/by-whom it happened. See plans/TEAM_EXCLUSION.md §7b.
+ * A former team member, excluded from the workspace: the name they had, and when and by whom
+ * they were excluded.
  */
 export type FormerTeamMember = {
     /**
@@ -809,9 +909,6 @@ export type BookingInfoSchema = {
  * DayColumnSchema
  *
  * Column header for a day in the week.
- *
- * Carries the day itself. The template renders the weekday with |date:"D" (which Django
- * translates) and the day/month with |date:"SHORT_DATE_FORMAT" (which is day-first in Romanian).
  */
 export type DayColumnSchema = {
     /**
@@ -858,6 +955,10 @@ export type DayLoadDataSchema = {
      * Bookings
      */
     bookings?: Array<BookingInfoSchema> | null;
+    /**
+     * Percentage
+     */
+    percentage?: number | string | null;
 };
 
 /**
@@ -934,7 +1035,7 @@ export type MemberLoadDetailSchema = {
     /**
      * Utilization Percentage
      */
-    utilization_percentage: number;
+    utilization_percentage: number | string;
 };
 
 /**
@@ -972,7 +1073,7 @@ export type TeamMemberSummarySchema = {
     /**
      * Load Percentage
      */
-    load_percentage: number;
+    load_percentage: number | string;
 };
 
 /**
@@ -1102,10 +1203,6 @@ export type EditMemberPreferences = {
  */
 export type EditMemberMiscPreferences = {
     /**
-     * Preference Mentions
-     */
-    preference_mentions?: boolean | null;
-    /**
      * Preference Feed
      */
     preference_feed?: boolean | null;
@@ -1113,54 +1210,6 @@ export type EditMemberMiscPreferences = {
      * Preference Ownership
      */
     preference_ownership?: boolean | null;
-    /**
-     * Preference My String
-     */
-    preference_my_string?: string | null;
-    /**
-     * Preference My Number
-     */
-    preference_my_number?: number | null;
-    /**
-     * Preference Theme
-     */
-    preference_theme?: string | null;
-};
-
-/**
- * PydanticDetail
- *
- * 422 response body shape for field-level validation errors.
- *
- * Mirrors the structure that ``htmx_mdb_server_validation`` parses on the
- * client side and that Ninja produces automatically for input-schema
- * failures. Routes declare this for status 422 instead of ``APIResponse``.
- */
-export type PydanticDetail = {
-    /**
-     * Detail
-     */
-    detail: Array<PydanticDetailItem>;
-};
-
-/**
- * PydanticDetailItem
- *
- * One per-field error inside a 422 ``detail`` array.
- */
-export type PydanticDetailItem = {
-    /**
-     * Type
-     */
-    type: string;
-    /**
-     * Loc
-     */
-    loc: Array<string>;
-    /**
-     * Msg
-     */
-    msg: string;
 };
 
 /**
@@ -1221,6 +1270,97 @@ export type EditContact = {
      * Contact Info Job Title
      */
     contact_info_job_title: string;
+};
+
+/**
+ * FeatureAccessSummary
+ *
+ * What the caller can reach in one feature, rolled up from their permissions.
+ */
+export type FeatureAccessSummary = {
+    /**
+     * Feature
+     */
+    feature: string;
+    /**
+     * Admin Access
+     */
+    admin_access: boolean;
+    /**
+     * User Access
+     */
+    user_access: boolean;
+    /**
+     * Has All
+     */
+    has_all: boolean;
+    /**
+     * Permission Count
+     */
+    permission_count: number;
+};
+
+/**
+ * MyPermissionsExplain
+ *
+ * The caller's own access in one workspace.
+ *
+ * Two permission lists, because they answer different questions.
+ * `flat_permissions` is the ceiling the caller's roles grant. Wildcards the
+ * owner policy adds are not in it, and a scope-narrowed credential has not
+ * been applied to it. `effective_permissions` is what the credential making
+ * THIS request can actually exercise. When the second is smaller than the
+ * first, `scope_crud_types` says why.
+ *
+ * Absent fields carry meaning: `scope_crud_types` is omitted under session
+ * auth, where no narrowing applies, and `is_superuser` is omitted for
+ * everyone who is not one.
+ */
+export type MyPermissionsExplain = {
+    /**
+     * Is Owner
+     */
+    is_owner: boolean;
+    /**
+     * Is Superuser
+     */
+    is_superuser?: boolean | null;
+    /**
+     * Flat Permissions
+     */
+    flat_permissions: Array<string>;
+    /**
+     * Effective Permissions
+     */
+    effective_permissions: Array<string>;
+    /**
+     * Scope Crud Types
+     */
+    scope_crud_types?: Array<string> | null;
+    /**
+     * Feature Summary
+     */
+    feature_summary: Array<FeatureAccessSummary>;
+    /**
+     * Role Memberships
+     */
+    role_memberships: Array<RoleMembership>;
+};
+
+/**
+ * RoleMembership
+ *
+ * A role the caller holds. Never anyone else's membership.
+ */
+export type RoleMembership = {
+    /**
+     * Role Id
+     */
+    role_id: string;
+    /**
+     * Role Name
+     */
+    role_name: string;
 };
 
 /**
@@ -1567,7 +1707,7 @@ export type TaggedEntityStats = {
     /**
      * Percentage
      */
-    percentage: number;
+    percentage: number | string;
 };
 
 /**
@@ -1849,7 +1989,7 @@ export type LabeledEntityStats = {
     /**
      * Percentage
      */
-    percentage: number;
+    percentage: number | string;
 };
 
 /**
@@ -1893,7 +2033,7 @@ export type LabelValueStats = {
     /**
      * Percentage
      */
-    percentage: number;
+    percentage: number | string;
 };
 
 /**
@@ -3134,6 +3274,14 @@ export type EditSubtenant = {
      * Domains
      */
     domains?: string | null;
+    /**
+     * Portal Ordering Enabled
+     */
+    portal_ordering_enabled?: boolean | null;
+    /**
+     * Portal Quote Requests Enabled
+     */
+    portal_quote_requests_enabled?: boolean | null;
 };
 
 /**
@@ -4063,7 +4211,7 @@ export type EditWorkItemType = {
     /**
      * Active
      */
-    active?: boolean;
+    active?: boolean | null;
     /**
      * Scheduling Behaviour
      */
@@ -4197,6 +4345,10 @@ export type OutputLeadSummary = {
      */
     next_action_channel?: string;
     /**
+     * Next Action Channel Label
+     */
+    next_action_channel_label?: string;
+    /**
      * Last Action At
      */
     last_action_at?: string | null;
@@ -4241,10 +4393,7 @@ export type OutputLeadSummary = {
 /**
  * OutputAllLeads
  *
- * Wrapping schema for the All Leads tab — Django Ninja rejects raw lists for
- * the middleware-driven HTML render path (which calls render(request, tpl, ctx)
- * where ctx must be a dict). All list-style outputs in the codebase wrap their
- * rows in a parent object.
+ * All leads in the workspace, with their total count.
  */
 export type OutputAllLeads = {
     /**
@@ -4260,7 +4409,7 @@ export type OutputAllLeads = {
 /**
  * OutputLeadListList
  *
- * Lists tab payload — owned, peer-owned, and pool lists in one response.
+ * Lists tab payload — owned, peer-owned and pool lists, plus the unclaimed leads in no list.
  */
 export type OutputLeadListList = {
     /**
@@ -4275,6 +4424,11 @@ export type OutputLeadListList = {
      * Pools
      */
     pools?: Array<OutputLeadListSummary>;
+    unclaimed?: OutputLeadListSummary | null;
+    /**
+     * List Required
+     */
+    list_required?: boolean;
     /**
      * Empty Message
      */
@@ -4343,6 +4497,40 @@ export type OutputLeadListSummary = {
      * Total Count
      */
     total_count?: number;
+};
+
+/**
+ * OutputLeadOwnerCandidate
+ *
+ * A workspace member a lead or list can be given to.
+ */
+export type OutputLeadOwnerCandidate = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Avatar Url
+     */
+    avatar_url?: string | null;
+    /**
+     * Is Me
+     */
+    is_me?: boolean;
+};
+
+/**
+ * OutputLeadOwnerCandidates
+ */
+export type OutputLeadOwnerCandidates = {
+    /**
+     * Candidates
+     */
+    candidates?: Array<OutputLeadOwnerCandidate>;
 };
 
 /**
@@ -4423,6 +4611,10 @@ export type OutputLead = {
      * Next Action Channel
      */
     next_action_channel?: string;
+    /**
+     * Next Action Channel Label
+     */
+    next_action_channel_label?: string;
     /**
      * Next Action Note
      */
@@ -4653,7 +4845,7 @@ export type AddLead = {
     /**
      * Source
      */
-    source?: 'cold_email' | 'linkedin' | 'referral' | 'event' | 'web_form' | 'import' | 'other';
+    source?: 'web_form' | 'inbound_call' | 'inbound_email' | 'organic_search' | 'paid_ads' | 'social_media' | 'linkedin' | 'email_campaign' | 'cold_email' | 'cold_call' | 'referral' | 'partner' | 'existing_customer' | 'event' | 'import' | 'other';
     /**
      * Source Note
      */
@@ -4731,7 +4923,7 @@ export type EditLead = {
     /**
      * Source
      */
-    source?: 'cold_email' | 'linkedin' | 'referral' | 'event' | 'web_form' | 'import' | 'other';
+    source?: 'web_form' | 'inbound_call' | 'inbound_email' | 'organic_search' | 'paid_ads' | 'social_media' | 'linkedin' | 'email_campaign' | 'cold_email' | 'cold_call' | 'referral' | 'partner' | 'existing_customer' | 'event' | 'import' | 'other';
     /**
      * Source Note
      */
@@ -4927,6 +5119,112 @@ export type MarkLeadConverted = {
 };
 
 /**
+ * FastProposalStageOption
+ *
+ * A funnel stage a fast proposal may land in.
+ */
+export type FastProposalStageOption = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Funnel Name
+     */
+    funnel_name: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * OutputFastProposalOptions
+ *
+ * What a client needs before offering the Fast Proposal form for one lead.
+ *
+ * `blockers` is the same list the web form shows instead of its fields: when it is not empty,
+ * submitting cannot succeed. `updated_at` is the lead's, for the submit's optimistic lock.
+ */
+export type OutputFastProposalOptions = {
+    /**
+     * Lead Id
+     */
+    lead_id: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Customer Name
+     */
+    customer_name: string;
+    /**
+     * Has Customer Org
+     */
+    has_customer_org: boolean;
+    /**
+     * Currency Code
+     */
+    currency_code: string;
+    /**
+     * Currency Symbol
+     */
+    currency_symbol: string;
+    /**
+     * Stages
+     */
+    stages: Array<FastProposalStageOption>;
+    /**
+     * Blockers
+     */
+    blockers: Array<string>;
+};
+
+/**
+ * FastProposal
+ *
+ * Turn a claimed lead into a priced proposal in one step.
+ *
+ * The worker's phone call *is* the offer, so there is no draft and no send step: the customer
+ * organization, the proposal and its single priced line are created together, and the proposal
+ * lands in a stage from which the deal can go straight to won or lost.
+ *
+ * Currency is deliberately absent. It is not a decision the person filing the call should be
+ * making, so the workspace default is applied server-side; a client that supplies one is ignored.
+ */
+export type FastProposal = {
+    /**
+     * Customer Name
+     */
+    customer_name: string;
+    /**
+     * Sales Stage
+     */
+    sales_stage: string;
+    /**
+     * Product Name
+     */
+    product_name: string;
+    /**
+     * Amount
+     */
+    amount: number | string;
+    /**
+     * Planned End
+     */
+    planned_end?: string | null;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
  * ReopenLead
  */
 export type ReopenLead = {
@@ -5081,17 +5379,7 @@ export type EditLeadList = {
     /**
      * Is Active
      */
-    is_active?: boolean;
-    /**
-     * Updated At
-     */
-    updated_at: string;
-};
-
-/**
- * DeleteLeadList
- */
-export type DeleteLeadList = {
+    is_active?: boolean | null;
     /**
      * Updated At
      */
@@ -5218,6 +5506,14 @@ export type TenantFunnelConfiguration = {
      * Description
      */
     description: string;
+    /**
+     * Used For Quote Requests
+     */
+    used_for_quote_requests?: boolean;
+    /**
+     * Used For Orders
+     */
+    used_for_orders?: boolean;
 };
 
 /**
@@ -5356,6 +5652,14 @@ export type EditFunnelConfiguration = {
      * Description
      */
     description?: string | null;
+    /**
+     * Used For Quote Requests
+     */
+    used_for_quote_requests?: boolean | null;
+    /**
+     * Used For Orders
+     */
+    used_for_orders?: boolean | null;
 };
 
 /**
@@ -5390,6 +5694,14 @@ export type TenantFunnelConfigurationStage = {
      * Transitions
      */
     transitions?: Array<string> | null;
+    /**
+     * Stage Type Display
+     */
+    stage_type_display?: string;
+    /**
+     * Transitions Display
+     */
+    transitions_display?: Array<string>;
 };
 
 /**
@@ -5637,6 +5949,26 @@ export type TenantFunnels = {
 };
 
 /**
+ * FunnelStageCurrency
+ *
+ * One currency's deals in a funnel stage, in that currency.
+ */
+export type FunnelStageCurrency = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Value
+     */
+    value: number | string;
+    /**
+     * Symbol
+     */
+    symbol: string;
+};
+
+/**
  * FunnelStageSchema
  */
 export type FunnelStageSchema = {
@@ -5663,11 +5995,11 @@ export type FunnelStageSchema = {
     /**
      * Total Value
      */
-    total_value: number | string;
+    total_value?: number | string | null;
     /**
      * Average Deal Size
      */
-    average_deal_size: number | string;
+    average_deal_size?: number | string | null;
     /**
      * Average Days In Stage
      */
@@ -5679,7 +6011,9 @@ export type FunnelStageSchema = {
     /**
      * Currency Breakdown
      */
-    currency_breakdown?: string | null;
+    currency_breakdown?: {
+        [key: string]: FunnelStageCurrency;
+    } | null;
 };
 
 /**
@@ -5750,6 +6084,38 @@ export type TenantFunnelOverview = {
      * Has Mixed Currencies
      */
     has_mixed_currencies?: boolean | null;
+};
+
+/**
+ * OutputSaleActivityTypes
+ */
+export type OutputSaleActivityTypes = {
+    /**
+     * Activity Types
+     */
+    activity_types: Array<SaleActivityTypeItem>;
+};
+
+/**
+ * SaleActivityTypeItem
+ */
+export type SaleActivityTypeItem = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Activity Type
+     */
+    activity_type: string;
+    /**
+     * Icon
+     */
+    icon: string;
 };
 
 /**
@@ -5830,6 +6196,30 @@ export type AddCatalogProduct = {
      * Cost Currency
      */
     cost_currency: string;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string | null;
+    /**
+     * Track Stock
+     */
+    track_stock?: boolean | null;
+    /**
+     * Stock Quantity
+     */
+    stock_quantity?: number | null;
+    /**
+     * Available In Customer Portal
+     */
+    available_in_customer_portal?: boolean | null;
+    /**
+     * Available In Partner Portals
+     */
+    available_in_partner_portals?: boolean | null;
+    /**
+     * Price Lists
+     */
+    price_lists?: Array<string> | null;
 };
 
 /**
@@ -5888,6 +6278,30 @@ export type EditCatalogProduct = {
      * Cost Currency
      */
     cost_currency?: string | null;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string | null;
+    /**
+     * Track Stock
+     */
+    track_stock?: boolean | null;
+    /**
+     * Stock Quantity
+     */
+    stock_quantity?: number | null;
+    /**
+     * Available In Customer Portal
+     */
+    available_in_customer_portal?: boolean | null;
+    /**
+     * Available In Partner Portals
+     */
+    available_in_partner_portals?: boolean | null;
+    /**
+     * Price Lists
+     */
+    price_lists?: Array<string> | null;
 };
 
 /**
@@ -5942,6 +6356,26 @@ export type CatalogProduct = {
      * Pricing Value
      */
     pricing_value: number | string;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string;
+    /**
+     * Track Stock
+     */
+    track_stock?: boolean;
+    /**
+     * Stock Quantity
+     */
+    stock_quantity?: number;
+    /**
+     * Available In Customer Portal
+     */
+    available_in_customer_portal?: boolean;
+    /**
+     * Available In Partner Portals
+     */
+    available_in_partner_portals?: boolean;
 };
 
 /**
@@ -5977,7 +6411,7 @@ export type FunnelWonProposals = {
     /**
      * Total Value
      */
-    total_value: number | string;
+    total_value?: number | string | null;
     /**
      * Total Count
      */
@@ -6111,7 +6545,7 @@ export type FunnelLostProposals = {
     /**
      * Total Value
      */
-    total_value: number | string;
+    total_value?: number | string | null;
     /**
      * Total Count
      */
@@ -6197,11 +6631,15 @@ export type TopSellingProduct = {
     /**
      * Total Revenue
      */
-    total_revenue: number | string;
+    total_revenue?: number | string | null;
     /**
      * Currency Symbol
      */
     currency_symbol: string;
+    /**
+     * Currency Code
+     */
+    currency_code?: string;
 };
 
 /**
@@ -6256,6 +6694,501 @@ export type OutputTotalProductsSold = {
 };
 
 /**
+ * OutputProductDetails
+ *
+ * Product details with sales analytics
+ */
+export type OutputProductDetails = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Internal Code
+     */
+    internal_code?: string | null;
+    /**
+     * Pricing Type
+     */
+    pricing_type: string;
+    /**
+     * Pricing Type Display
+     */
+    pricing_type_display: string;
+    /**
+     * Product Type
+     */
+    product_type?: string | null;
+    /**
+     * Pricing Value
+     */
+    pricing_value: number | string;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Currency Symbol
+     */
+    currency_symbol: string;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+    /**
+     * Owner Name
+     */
+    owner_name: string;
+    /**
+     * Payment Integration Id
+     */
+    payment_integration_id: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Times Sold
+     */
+    times_sold: number;
+    /**
+     * Won Proposals Percent
+     */
+    won_proposals_percent: number | string;
+    /**
+     * Lost Proposals Percent
+     */
+    lost_proposals_percent: number | string;
+    /**
+     * Sales Time Series
+     */
+    sales_time_series: Array<ProductSalesTimeSeries>;
+};
+
+/**
+ * ProductSalesTimeSeries
+ *
+ * Time series data point for product sales
+ */
+export type ProductSalesTimeSeries = {
+    /**
+     * Date
+     */
+    date: string;
+    /**
+     * Quantity
+     */
+    quantity: number;
+};
+
+/**
+ * AddPriceList
+ *
+ * A price list: which catalog items a customer or partner sees in their portal, and at what price.
+ */
+export type AddPriceList = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+};
+
+/**
+ * EditPriceList
+ */
+export type EditPriceList = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+};
+
+/**
+ * EditPriceListItems
+ *
+ * The list's items, as a whole: items left out leave the list.
+ */
+export type EditPriceListItems = {
+    /**
+     * Items
+     */
+    items: Array<PriceListEntry>;
+};
+
+/**
+ * PriceListEntry
+ */
+export type PriceListEntry = {
+    /**
+     * Catalog Id
+     */
+    catalog_id: string;
+    /**
+     * Override Price
+     */
+    override_price?: number | string | null;
+    /**
+     * Override Currency
+     */
+    override_currency?: string | null;
+};
+
+/**
+ * SetPriceLists
+ *
+ * The price lists a customer organization or a partnership holds, as a whole: an empty list
+ * takes them all away.
+ */
+export type SetPriceLists = {
+    /**
+     * Price Lists
+     */
+    price_lists: Array<string>;
+};
+
+/**
+ * OutputTargetBand
+ */
+export type OutputTargetBand = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Threshold Percent
+     */
+    threshold_percent: number | string;
+    /**
+     * Sequence No
+     */
+    sequence_no: number;
+};
+
+/**
+ * OutputTargetScheme
+ */
+export type OutputTargetScheme = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description: string;
+    /**
+     * Is Default
+     */
+    is_default: boolean;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+    /**
+     * Band Count
+     */
+    band_count: number;
+    /**
+     * Bands
+     */
+    bands?: Array<OutputTargetBand> | null;
+    /**
+     * Target Count
+     */
+    target_count?: number;
+    /**
+     * Is Ladder Complete
+     */
+    is_ladder_complete?: boolean;
+};
+
+/**
+ * OutputTargetSchemes
+ */
+export type OutputTargetSchemes = {
+    /**
+     * Target Schemes
+     */
+    target_schemes: Array<OutputTargetScheme>;
+};
+
+/**
+ * OutputSalesTarget
+ */
+export type OutputSalesTarget = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Member
+     */
+    member: string;
+    /**
+     * Member Name
+     */
+    member_name: string;
+    /**
+     * Scheme
+     */
+    scheme: string;
+    /**
+     * Scheme Name
+     */
+    scheme_name: string;
+    /**
+     * Metric
+     */
+    metric: string;
+    /**
+     * Metric Label
+     */
+    metric_label: string;
+    /**
+     * Amount
+     */
+    amount: number | string;
+    /**
+     * Currency
+     */
+    currency?: string | null;
+    /**
+     * Period Start
+     */
+    period_start: string;
+    /**
+     * Period End
+     */
+    period_end: string;
+    /**
+     * Months
+     */
+    months?: number | string | null;
+    /**
+     * Per Month
+     */
+    per_month?: number | string | null;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Notes
+     */
+    notes: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string | null;
+};
+
+/**
+ * OutputSalesTargets
+ */
+export type OutputSalesTargets = {
+    /**
+     * Sales Targets
+     */
+    sales_targets: Array<OutputSalesTarget>;
+};
+
+/**
+ * AddTargetScheme
+ */
+export type AddTargetScheme = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Default
+     */
+    is_default?: boolean | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+};
+
+/**
+ * EditTargetScheme
+ */
+export type EditTargetScheme = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Is Default
+     */
+    is_default?: boolean | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+};
+
+/**
+ * AddTargetBand
+ */
+export type AddTargetBand = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Threshold Percent
+     */
+    threshold_percent: number | string;
+    /**
+     * Sequence No
+     */
+    sequence_no: number;
+};
+
+/**
+ * EditTargetBand
+ */
+export type EditTargetBand = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Threshold Percent
+     */
+    threshold_percent?: number | string | null;
+    /**
+     * Sequence No
+     */
+    sequence_no?: number | null;
+};
+
+/**
+ * AddSalesTarget
+ */
+export type AddSalesTarget = {
+    /**
+     * Member
+     */
+    member: string;
+    /**
+     * Scheme
+     */
+    scheme: string;
+    /**
+     * Metric
+     */
+    metric?: 'revenue' | 'deals_won';
+    /**
+     * Amount
+     */
+    amount: number | string;
+    /**
+     * Currency
+     */
+    currency?: string | null;
+    /**
+     * Period Start
+     */
+    period_start: string;
+    /**
+     * Period End
+     */
+    period_end: string;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+};
+
+/**
+ * EditSalesTarget
+ */
+export type EditSalesTarget = {
+    /**
+     * Member
+     */
+    member?: string | null;
+    /**
+     * Scheme
+     */
+    scheme?: string | null;
+    /**
+     * Metric
+     */
+    metric?: 'revenue' | 'deals_won' | null;
+    /**
+     * Amount
+     */
+    amount?: number | string | null;
+    /**
+     * Currency
+     */
+    currency?: string | null;
+    /**
+     * Period Start
+     */
+    period_start?: string | null;
+    /**
+     * Period End
+     */
+    period_end?: string | null;
+    /**
+     * Status
+     */
+    status?: 'active' | 'inactive' | 'void' | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+};
+
+/**
  * AddProposal
  */
 export type AddProposal = {
@@ -6279,6 +7212,14 @@ export type AddProposal = {
      * Rfp Publication
      */
     rfp_publication?: string | null;
+    /**
+     * Customer Location
+     */
+    customer_location?: string | null;
+    /**
+     * Customer Asset
+     */
+    customer_asset?: string | null;
     /**
      * Owner
      */
@@ -6433,6 +7374,104 @@ export type OrgProposalDetails = {
      * Minimum Margin Percent
      */
     minimum_margin_percent?: number | string | null;
+    /**
+     * Customer Id
+     */
+    customer_id?: string | null;
+    /**
+     * Customer Name
+     */
+    customer_name?: string | null;
+    /**
+     * Owner Id
+     */
+    owner_id?: string | null;
+    /**
+     * Funnel Id
+     */
+    funnel_id?: string | null;
+    /**
+     * Stage Id
+     */
+    stage_id?: string | null;
+    /**
+     * Currency Code
+     */
+    currency_code?: string | null;
+    /**
+     * Days In Stage
+     */
+    days_in_stage?: number | null;
+    /**
+     * Stage Sequence No
+     */
+    stage_sequence_no?: number | null;
+    /**
+     * Moves
+     */
+    moves?: Array<ProposalMove>;
+    /**
+     * Booking Management Enabled
+     */
+    booking_management_enabled?: boolean;
+    /**
+     * Origin
+     */
+    origin?: string;
+    /**
+     * Requested By Name
+     */
+    requested_by_name?: string | null;
+    /**
+     * Customer Location Name
+     */
+    customer_location_name?: string | null;
+    /**
+     * Customer Reference
+     */
+    customer_reference?: string;
+    /**
+     * Portal Reference
+     */
+    portal_reference?: string | null;
+    /**
+     * Customer Asset Name
+     */
+    customer_asset_name?: string | null;
+    /**
+     * Wanted By
+     */
+    wanted_by?: string | null;
+};
+
+/**
+ * ProposalMove
+ *
+ * A stage a proposal may move to next, per FunnelStage.MOVES. `instructions` is what the stage asks
+ * the mover to confirm having done, empty when it asks nothing. `sequence_no` is the stage's place in its
+ * funnel, so a client can tell a step forward from a step back.
+ */
+export type ProposalMove = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Stage Type
+     */
+    stage_type: string;
+    /**
+     * Instructions
+     */
+    instructions?: string;
+    /**
+     * Sequence No
+     */
+    sequence_no?: number;
 };
 
 /**
@@ -6692,6 +7731,94 @@ export type ProposalListItem = {
 };
 
 /**
+ * MyPipelineFunnel
+ */
+export type MyPipelineFunnel = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Values
+     */
+    values: Array<MyPipelineMoney>;
+    /**
+     * Stages
+     */
+    stages: Array<MyPipelineStage>;
+};
+
+/**
+ * MyPipelineMoney
+ *
+ * One currency's sum. Pipelines are never summed across currencies.
+ */
+export type MyPipelineMoney = {
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Symbol
+     */
+    symbol: string;
+    /**
+     * Value
+     */
+    value: number | string;
+};
+
+/**
+ * MyPipelineStage
+ */
+export type MyPipelineStage = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Stage Type
+     */
+    stage_type: string;
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Values
+     */
+    values: Array<MyPipelineMoney>;
+};
+
+/**
+ * OutputMyPipeline
+ *
+ * The caller's own open proposals, per active funnel and open stage, empty stages included.
+ */
+export type OutputMyPipeline = {
+    /**
+     * Funnels
+     */
+    funnels: Array<MyPipelineFunnel>;
+    /**
+     * Total Count
+     */
+    total_count: number;
+};
+
+/**
  * StageProposals
  */
 export type StageProposals = {
@@ -6725,6 +7852,14 @@ export type EditProposal = {
      * Rfp Publication
      */
     rfp_publication?: string | null;
+    /**
+     * Customer Location
+     */
+    customer_location?: string | null;
+    /**
+     * Customer Asset
+     */
+    customer_asset?: string | null;
     /**
      * Owner
      */
@@ -6818,6 +7953,42 @@ export type ChangeProposalStage = {
 };
 
 /**
+ * AcceptPortalOrder
+ *
+ * Input schema for the supplier accepting an order a customer placed in the portal
+ */
+export type AcceptPortalOrder = {
+    /**
+     * Confirmation
+     */
+    confirmation: boolean;
+};
+
+/**
+ * MarkPortalOrderDelivered
+ *
+ * Input schema for the supplier marking a whole portal order delivered
+ */
+export type MarkPortalOrderDelivered = {
+    /**
+     * Confirmation
+     */
+    confirmation: boolean;
+};
+
+/**
+ * RejectPortalOrder
+ *
+ * Input schema for the supplier rejecting a portal order; the customer reads the reason
+ */
+export type RejectPortalOrder = {
+    /**
+     * Reason
+     */
+    reason: string;
+};
+
+/**
  * ProductStatusDetail
  *
  * Product status for lifecycle display.
@@ -6872,6 +8043,18 @@ export type ProposalProduct = {
      */
     description: string;
     /**
+     * Description For Customer
+     */
+    description_for_customer?: string;
+    /**
+     * Planned Start
+     */
+    planned_start?: string | null;
+    /**
+     * Planned End
+     */
+    planned_end?: string | null;
+    /**
      * Product Type
      */
     product_type: string;
@@ -6900,6 +8083,14 @@ export type ProposalProduct = {
      */
     product_count: number;
     /**
+     * Origin
+     */
+    origin?: string;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string;
+    /**
      * Total Price
      */
     total_price: number | string;
@@ -6915,6 +8106,34 @@ export type ProposalProduct = {
      * Catalog Name
      */
     catalog_name?: string | null;
+    /**
+     * Catalog Internal Code
+     */
+    catalog_internal_code?: string | null;
+    /**
+     * Is Linked
+     */
+    is_linked?: boolean;
+    /**
+     * Proposal Currency Symbol
+     */
+    proposal_currency_symbol?: string;
+    /**
+     * Margin Currency Symbol
+     */
+    margin_currency_symbol?: string | null;
+    /**
+     * Proposal Currency
+     */
+    proposal_currency?: string;
+    /**
+     * Margin Currency
+     */
+    margin_currency?: string | null;
+    /**
+     * Cost Percentage
+     */
+    cost_percentage?: number | string | null;
     /**
      * Original Value
      */
@@ -7015,6 +8234,10 @@ export type ProposalProductSummary = {
      */
     avg_product_value: number | string;
     /**
+     * Avg Product Cost
+     */
+    avg_product_cost?: number | string;
+    /**
      * Pricing Types Count
      */
     pricing_types_count: number;
@@ -7055,72 +8278,6 @@ export type ProposalProducts = {
      * Is Locked
      */
     is_locked: boolean;
-};
-
-/**
- * ProposalProductDetails
- */
-export type ProposalProductDetails = {
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Name
-     */
-    name: string;
-    /**
-     * Description
-     */
-    description: string;
-    /**
-     * Pricing Type
-     */
-    pricing_type: string;
-    /**
-     * Pricing Value
-     */
-    pricing_value: number | string;
-    /**
-     * Pricing Currency
-     */
-    pricing_currency: string;
-    /**
-     * Currency Symbol
-     */
-    currency_symbol: string;
-    /**
-     * Is Finished
-     */
-    is_finished: boolean;
-    /**
-     * Is Accepted
-     */
-    is_accepted: boolean;
-    /**
-     * Created At
-     */
-    created_at: string;
-    /**
-     * Updated At
-     */
-    updated_at: string;
-    /**
-     * Catalog Id
-     */
-    catalog_id?: string | null;
-    /**
-     * Catalog Name
-     */
-    catalog_name?: string | null;
-    /**
-     * Owner Id
-     */
-    owner_id: string;
-    /**
-     * Owner Name
-     */
-    owner_name: string;
 };
 
 /**
@@ -7253,7 +8410,7 @@ export type ProductStatusTransition = {
     /**
      * Status Id
      */
-    status_id: number;
+    status_id: string;
     /**
      * Name
      */
@@ -7376,6 +8533,31 @@ export type OutputPaymentScheduleBlocks = {
 };
 
 /**
+ * PaymentScheduleBlockAmount
+ *
+ * One currency's share of a block. A payment keeps the currency it was created in, so a block whose
+ * proposal changed currency can hold two, and they are never added together.
+ */
+export type PaymentScheduleBlockAmount = {
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Symbol
+     */
+    symbol: string;
+    /**
+     * Total
+     */
+    total: number | string;
+    /**
+     * Paid
+     */
+    paid: number | string;
+};
+
+/**
  * PaymentScheduleBlockDetail
  */
 export type PaymentScheduleBlockDetail = {
@@ -7411,6 +8593,18 @@ export type PaymentScheduleBlockDetail = {
      * Project Id
      */
     project_id: string;
+    /**
+     * Payment Count
+     */
+    payment_count?: number;
+    /**
+     * Amounts
+     */
+    amounts?: Array<PaymentScheduleBlockAmount>;
+    /**
+     * Next Due Date
+     */
+    next_due_date?: string | null;
 };
 
 /**
@@ -7528,6 +8722,10 @@ export type BlockPaymentsSummary = {
      */
     currency_symbol: string;
     /**
+     * Currency Code
+     */
+    currency_code?: string | null;
+    /**
      * Payment Count
      */
     payment_count: number;
@@ -7608,6 +8806,10 @@ export type PaymentDetail = {
      * Currency Symbol
      */
     currency_symbol: string;
+    /**
+     * Currency Code
+     */
+    currency_code?: string | null;
     /**
      * Paid
      */
@@ -7919,6 +9121,10 @@ export type PaymentCumulativeChartData = {
      * Currency Symbol
      */
     currency_symbol: string;
+    /**
+     * Currency Code
+     */
+    currency_code: string;
 };
 
 /**
@@ -7943,6 +9149,10 @@ export type PaymentStatusChartData = {
      * Currency Symbol
      */
     currency_symbol: string;
+    /**
+     * Currency Code
+     */
+    currency_code: string;
 };
 
 /**
@@ -8171,6 +9381,22 @@ export type ProjectProductSimple = {
      * Name
      */
     name: string;
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Description For Customer
+     */
+    description_for_customer?: string;
+    /**
+     * Planned Start
+     */
+    planned_start?: string | null;
+    /**
+     * Planned End
+     */
+    planned_end?: string | null;
     /**
      * Is Active
      */
@@ -8626,11 +9852,11 @@ export type ScheduleTaskItem = {
     /**
      * Total Float Days
      */
-    total_float_days: number;
+    total_float_days?: number | null;
     /**
      * Free Float Days
      */
-    free_float_days: number;
+    free_float_days?: number | null;
     /**
      * Is Critical
      */
@@ -9032,6 +10258,10 @@ export type OutputProjectWorkItemDetail = {
      */
     timeline_source: 'manual' | 'cpm';
     /**
+     * Schedule Not Calculated
+     */
+    schedule_not_calculated?: boolean;
+    /**
      * Is Finished
      */
     is_finished: boolean;
@@ -9059,6 +10289,58 @@ export type OutputProjectWorkItemDetail = {
      * Can Have Dependencies
      */
     can_have_dependencies: boolean;
+    /**
+     * Product Id
+     */
+    product_id?: string | null;
+    /**
+     * Product Name
+     */
+    product_name?: string | null;
+    /**
+     * Product Status
+     */
+    product_status?: string | null;
+    /**
+     * Product Status Lifecycle Type
+     */
+    product_status_lifecycle_type?: string | null;
+    /**
+     * Product Status Options
+     */
+    product_status_options?: Array<ProductStatusOption>;
+    /**
+     * Can Deliver
+     */
+    can_deliver?: boolean;
+    /**
+     * Deliver Blocked Reason
+     */
+    deliver_blocked_reason?: string | null;
+    /**
+     * Reopen Grace Days
+     */
+    reopen_grace_days?: number;
+};
+
+/**
+ * ProductStatusOption
+ *
+ * A status this product may legally move to next.
+ */
+export type ProductStatusOption = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Lifecycle Type
+     */
+    lifecycle_type: string;
 };
 
 /**
@@ -9206,7 +10488,7 @@ export type EditWorkItem = {
     /**
      * Visible To Customer
      */
-    visible_to_customer?: boolean;
+    visible_to_customer?: boolean | null;
     /**
      * Parent
      */
@@ -9470,9 +10752,11 @@ export type AddWorkLog = {
      */
     member: string;
     /**
-     * Hours
+     * Duration
+     *
+     * How long the work took: 2, 1h30m, 45m or 3:45. A bare number is hours.
      */
-    hours: number;
+    duration: string;
     /**
      * Date
      */
@@ -9492,9 +10776,11 @@ export type EditWorkLog = {
      */
     booking?: string | null;
     /**
-     * Hours
+     * Duration
+     *
+     * How long the work took: 2, 1h30m, 45m or 3:45. A bare number is hours.
      */
-    hours: number;
+    duration: string;
     /**
      * Date
      */
@@ -9730,7 +11016,29 @@ export type WorkItemCostsOutput = {
     /**
      * Total Expected
      */
-    total_expected: string;
+    total_expected?: string | null;
+    /**
+     * Total By Currency
+     */
+    total_by_currency?: {
+        [key: string]: string;
+    };
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
+     * Total In Workspace Currency
+     */
+    total_in_workspace_currency?: string | null;
+    /**
+     * Workspace Currency
+     */
+    workspace_currency?: string;
+    /**
+     * Project Currency
+     */
+    project_currency?: string;
     /**
      * Cost Count
      */
@@ -9838,7 +11146,29 @@ export type WorkItemExpensesOutput = {
     /**
      * Total Actual
      */
-    total_actual: string;
+    total_actual?: string | null;
+    /**
+     * Total By Currency
+     */
+    total_by_currency?: {
+        [key: string]: string;
+    };
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
+     * Total In Workspace Currency
+     */
+    total_in_workspace_currency?: string | null;
+    /**
+     * Workspace Currency
+     */
+    workspace_currency?: string;
+    /**
+     * Project Currency
+     */
+    project_currency?: string;
     /**
      * Expense Count
      */
@@ -9870,9 +11200,9 @@ export type WorkItemWorkLogsOutput = {
      */
     work_logs: Array<WorkLogItem>;
     /**
-     * Total Hours
+     * Total Minutes
      */
-    total_hours: number;
+    total_minutes: number;
     /**
      * Log Count
      */
@@ -9916,9 +11246,9 @@ export type WorkLogItem = {
      */
     member_id: string;
     /**
-     * Hours
+     * Minutes
      */
-    hours: number;
+    minutes: number;
     /**
      * Date
      */
@@ -10055,6 +11385,10 @@ export type ProjectTeamMember = {
      * Is Active
      */
     is_active: boolean;
+    /**
+     * Is Upcoming
+     */
+    is_upcoming?: boolean;
 };
 
 /**
@@ -10108,9 +11442,13 @@ export type TeamMemberWorkItem = {
      */
     estimated_work_hours?: number | null;
     /**
-     * Total Logged Hours
+     * Total Logged Minutes
      */
-    total_logged_hours?: number | null;
+    total_logged_minutes?: number | null;
+    /**
+     * Effort State
+     */
+    effort_state?: string;
     /**
      * Is Finished
      */
@@ -10167,7 +11505,7 @@ export type TeamMemberWorkItems = {
  * Heatmap data for team member bookings in a project
  *
  * Shows three metrics per cell:
- * - activity: Actual logged work hours from WorkLog records
+ * - activity: Actual logged work minutes from WorkLog records
  * - booking: Allocated hours from TeamBooking (cumulative if overlapping)
  * - availability: Weekly availability hours from Availability records (+1 bonus if > 0)
  */
@@ -10258,7 +11596,7 @@ export type OutputTeamMemberBookingHeatmap = {
  * Each person object always contains ALL possible fields:
  * - member_id, member_name (always present)
  * - Booking fields: total_days, booking_count, earliest_start, latest_end, has_bookings
- * - Effort fields: logged_hours, log_count, has_work_logs
+ * - Effort fields: logged_minutes, log_count, has_work_logs
  * - Ownership fields: owned_items, completed_items, has_owned_items
  *
  * The has_* flags indicate which data is actually present for each member.
@@ -10338,6 +11676,10 @@ export type ProjectResource = {
      * Is Active
      */
     is_active: boolean;
+    /**
+     * Is Upcoming
+     */
+    is_upcoming?: boolean;
 };
 
 /**
@@ -10436,6 +11778,10 @@ export type ProjectResourceBooking = {
      * Is Active
      */
     is_active: boolean;
+    /**
+     * Is Upcoming
+     */
+    is_upcoming?: boolean;
 };
 
 /**
@@ -10719,11 +12065,11 @@ export type ProjectProductCostComparisonProductSchema = {
     /**
      * Proposal Cost
      */
-    proposal_cost: string;
+    proposal_cost: number | string;
     /**
      * Project Cost
      */
-    project_cost: string;
+    project_cost: number | string;
     /**
      * Currency Symbol
      */
@@ -10763,15 +12109,15 @@ export type ProjectProductCostComparisonSchema = {
     /**
      * Max Cost
      */
-    max_cost: string;
+    max_cost: number | string;
     /**
      * Total Proposal Cost
      */
-    total_proposal_cost: string;
+    total_proposal_cost: number | string;
     /**
      * Total Project Cost
      */
-    total_project_cost: string;
+    total_project_cost: number | string;
     /**
      * Financial Mode
      */
@@ -10812,7 +12158,7 @@ export type ProductBudgetBreakdownItem = {
     /**
      * Total Cost
      */
-    total_cost: string;
+    total_cost: number | string;
 };
 
 /**
@@ -10853,6 +12199,10 @@ export type ProjectProductBudgetBreakdownSchema = {
      * Currency Symbol
      */
     currency_symbol: string;
+    /**
+     * Currency
+     */
+    currency: string;
     /**
      * Financial Mode
      */
@@ -11193,6 +12543,10 @@ export type ProjectCashBalanceChartData = {
     cash_balance_data: Array<{
         [key: string]: unknown;
     }>;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
     /**
      * Currency Symbol
      */
@@ -11991,7 +13345,7 @@ export type ResourceLoadDetailSchema = {
     /**
      * Utilization Percentage
      */
-    utilization_percentage: number;
+    utilization_percentage: number | string;
 };
 
 /**
@@ -12360,6 +13714,40 @@ export type OutputApiKeyList = {
      * Now
      */
     now: string;
+};
+
+/**
+ * ApiKeyCreated
+ *
+ * `add_api_key` answer: the key's id and the raw key, returned once, here only.
+ * The browser also gets it via the session for one-time display; an API client
+ * creating a key for a service has no session, so this is its only chance.
+ */
+export type ApiKeyCreated = {
+    /**
+     * Response Id
+     */
+    response_id: string;
+    /**
+     * Success
+     */
+    success: boolean;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Url
+     */
+    url?: string | null;
+    /**
+     * Api Key Id
+     */
+    api_key_id: string;
+    /**
+     * Key
+     */
+    key: string;
 };
 
 /**
@@ -13661,6 +15049,38 @@ export type OutputInternalSupportRequest = {
      */
     root_cause_asset_name?: string | null;
     /**
+     * Resource Id
+     */
+    resource_id?: string | null;
+    /**
+     * Project Id
+     */
+    project_id?: string | null;
+    /**
+     * Project Customer Id
+     */
+    project_customer_id?: string | null;
+    /**
+     * Customer Id
+     */
+    customer_id?: string | null;
+    /**
+     * Work Item Id
+     */
+    work_item_id?: string | null;
+    /**
+     * Assignee Id
+     */
+    assignee_id?: string | null;
+    /**
+     * Reported Asset Id
+     */
+    reported_asset_id?: string | null;
+    /**
+     * Root Cause Asset Id
+     */
+    root_cause_asset_id?: string | null;
+    /**
      * Request Type
      */
     request_type: string;
@@ -13796,6 +15216,38 @@ export type OutputExternalSupportRequest = {
      * Root Cause Asset Name
      */
     root_cause_asset_name?: string | null;
+    /**
+     * Resource Id
+     */
+    resource_id?: string | null;
+    /**
+     * Project Id
+     */
+    project_id?: string | null;
+    /**
+     * Project Customer Id
+     */
+    project_customer_id?: string | null;
+    /**
+     * Customer Id
+     */
+    customer_id?: string | null;
+    /**
+     * Work Item Id
+     */
+    work_item_id?: string | null;
+    /**
+     * Assignee Id
+     */
+    assignee_id?: string | null;
+    /**
+     * Reported Asset Id
+     */
+    reported_asset_id?: string | null;
+    /**
+     * Root Cause Asset Id
+     */
+    root_cause_asset_id?: string | null;
     /**
      * Request Type
      */
@@ -14397,7 +15849,7 @@ export type EditQueueRule = {
     /**
      * Active
      */
-    active?: boolean;
+    active?: boolean | null;
     /**
      * Target Queue
      */
@@ -14753,6 +16205,22 @@ export type AddProcessParticipation = {
 };
 
 /**
+ * OutputProcessAssignee
+ *
+ * A team member who may own an item in this process.
+ */
+export type OutputProcessAssignee = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
  * OutputProcessSummaries
  */
 export type OutputProcessSummaries = {
@@ -14786,6 +16254,10 @@ export type OutputProcessSummary = {
      * Pending Approval
      */
     pending_approval?: number;
+    /**
+     * Assignable Members
+     */
+    assignable_members?: Array<OutputProcessAssignee>;
 };
 
 /**
@@ -14908,6 +16380,30 @@ export type OutputOperationalItem = {
      * Proposal Id
      */
     proposal_id?: string | null;
+    /**
+     * Anchor Latitude
+     */
+    anchor_latitude?: number | null;
+    /**
+     * Anchor Longitude
+     */
+    anchor_longitude?: number | null;
+    /**
+     * Anchor Source
+     */
+    anchor_source?: string | null;
+    /**
+     * Anchor Name
+     */
+    anchor_name?: string | null;
+    /**
+     * Proximity Radius M
+     */
+    proximity_radius_m?: number | null;
+    /**
+     * Proximity Source
+     */
+    proximity_source?: string | null;
 };
 
 /**
@@ -15059,11 +16555,11 @@ export type EditOperationalItem = {
     /**
      * Name
      */
-    name: string;
+    name?: string | null;
     /**
      * Description
      */
-    description?: string;
+    description?: string | null;
     /**
      * Customer
      */
@@ -15075,7 +16571,7 @@ export type EditOperationalItem = {
     /**
      * Priority
      */
-    priority?: 'critical' | 'high' | 'normal' | 'low';
+    priority?: 'critical' | 'high' | 'normal' | 'low' | null;
     /**
      * Due Date
      */
@@ -15118,6 +16614,10 @@ export type AddOperationalItem = {
      * Due Date
      */
     due_date?: string | null;
+    /**
+     * Owner
+     */
+    owner?: string | null;
 };
 
 /**
@@ -15132,6 +16632,22 @@ export type MoveOperationalItem = {
      * Notes
      */
     notes?: string;
+    /**
+     * Geo Latitude
+     */
+    geo_latitude?: number | null;
+    /**
+     * Geo Longitude
+     */
+    geo_longitude?: number | null;
+    /**
+     * Geo Accuracy M
+     */
+    geo_accuracy_m?: number | null;
+    /**
+     * Geo Overridden
+     */
+    geo_overridden?: boolean | null;
 };
 
 /**
@@ -15146,6 +16662,22 @@ export type ApproveOperationalItem = {
      * Notes
      */
     notes?: string;
+    /**
+     * Geo Latitude
+     */
+    geo_latitude?: number | null;
+    /**
+     * Geo Longitude
+     */
+    geo_longitude?: number | null;
+    /**
+     * Geo Accuracy M
+     */
+    geo_accuracy_m?: number | null;
+    /**
+     * Geo Overridden
+     */
+    geo_overridden?: boolean | null;
 };
 
 /**
@@ -15156,6 +16688,22 @@ export type RejectOperationalItem = {
      * Reason
      */
     reason: string;
+    /**
+     * Geo Latitude
+     */
+    geo_latitude?: number | null;
+    /**
+     * Geo Longitude
+     */
+    geo_longitude?: number | null;
+    /**
+     * Geo Accuracy M
+     */
+    geo_accuracy_m?: number | null;
+    /**
+     * Geo Overridden
+     */
+    geo_overridden?: boolean | null;
 };
 
 /**
@@ -15345,7 +16893,7 @@ export type EditTimer = {
     /**
      * Is Enabled
      */
-    is_enabled?: boolean;
+    is_enabled?: boolean | null;
     /**
      * Schedule Type
      */
@@ -15509,6 +17057,18 @@ export type KpiOverduePaymentsSummary = {
      * Oldestdaysoverdue
      */
     oldestDaysOverdue?: string;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Amountsavailable
+     */
+    amountsAvailable: boolean;
+    /**
+     * Uncoveredcurrencies
+     */
+    uncoveredCurrencies: string;
 };
 
 /**
@@ -15595,6 +17155,18 @@ export type KpiUpcomingPaymentsSummary = {
      * Duethisweek
      */
     dueThisWeek?: string;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Amountsavailable
+     */
+    amountsAvailable: boolean;
+    /**
+     * Uncoveredcurrencies
+     */
+    uncoveredCurrencies: string;
 };
 
 /**
@@ -15657,6 +17229,18 @@ export type KpiExpiringProposalsSummary = {
      * Totalvalueatrisk
      */
     totalValueAtRisk?: string;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Amountsavailable
+     */
+    amountsAvailable: boolean;
+    /**
+     * Uncoveredcurrencies
+     */
+    uncoveredCurrencies: string;
 };
 
 /**
@@ -16038,6 +17622,18 @@ export type KpiRevenueAtRiskSummary = {
      * Combinedatrisk
      */
     combinedAtRisk?: string;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Amountsavailable
+     */
+    amountsAvailable: boolean;
+    /**
+     * Uncoveredcurrencies
+     */
+    uncoveredCurrencies: string;
 };
 
 /**
@@ -16359,7 +17955,7 @@ export type EditAssetCategory = {
     /**
      * Is Active
      */
-    is_active?: boolean;
+    is_active?: boolean | null;
 };
 
 /**
@@ -16483,7 +18079,77 @@ export type EditCustomerLocation = {
     /**
      * Is Active
      */
-    is_active?: boolean;
+    is_active?: boolean | null;
+};
+
+/**
+ * OutputCoordinatesConflict
+ *
+ * 409 body for GPS capture on an entity that already has a pin.
+ *
+ * APIResponse-superset: the middleware still renders the message as a toast,
+ * and the client gets the stored point so it can show how far the pin would
+ * move before the user confirms the overwrite.
+ */
+export type OutputCoordinatesConflict = {
+    /**
+     * Response Id
+     */
+    response_id: string;
+    /**
+     * Success
+     */
+    success: boolean;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Url
+     */
+    url?: string | null;
+    /**
+     * Previous Latitude
+     */
+    previous_latitude: number;
+    /**
+     * Previous Longitude
+     */
+    previous_longitude: number;
+    /**
+     * Distance M
+     */
+    distance_m: number;
+};
+
+/**
+ * SetEntityCoordinates
+ *
+ * Field GPS capture for a location / customer location / customer asset.
+ *
+ * `accuracy_m` is the device-reported fix accuracy and is mandatory — writes
+ * above the workspace's `geo_capture_max_accuracy_m` floor are rejected, so a
+ * 500 m fix never gets stored as truth. An existing point is never silently
+ * overwritten: without `confirm_overwrite` the endpoint answers 409 with the
+ * stored point so the client can show how far the pin would move.
+ */
+export type SetEntityCoordinates = {
+    /**
+     * Latitude
+     */
+    latitude: number;
+    /**
+     * Longitude
+     */
+    longitude: number;
+    /**
+     * Accuracy M
+     */
+    accuracy_m: number;
+    /**
+     * Confirm Overwrite
+     */
+    confirm_overwrite?: boolean | null;
 };
 
 /**
@@ -16590,6 +18256,14 @@ export type OutputCustomerAsset = {
      * Parent Name
      */
     parent_name?: string | null;
+    /**
+     * Latitude
+     */
+    latitude?: number | null;
+    /**
+     * Longitude
+     */
+    longitude?: number | null;
 };
 
 /**
@@ -16719,7 +18393,7 @@ export type EditCustomerAsset = {
     /**
      * Is Customer Visible
      */
-    is_customer_visible?: boolean;
+    is_customer_visible?: boolean | null;
 };
 
 /**
@@ -16871,7 +18545,7 @@ export type EditLocation = {
     /**
      * Is Active
      */
-    is_active?: boolean;
+    is_active?: boolean | null;
     /**
      * Latitude
      */
@@ -16930,12 +18604,7 @@ export type NotificationItem = {
      * Created At
      */
     created_at: string;
-    /**
-     * Tenant
-     */
-    tenant?: {
-        [key: string]: unknown;
-    } | null;
+    tenant?: NotificationTenant | null;
     /**
      * Sender
      */
@@ -16946,6 +18615,26 @@ export type NotificationItem = {
      * Action Url
      */
     action_url?: string | null;
+};
+
+/**
+ * NotificationTenant
+ *
+ * The workspace a notification belongs to.
+ */
+export type NotificationTenant = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Path
+     */
+    path: string;
 };
 
 /**
@@ -16987,6 +18676,118 @@ export type OutputUserNotifications = {
 };
 
 /**
+ * NotificationGroupOption
+ *
+ * One collapsible section, filtered to what this workspace has enabled.
+ */
+export type NotificationGroupOption = {
+    /**
+     * Group
+     */
+    group: string;
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Types
+     */
+    types: Array<NotificationTypeOption>;
+};
+
+/**
+ * NotificationTypeOption
+ *
+ * One row in the preferences screen.
+ */
+export type NotificationTypeOption = {
+    /**
+     * Type
+     */
+    type: string;
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Description
+     */
+    description: string;
+    /**
+     * Icon
+     */
+    icon: string;
+    /**
+     * Priority
+     */
+    priority: string;
+    /**
+     * User Configurable
+     */
+    user_configurable: boolean;
+    /**
+     * Channels
+     */
+    channels: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * OutputNotificationPreferences
+ *
+ * The preferences screen's whole state: what can be tuned, and how it currently resolves.
+ */
+export type OutputNotificationPreferences = {
+    /**
+     * Scope
+     */
+    scope: string;
+    /**
+     * Edit Url
+     */
+    edit_url: string;
+    /**
+     * Channels
+     */
+    channels: Array<string>;
+    /**
+     * Editable Channels
+     */
+    editable_channels: Array<string>;
+    /**
+     * Groups
+     */
+    groups: Array<NotificationGroupOption>;
+};
+
+/**
+ * EditNotificationPreferences
+ *
+ * A **sparse** notification-preference edit.
+ *
+ * `preferences` maps a notification type or group key to the channels the user expressed an
+ * opinion about: `{"support": {"web": false}, "support_assigned": {"mobile": true}}`.
+ *
+ * Only the keys sent are written. An absent key keeps whatever was stored, and a stored key
+ * that is absent here is not cleared — matching how every other edit in this codebase
+ * behaves. To go back to following the product default, send the key with an empty object
+ * and it is removed.
+ */
+export type EditNotificationPreferences = {
+    /**
+     * Scope
+     */
+    scope?: 'user' | 'tenant';
+    /**
+     * Preferences
+     */
+    preferences?: {
+        [key: string]: unknown;
+    };
+};
+
+/**
  * OutputCustomerPortalProposals
  *
  * Customer portal proposals view with individual costs
@@ -17025,7 +18826,11 @@ export type OutputCustomerPortalProjects = {
     /**
      * Total Accepted Amount
      */
-    total_accepted_amount: number;
+    total_accepted_amount?: number | string | null;
+    /**
+     * Total By Currency
+     */
+    total_by_currency?: Array<PortalCurrencyTotal>;
     /**
      * Next Payment Date
      */
@@ -17040,6 +18845,26 @@ export type OutputCustomerPortalProjects = {
     org: {
         [key: string]: unknown;
     };
+};
+
+/**
+ * PortalCurrencyTotal
+ *
+ * One currency's share of a total the portal could not put into a single figure.
+ */
+export type PortalCurrencyTotal = {
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Symbol
+     */
+    symbol: string;
+    /**
+     * Amount
+     */
+    amount: number | string;
 };
 
 /**
@@ -17321,6 +19146,411 @@ export type PortalAcceptProposal = {
 };
 
 /**
+ * OutputPortalQuoteCatalog
+ */
+export type OutputPortalQuoteCatalog = {
+    /**
+     * Items
+     */
+    items: Array<PortalQuoteCatalogItem>;
+};
+
+/**
+ * PortalQuoteCatalogItem
+ *
+ * An orderable catalog item as the customer sees it: no costs, no internal codes.
+ */
+export type PortalQuoteCatalogItem = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Description For Customer
+     */
+    description_for_customer?: string;
+    /**
+     * Product Type
+     */
+    product_type: string;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string;
+    /**
+     * Price
+     */
+    price?: number | string | null;
+    /**
+     * Currency
+     */
+    currency?: string;
+};
+
+/**
+ * OutputPortalQuoteRequests
+ */
+export type OutputPortalQuoteRequests = {
+    /**
+     * Requests
+     */
+    requests: Array<PortalQuoteRequest>;
+    /**
+     * Org
+     */
+    org: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * PortalQuoteRequest
+ *
+ * A quote request as its customer sees it while it waits for an offer: what was asked, never
+ * the supplier's prices while the offer is being prepared.
+ */
+export type PortalQuoteRequest = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Reference
+     */
+    reference?: string | null;
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Wanted By
+     */
+    wanted_by?: string | null;
+    /**
+     * Customer Reference
+     */
+    customer_reference?: string;
+    /**
+     * Location Name
+     */
+    location_name?: string | null;
+    /**
+     * Asset Name
+     */
+    asset_name?: string | null;
+    /**
+     * Requested By Name
+     */
+    requested_by_name?: string | null;
+    /**
+     * Can Withdraw
+     */
+    can_withdraw: boolean;
+    /**
+     * Lines
+     */
+    lines?: Array<PortalQuoteRequestLine>;
+};
+
+/**
+ * PortalQuoteRequestLine
+ */
+export type PortalQuoteRequestLine = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Quantity
+     */
+    quantity: number;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string;
+};
+
+/**
+ * PortalQuoteLine
+ *
+ * One catalog item the customer asks a quote for. Prices are never taken from the client.
+ */
+export type PortalQuoteLine = {
+    /**
+     * Catalog Id
+     */
+    catalog_id: string;
+    /**
+     * Quantity
+     */
+    quantity: number;
+};
+
+/**
+ * PortalRequestQuote
+ *
+ * Input schema for a customer asking for a quote in the portal
+ */
+export type PortalRequestQuote = {
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Lines
+     */
+    lines: Array<PortalQuoteLine>;
+    /**
+     * Customer Location
+     */
+    customer_location?: string | null;
+    /**
+     * Customer Asset
+     */
+    customer_asset?: string | null;
+    /**
+     * Customer Reference
+     */
+    customer_reference?: string | null;
+    /**
+     * Wanted By
+     */
+    wanted_by?: string | null;
+};
+
+/**
+ * PortalWithdrawQuoteRequest
+ *
+ * Input schema for a customer withdrawing a quote request in the portal
+ */
+export type PortalWithdrawQuoteRequest = {
+    /**
+     * Confirmation
+     */
+    confirmation: boolean;
+};
+
+/**
+ * OutputPortalOrders
+ */
+export type OutputPortalOrders = {
+    /**
+     * Orders
+     */
+    orders: Array<PortalOrder>;
+    /**
+     * Org
+     */
+    org: {
+        [key: string]: unknown;
+    };
+};
+
+/**
+ * PortalOrder
+ */
+export type PortalOrder = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Reference
+     */
+    reference?: string | null;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * State Label
+     */
+    state_label: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Submitted At
+     */
+    submitted_at?: string | null;
+    /**
+     * Wanted By
+     */
+    wanted_by?: string | null;
+    /**
+     * Customer Reference
+     */
+    customer_reference?: string;
+    /**
+     * Location Id
+     */
+    location_id?: string | null;
+    /**
+     * Location Name
+     */
+    location_name?: string | null;
+    /**
+     * Asset Name
+     */
+    asset_name?: string | null;
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Requested By Name
+     */
+    requested_by_name?: string | null;
+    /**
+     * Rejection Reason
+     */
+    rejection_reason?: string | null;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Total
+     */
+    total: number | string;
+    /**
+     * Lines
+     */
+    lines?: Array<PortalOrderLineOutput>;
+    /**
+     * Can Cancel
+     */
+    can_cancel?: boolean;
+};
+
+/**
+ * PortalOrderLineOutput
+ *
+ * One line of a portal order as the customer sees it: the price agreed, never costs.
+ */
+export type PortalOrderLineOutput = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Quantity
+     */
+    quantity: number;
+    /**
+     * Unit Of Measure
+     */
+    unit_of_measure?: string;
+    /**
+     * Unit Price
+     */
+    unit_price: number | string;
+    /**
+     * Total
+     */
+    total: number | string;
+    /**
+     * Status Name
+     */
+    status_name?: string | null;
+    /**
+     * Status Type
+     */
+    status_type?: string | null;
+};
+
+/**
+ * PortalPlaceOrder
+ *
+ * Input schema for a customer placing an order in the portal. Prices never come from the client.
+ */
+export type PortalPlaceOrder = {
+    /**
+     * Description
+     */
+    description?: string;
+    /**
+     * Lines
+     */
+    lines: Array<PortalQuoteLine>;
+    /**
+     * Customer Location
+     */
+    customer_location?: string | null;
+    /**
+     * Customer Asset
+     */
+    customer_asset?: string | null;
+    /**
+     * Customer Reference
+     */
+    customer_reference?: string | null;
+    /**
+     * Wanted By
+     */
+    wanted_by?: string | null;
+};
+
+/**
+ * PortalCancelOrder
+ *
+ * Input schema for the customer cancelling a submitted order
+ */
+export type PortalCancelOrder = {
+    /**
+     * Confirmation
+     */
+    confirmation: boolean;
+};
+
+/**
+ * PortalConfirmOrderReceipt
+ *
+ * Input schema for the customer saying what of an order reached them
+ */
+export type PortalConfirmOrderReceipt = {
+    /**
+     * Outcomes
+     */
+    outcomes: Array<PortalReceiptLine>;
+};
+
+/**
+ * PortalReceiptLine
+ */
+export type PortalReceiptLine = {
+    /**
+     * Line Id
+     */
+    line_id: string;
+    /**
+     * Outcome
+     */
+    outcome: 'received' | 'not_received' | 'damaged';
+};
+
+/**
  * AddExternalSupportRequest
  *
  * Input schema for creating external support request from customer portal
@@ -17405,6 +19635,262 @@ export type PortalEditExternalSupportRequest = {
 };
 
 /**
+ * OutputPortalShareSummary
+ */
+export type OutputPortalShareSummary = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Message
+     */
+    message?: string;
+    /**
+     * Published At
+     */
+    published_at: string;
+    /**
+     * Expires At
+     */
+    expires_at?: string | null;
+    /**
+     * Proposal Count
+     */
+    proposal_count?: number;
+    /**
+     * Document Count
+     */
+    document_count?: number;
+    /**
+     * File Count
+     */
+    file_count?: number;
+};
+
+/**
+ * OutputPortalShares
+ */
+export type OutputPortalShares = {
+    /**
+     * Org Id
+     */
+    org_id: string;
+    /**
+     * Shares
+     */
+    shares: Array<OutputPortalShareSummary>;
+};
+
+/**
+ * OutputPortalShare
+ */
+export type OutputPortalShare = {
+    /**
+     * Org Id
+     */
+    org_id: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Message
+     */
+    message?: string;
+    /**
+     * Published At
+     */
+    published_at: string;
+    /**
+     * Expires At
+     */
+    expires_at?: string | null;
+    /**
+     * Proposals
+     */
+    proposals: Array<OutputPortalShareProposal>;
+    /**
+     * Documents
+     */
+    documents: Array<OutputPortalShareDocument>;
+    /**
+     * Files
+     */
+    files: Array<OutputPortalShareFile>;
+};
+
+/**
+ * OutputPortalShareDocument
+ */
+export type OutputPortalShareDocument = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Full Number
+     */
+    full_number?: string | null;
+    /**
+     * State
+     */
+    state: 'current' | 'changed';
+    /**
+     * Updated At
+     */
+    updated_at?: string | null;
+};
+
+/**
+ * OutputPortalShareFile
+ */
+export type OutputPortalShareFile = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Size
+     */
+    size: number;
+    /**
+     * State
+     */
+    state: 'current' | 'replaced';
+};
+
+/**
+ * OutputPortalShareProposal
+ */
+export type OutputPortalShareProposal = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * State
+     */
+    state: 'current' | 'updated' | 'revising' | 'accepted' | 'lost';
+    /**
+     * Sent At
+     */
+    sent_at?: string | null;
+    /**
+     * Accepted At
+     */
+    accepted_at?: string | null;
+};
+
+/**
+ * OutputPortalShareProposalPreview
+ */
+export type OutputPortalShareProposalPreview = {
+    /**
+     * Company
+     */
+    company: {
+        [key: string]: unknown;
+    };
+    /**
+     * Customer
+     */
+    customer: {
+        [key: string]: unknown;
+    };
+    /**
+     * Header
+     */
+    header: {
+        [key: string]: unknown;
+    };
+    /**
+     * Executive Summary
+     */
+    executive_summary: {
+        [key: string]: unknown;
+    };
+    /**
+     * Products
+     */
+    products: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Payment Schedule
+     */
+    payment_schedule: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Investment Summary
+     */
+    investment_summary: {
+        [key: string]: unknown;
+    };
+    /**
+     * Terms Conditions
+     */
+    terms_conditions: {
+        [key: string]: unknown;
+    };
+    /**
+     * Acceptance Info
+     */
+    acceptance_info: {
+        [key: string]: unknown;
+    };
+    /**
+     * Generated At
+     */
+    generated_at: string;
+    /**
+     * Tenant Path
+     */
+    tenant_path: string;
+    /**
+     * Proposal Id
+     */
+    proposal_id: string;
+    /**
+     * Customer Org Id
+     */
+    customer_org_id?: string | null;
+    /**
+     * Share Id
+     */
+    share_id: string;
+    /**
+     * Item Id
+     */
+    item_id: string;
+    /**
+     * Updated On
+     */
+    updated_on?: string | null;
+};
+
+/**
  * SubmitCustomForm
  */
 export type SubmitCustomForm = {
@@ -17438,6 +19924,14 @@ export type CreateBridge = {
      * Grant Proposal Accept
      */
     grant_proposal_accept?: boolean | null;
+    /**
+     * Grant Quote Request
+     */
+    grant_quote_request?: boolean | null;
+    /**
+     * Grant Order Place
+     */
+    grant_order_place?: boolean | null;
     /**
      * Grant Project View
      */
@@ -17828,6 +20322,14 @@ export type AcceptBridge = {
      */
     grant_proposal_accept?: boolean | null;
     /**
+     * Grant Quote Request
+     */
+    grant_quote_request?: boolean | null;
+    /**
+     * Grant Order Place
+     */
+    grant_order_place?: boolean | null;
+    /**
      * Grant Project View
      */
     grant_project_view?: boolean | null;
@@ -17875,6 +20377,14 @@ export type EditBridgeGrants = {
      * Grant Proposal Accept
      */
     grant_proposal_accept?: boolean | null;
+    /**
+     * Grant Quote Request
+     */
+    grant_quote_request?: boolean | null;
+    /**
+     * Grant Order Place
+     */
+    grant_order_place?: boolean | null;
     /**
      * Grant Project View
      */
@@ -19753,11 +22263,11 @@ export type OverviewKpis = {
     /**
      * Won Revenue
      */
-    won_revenue: number | string;
+    won_revenue?: number | string | null;
     /**
      * Won Revenue Previous
      */
-    won_revenue_previous: number | string;
+    won_revenue_previous?: number | string | null;
     /**
      * Won Revenue Change Percent
      */
@@ -19854,6 +22364,18 @@ export type AnalyticsAlertItem = {
      * Action Url
      */
     action_url?: string | null;
+    /**
+     * Amount
+     */
+    amount?: number | string | null;
+    /**
+     * Currency
+     */
+    currency?: string | null;
+    /**
+     * Days Info
+     */
+    days_info?: string | null;
 };
 
 /**
@@ -19947,7 +22469,11 @@ export type AnalyticsAlerts = {
 /**
  * AnalyticsTrendItem
  *
- * Single trend indicator
+ * Single trend indicator.
+ *
+ * `unit` is the dimension the figure is in -- a currency code, `%`, `deals`, `tickets` -- so a
+ * consumer formats it without guessing. The template used to decide by matching words in the
+ * translated `name`.
  */
 export type AnalyticsTrendItem = {
     /**
@@ -19955,13 +22481,17 @@ export type AnalyticsTrendItem = {
      */
     name: string;
     /**
+     * Unit
+     */
+    unit?: string;
+    /**
      * Current Value
      */
-    current_value: number | string;
+    current_value?: number | string | null;
     /**
      * Previous Value
      */
-    previous_value: number | string;
+    previous_value?: number | string | null;
     /**
      * Change Percent
      */
@@ -20121,27 +22651,39 @@ export type AnalyticsCashflowOverview = {
     /**
      * Total Income Scheduled
      */
-    total_income_scheduled: number | string;
+    total_income_scheduled?: number | string | null;
     /**
      * Total Income Realized
      */
-    total_income_realized: number | string;
+    total_income_realized?: number | string | null;
     /**
      * Total Payments Scheduled
      */
-    total_payments_scheduled: number | string;
+    total_payments_scheduled?: number | string | null;
     /**
      * Total Payments Realized
      */
-    total_payments_realized: number | string;
+    total_payments_realized?: number | string | null;
     /**
      * Net Position Scheduled
      */
-    net_position_scheduled: number | string;
+    net_position_scheduled?: number | string | null;
     /**
      * Net Position Realized
      */
-    net_position_realized: number | string;
+    net_position_realized?: number | string | null;
+    /**
+     * Income Collected Percent
+     */
+    income_collected_percent?: number | string | null;
+    /**
+     * Payments Made Percent
+     */
+    payments_made_percent?: number | string | null;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
     /**
      * Currency
      */
@@ -20165,27 +22707,27 @@ export type AnalyticsCashflowBucket = {
     /**
      * Income Projected
      */
-    income_projected: number | string;
+    income_projected?: number | string | null;
     /**
      * Income Realized
      */
-    income_realized: number | string;
+    income_realized?: number | string | null;
     /**
      * Payments Projected
      */
-    payments_projected: number | string;
+    payments_projected?: number | string | null;
     /**
      * Payments Realized
      */
-    payments_realized: number | string;
+    payments_realized?: number | string | null;
     /**
      * Net Projected
      */
-    net_projected: number | string;
+    net_projected?: number | string | null;
     /**
      * Net Realized
      */
-    net_realized: number | string;
+    net_realized?: number | string | null;
 };
 
 /**
@@ -20266,6 +22808,10 @@ export type AnalyticsCashflowProjections = {
      * Granularity
      */
     granularity?: string;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
     /**
      * Buckets
      */
@@ -20359,6 +22905,10 @@ export type AnalyticsCashflowBreakdown = {
      */
     payments_by_source?: Array<AnalyticsCashflowSourceItem>;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Currency
      */
     currency: string;
@@ -20377,11 +22927,11 @@ export type AnalyticsCashflowSourceItem = {
     /**
      * Amount Scheduled
      */
-    amount_scheduled: number | string;
+    amount_scheduled?: number | string | null;
     /**
      * Amount Realized
      */
-    amount_realized: number | string;
+    amount_realized?: number | string | null;
 };
 
 /**
@@ -20465,7 +23015,7 @@ export type SalesKpis = {
     /**
      * Win Rate Percent
      */
-    win_rate_percent: number | string;
+    win_rate_percent?: number | string | null;
     /**
      * Win Rate Benchmark
      */
@@ -20485,7 +23035,7 @@ export type SalesKpis = {
     /**
      * Avg Deal Size
      */
-    avg_deal_size: number | string;
+    avg_deal_size?: number | string | null;
     /**
      * Avg Deal Size Status
      */
@@ -20493,15 +23043,15 @@ export type SalesKpis = {
     /**
      * Largest Deal Value
      */
-    largest_deal_value: number | string;
+    largest_deal_value?: number | string | null;
     /**
      * Smallest Deal Value
      */
-    smallest_deal_value: number | string;
+    smallest_deal_value?: number | string | null;
     /**
      * Sales Velocity
      */
-    sales_velocity: number | string;
+    sales_velocity?: number | string | null;
     /**
      * Sales Velocity Status
      */
@@ -20513,23 +23063,27 @@ export type SalesKpis = {
     /**
      * Revenue Won Period
      */
-    revenue_won_period: number | string;
+    revenue_won_period?: number | string | null;
     /**
      * Revenue Won Previous
      */
-    revenue_won_previous: number | string;
+    revenue_won_previous?: number | string | null;
     /**
      * Revenue Won Trend
      */
     revenue_won_trend: string;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Pipeline Total Value
      */
-    pipeline_total_value: number | string;
+    pipeline_total_value?: number | string | null;
     /**
      * Pipeline Weighted Value
      */
-    pipeline_weighted_value: number | string;
+    pipeline_weighted_value?: number | string | null;
     /**
      * Pipeline Status
      */
@@ -20593,7 +23147,7 @@ export type AnalyticsSalesFunnel = {
     /**
      * Total Value
      */
-    total_value: number | string;
+    total_value?: number | string | null;
 };
 
 /**
@@ -20688,11 +23242,19 @@ export type AnalyticsSalesPipeline = {
     /**
      * Total Pipeline Value
      */
-    total_pipeline_value: number | string;
+    total_pipeline_value?: number | string | null;
     /**
      * Weighted Pipeline Value
      */
-    weighted_pipeline_value: number | string;
+    weighted_pipeline_value?: number | string | null;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
+     * Coverage Percent
+     */
+    coverage_percent?: number | string | null;
     /**
      * Total Deals
      */
@@ -20744,11 +23306,11 @@ export type AnalyticsSalesPipelineStage = {
     /**
      * Total Value
      */
-    total_value: number | string;
+    total_value?: number | string | null;
     /**
      * Weighted Value
      */
-    weighted_value: number | string;
+    weighted_value?: number | string | null;
     /**
      * Avg Days In Stage
      */
@@ -20784,23 +23346,37 @@ export type AnalyticsPerformanceEntry = {
     /**
      * Total Revenue
      */
-    total_revenue: number | string;
+    total_revenue?: number | string | null;
     /**
      * Win Rate
      */
-    win_rate: number | string;
+    win_rate?: number | string | null;
     /**
      * Avg Deal Size
      */
-    avg_deal_size: number | string;
+    avg_deal_size?: number | string | null;
     /**
      * Prev Revenue
      */
     prev_revenue?: number | string | null;
     /**
      * Revenue Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    revenue_change_pct?: number | string | 'new' | null;
+    revenue_change_pct?: number | string | null;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
+     * Attainment
+     */
+    attainment?: Array<TargetAttainmentEntry>;
 };
 
 /**
@@ -20876,7 +23452,7 @@ export type AnalyticsSalesPerformance = {
     /**
      * Total Revenue
      */
-    total_revenue: number | string;
+    total_revenue?: number | string | null;
     /**
      * Deals Won
      */
@@ -20888,19 +23464,25 @@ export type AnalyticsSalesPerformance = {
     /**
      * Win Rate
      */
-    win_rate: number | string;
+    win_rate?: number | string | null;
     /**
      * Avg Deal Size
      */
-    avg_deal_size: number | string;
+    avg_deal_size?: number | string | null;
     /**
      * Prev Total Revenue
      */
     prev_total_revenue?: number | string | null;
     /**
      * Revenue Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
     revenue_change_pct?: number | string | null;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
     /**
      * Salespeople
      */
@@ -20917,6 +23499,420 @@ export type AnalyticsSalesPerformance = {
      * Currency
      */
     currency: string;
+};
+
+/**
+ * TargetAttainmentEntry
+ *
+ * Attainment of one sales target metric for a report period.
+ *
+ * `target` is the whole period's number (the month for MTD, the quarter for QTD, the year for YTD),
+ * split from the rows in `sources` by calendar month. Attainment and bands are measured against it.
+ * `expected_to_date` is the share due by the end of the window -- the "expected by today" marker.
+ *
+ * `attainment_pct` and `band_name` are None whenever the comparison cannot honestly be made, with
+ * `unavailable` carrying the reason, and while the period has not started (`not_started`). A missing
+ * target produces no entry at all rather than a zero: a target nobody set is not one somebody missed.
+ */
+export type TargetAttainmentEntry = {
+    /**
+     * Metric
+     */
+    metric: string;
+    /**
+     * Metric Label
+     */
+    metric_label: string;
+    /**
+     * Target
+     */
+    target: number | string;
+    /**
+     * Currency
+     */
+    currency?: string | null;
+    /**
+     * Actual
+     */
+    actual?: number | string | null;
+    /**
+     * Attainment Pct
+     */
+    attainment_pct?: number | string | null;
+    /**
+     * Band Name
+     */
+    band_name?: string | null;
+    /**
+     * Scheme Name
+     */
+    scheme_name: string;
+    /**
+     * Period Start
+     */
+    period_start?: string | null;
+    /**
+     * Period End
+     */
+    period_end?: string | null;
+    /**
+     * Expected To Date
+     */
+    expected_to_date?: number | string | null;
+    /**
+     * Expected Pct
+     */
+    expected_pct?: number | string | null;
+    /**
+     * Pace Gap
+     */
+    pace_gap?: number | string | null;
+    /**
+     * Elapsed
+     */
+    elapsed?: number | string;
+    /**
+     * Period Length
+     */
+    period_length?: number | string;
+    /**
+     * Length Unit
+     */
+    length_unit?: string;
+    /**
+     * Not Started
+     */
+    not_started?: boolean;
+    /**
+     * Coverage Partial
+     */
+    coverage_partial?: boolean;
+    /**
+     * Covered From
+     */
+    covered_from?: string | null;
+    /**
+     * Covered Until
+     */
+    covered_until?: string | null;
+    /**
+     * Prorated
+     */
+    prorated?: boolean;
+    /**
+     * Target Count
+     */
+    target_count?: number;
+    /**
+     * Sources
+     */
+    sources?: Array<TargetSource>;
+    /**
+     * Unavailable
+     */
+    unavailable?: string | null;
+    /**
+     * Bands
+     */
+    bands?: Array<TargetBandRung>;
+    /**
+     * Segments
+     */
+    segments?: Array<TargetBandSegment>;
+    /**
+     * Scale Max Pct
+     */
+    scale_max_pct?: number | string;
+};
+
+/**
+ * TargetBandRung
+ *
+ * One rung of the scheme's band ladder, so a surface can draw the whole ladder rather than
+ * only the rung reached.
+ */
+export type TargetBandRung = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Threshold Percent
+     */
+    threshold_percent: number | string;
+};
+
+/**
+ * TargetBandSegment
+ *
+ * One stretch of the attainment bar, already measured as a share of the track.
+ *
+ * The arithmetic is done here rather than in the template: widths depend on where the ladder ends
+ * and on whether the person went past it, and a template cannot divide.
+ */
+export type TargetBandSegment = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Width Pct
+     */
+    width_pct: number | string;
+    /**
+     * Achieved
+     */
+    achieved: boolean;
+};
+
+/**
+ * TargetSource
+ *
+ * One target row behind an attainment entry, as the admin typed it, with its monthly rate.
+ */
+export type TargetSource = {
+    /**
+     * Amount
+     */
+    amount: number | string;
+    /**
+     * Currency
+     */
+    currency?: string | null;
+    /**
+     * Period Start
+     */
+    period_start: string;
+    /**
+     * Period End
+     */
+    period_end: string;
+    /**
+     * Per Month
+     */
+    per_month: number | string;
+};
+
+/**
+ * AnalyticsSalespersonSales
+ *
+ * One salesperson's won deals for a period, with the same KPIs the dashboard shows.
+ */
+export type AnalyticsSalespersonSales = {
+    /**
+     * Period
+     */
+    period?: string;
+    /**
+     * Temporal Type
+     */
+    temporal_type?: string;
+    /**
+     * Generated At
+     */
+    generated_at?: string | null;
+    /**
+     * Period Label
+     */
+    period_label?: string | null;
+    /**
+     * Horizon
+     */
+    horizon?: string | null;
+    /**
+     * Horizon Label
+     */
+    horizon_label?: string | null;
+    /**
+     * Horizon Options
+     */
+    horizon_options?: Array<HorizonOption> | null;
+    /**
+     * Compare
+     */
+    compare?: string | null;
+    /**
+     * Compare Label
+     */
+    compare_label?: string | null;
+    /**
+     * Compare Options
+     */
+    compare_options?: Array<CompareOption> | null;
+    /**
+     * Filter Severity
+     */
+    filter_severity?: string | null;
+    /**
+     * Filter Severity Label
+     */
+    filter_severity_label?: string | null;
+    /**
+     * Filter Category
+     */
+    filter_category?: string | null;
+    /**
+     * Filter Category Label
+     */
+    filter_category_label?: string | null;
+    /**
+     * Filter Type
+     */
+    filter_type?: string | null;
+    /**
+     * Filter Type Label
+     */
+    filter_type_label?: string | null;
+    /**
+     * Member Id
+     */
+    member_id: string;
+    /**
+     * Member Name
+     */
+    member_name: string;
+    /**
+     * Avatar Url
+     */
+    avatar_url?: string | null;
+    /**
+     * Is Self
+     */
+    is_self?: boolean;
+    /**
+     * Total Revenue
+     */
+    total_revenue?: number | string | null;
+    /**
+     * Deals Won
+     */
+    deals_won: number;
+    /**
+     * Deals Lost
+     */
+    deals_lost: number;
+    /**
+     * Win Rate
+     */
+    win_rate?: number | string | null;
+    /**
+     * Avg Deal Size
+     */
+    avg_deal_size?: number | string | null;
+    /**
+     * Prev Revenue
+     */
+    prev_revenue?: number | string | null;
+    /**
+     * Revenue Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
+     */
+    revenue_change_pct?: number | string | null;
+    /**
+     * Rows
+     */
+    rows?: Array<SalespersonSaleRow>;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
+     * Series
+     */
+    series?: Array<SalesSeriesPoint>;
+    /**
+     * Series Previous
+     */
+    series_previous?: Array<SalesSeriesPoint>;
+    /**
+     * Window Start
+     */
+    window_start?: string | null;
+    /**
+     * Window End
+     */
+    window_end?: string | null;
+    /**
+     * Previous Start
+     */
+    previous_start?: string | null;
+    /**
+     * Previous End
+     */
+    previous_end?: string | null;
+    /**
+     * Attainment
+     */
+    attainment?: Array<TargetAttainmentEntry>;
+};
+
+/**
+ * SalesSeriesPoint
+ *
+ * One day of a salesperson's running total, in the workspace currency.
+ */
+export type SalesSeriesPoint = {
+    /**
+     * Date
+     */
+    date: string;
+    /**
+     * Value
+     */
+    value: number | string;
+};
+
+/**
+ * SalespersonSaleRow
+ *
+ * One won deal on the salesperson page.
+ */
+export type SalespersonSaleRow = {
+    /**
+     * Approved At
+     */
+    approved_at?: string | null;
+    /**
+     * Value
+     */
+    value: number | string;
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * Project Id
+     */
+    project_id: string;
+    /**
+     * Project Name
+     */
+    project_name: string;
+    /**
+     * Customer Id
+     */
+    customer_id?: string | null;
+    /**
+     * Customer Name
+     */
+    customer_name?: string | null;
+    /**
+     * Lead Id
+     */
+    lead_id?: string | null;
+    /**
+     * Lead Name
+     */
+    lead_name?: string | null;
+    /**
+     * Lead Count
+     */
+    lead_count?: number;
 };
 
 /**
@@ -21032,12 +24028,16 @@ export type AnalyticsSalesConversion = {
     prev_win_rate?: number | string | null;
     /**
      * Conversion Rate Change
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    conversion_rate_change?: number | string | 'new' | null;
+    conversion_rate_change?: number | string | null;
     /**
      * Win Rate Change
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    win_rate_change?: number | string | 'new' | null;
+    win_rate_change?: number | string | null;
     /**
      * Funnel Id
      */
@@ -21148,8 +24148,10 @@ export type AnalyticsSalesConversionStage = {
     prev_conversion_rate?: number | string | null;
     /**
      * Conversion Rate Change
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    conversion_rate_change?: number | string | 'new' | null;
+    conversion_rate_change?: number | string | null;
 };
 
 /**
@@ -21230,21 +24232,25 @@ export type AnalyticsSalesForecast = {
      */
     filter_type_label?: string | null;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Total Pipeline Value
      */
-    total_pipeline_value: number | string;
+    total_pipeline_value?: number | string | null;
     /**
      * Total Weighted Value
      */
-    total_weighted_value: number | string;
+    total_weighted_value?: number | string | null;
     /**
      * Total Best Case
      */
-    total_best_case: number | string;
+    total_best_case?: number | string | null;
     /**
      * Total Worst Case
      */
-    total_worst_case: number | string;
+    total_worst_case?: number | string | null;
     /**
      * Total Deals
      */
@@ -21252,7 +24258,7 @@ export type AnalyticsSalesForecast = {
     /**
      * Avg Deal Size
      */
-    avg_deal_size: number | string;
+    avg_deal_size?: number | string | null;
     /**
      * Avg Sales Cycle Days
      */
@@ -21272,7 +24278,7 @@ export type AnalyticsSalesForecast = {
     /**
      * Value Without Close Date
      */
-    value_without_close_date?: number | string;
+    value_without_close_date?: number | string | null;
     /**
      * Currency
      */
@@ -21304,19 +24310,19 @@ export type AnalyticsSalesForecastBucket = {
     /**
      * Pipeline Value
      */
-    pipeline_value: number | string;
+    pipeline_value?: number | string | null;
     /**
      * Weighted Value
      */
-    weighted_value: number | string;
+    weighted_value?: number | string | null;
     /**
      * Best Case
      */
-    best_case: number | string;
+    best_case?: number | string | null;
     /**
      * Worst Case
      */
-    worst_case: number | string;
+    worst_case?: number | string | null;
 };
 
 /**
@@ -21392,13 +24398,19 @@ export type FinancialKpis = {
      */
     filter_type_label?: string | null;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Total Revenue
      */
-    total_revenue: number | string;
+    total_revenue?: number | string | null;
     /**
      * Revenue Growth Percent
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    revenue_growth_percent: number | string;
+    revenue_growth_percent?: number | string | null;
     /**
      * Revenue Status
      */
@@ -21406,15 +24418,15 @@ export type FinancialKpis = {
     /**
      * Recurring Revenue
      */
-    recurring_revenue: number | string;
+    recurring_revenue?: number | string | null;
     /**
      * One Time Revenue
      */
-    one_time_revenue: number | string;
+    one_time_revenue?: number | string | null;
     /**
      * Gross Margin Percent
      */
-    gross_margin_percent: number | string;
+    gross_margin_percent?: number | string | null;
     /**
      * Gross Margin Target
      */
@@ -21430,31 +24442,35 @@ export type FinancialKpis = {
     /**
      * Outstanding Ar
      */
-    outstanding_ar: number | string;
+    outstanding_ar?: number | string | null;
     /**
      * Ar Current
      */
-    ar_current: number | string;
+    ar_current?: number | string | null;
     /**
      * Ar Overdue
      */
-    ar_overdue: number | string;
+    ar_overdue?: number | string | null;
     /**
      * Ar Overdue 30 Plus
      */
-    ar_overdue_30_plus: number | string;
+    ar_overdue_30_plus?: number | string | null;
     /**
      * Ar Status
      */
     ar_status: string;
     /**
+     * Ar Nothing Outstanding
+     */
+    ar_nothing_outstanding?: boolean;
+    /**
      * Ar At Risk Percent
      */
-    ar_at_risk_percent: number | string;
+    ar_at_risk_percent?: number | string | null;
     /**
      * Dso Days
      */
-    dso_days: number;
+    dso_days?: number | null;
     /**
      * Dso Target
      */
@@ -21546,15 +24562,27 @@ export type AnalyticsFinancialRevenue = {
     /**
      * Total Revenue
      */
-    total_revenue: number | string;
+    total_revenue?: number | string | null;
     /**
      * Recurring Revenue
      */
-    recurring_revenue: number | string;
+    recurring_revenue?: number | string | null;
     /**
      * One Time Revenue
      */
-    one_time_revenue: number | string;
+    one_time_revenue?: number | string | null;
+    /**
+     * Recurring Percent
+     */
+    recurring_percent?: number | string | null;
+    /**
+     * One Time Percent
+     */
+    one_time_percent?: number | string | null;
+    /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
     /**
      * Revenue By Category
      */
@@ -21581,22 +24609,32 @@ export type AnalyticsFinancialRevenue = {
     prev_one_time_revenue?: number | string | null;
     /**
      * Total Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    total_change_pct?: number | string | 'new' | null;
+    total_change_pct?: number | string | null;
     /**
      * Recurring Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    recurring_change_pct?: number | string | 'new' | null;
+    recurring_change_pct?: number | string | null;
     /**
      * One Time Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    one_time_change_pct?: number | string | 'new' | null;
+    one_time_change_pct?: number | string | null;
 };
 
 /**
  * AnalyticsRevenueCategoryItem
  *
- * Revenue by category
+ * Revenue by category.
+ *
+ * Optional for the same reason the headline totals are: a category whose payments sit in a currency
+ * with no rate has no amount. The old loop skipped those rows, so this field was never null -- it was
+ * silently too small instead, which is the worse of the two answers.
  */
 export type AnalyticsRevenueCategoryItem = {
     /**
@@ -21606,17 +24644,17 @@ export type AnalyticsRevenueCategoryItem = {
     /**
      * Amount
      */
-    amount: number | string;
+    amount?: number | string | null;
     /**
      * Percent Of Total
      */
-    percent_of_total: number | string;
+    percent_of_total?: number | string | null;
 };
 
 /**
  * AnalyticsRevenueMonthItem
  *
- * Revenue for a single month
+ * Revenue for a single month. Null where that month holds a payment with no rate.
  */
 export type AnalyticsRevenueMonthItem = {
     /**
@@ -21626,21 +24664,21 @@ export type AnalyticsRevenueMonthItem = {
     /**
      * Recurring
      */
-    recurring: number | string;
+    recurring?: number | string | null;
     /**
      * One Time
      */
-    one_time: number | string;
+    one_time?: number | string | null;
     /**
      * Total
      */
-    total: number | string;
+    total?: number | string | null;
 };
 
 /**
  * AnalyticsCostCategoryItem
  *
- * Costs by category
+ * Costs by category. Null where that category holds an expense with no rate.
  */
 export type AnalyticsCostCategoryItem = {
     /**
@@ -21650,17 +24688,17 @@ export type AnalyticsCostCategoryItem = {
     /**
      * Amount
      */
-    amount: number | string;
+    amount?: number | string | null;
     /**
      * Percent Of Total
      */
-    percent_of_total: number | string;
+    percent_of_total?: number | string | null;
 };
 
 /**
  * AnalyticsCostMonthItem
  *
- * Costs for a single month
+ * Costs for a single month. Null where that month holds an expense with no rate.
  */
 export type AnalyticsCostMonthItem = {
     /**
@@ -21670,15 +24708,15 @@ export type AnalyticsCostMonthItem = {
     /**
      * Direct
      */
-    direct: number | string;
+    direct?: number | string | null;
     /**
      * Overhead
      */
-    overhead: number | string;
+    overhead?: number | string | null;
     /**
      * Total
      */
-    total: number | string;
+    total?: number | string | null;
 };
 
 /**
@@ -21752,17 +24790,29 @@ export type AnalyticsFinancialCosts = {
      */
     filter_type_label?: string | null;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Total Costs
      */
-    total_costs: number | string;
+    total_costs?: number | string | null;
     /**
      * Direct Costs
      */
-    direct_costs: number | string;
+    direct_costs?: number | string | null;
     /**
      * Overhead Costs
      */
-    overhead_costs: number | string;
+    overhead_costs?: number | string | null;
+    /**
+     * Direct Percent
+     */
+    direct_percent?: number | string | null;
+    /**
+     * Overhead Percent
+     */
+    overhead_percent?: number | string | null;
     /**
      * Costs By Category
      */
@@ -21789,16 +24839,22 @@ export type AnalyticsFinancialCosts = {
     prev_overhead_costs?: number | string | null;
     /**
      * Total Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    total_change_pct?: number | string | 'new' | null;
+    total_change_pct?: number | string | null;
     /**
      * Direct Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    direct_change_pct?: number | string | 'new' | null;
+    direct_change_pct?: number | string | null;
     /**
      * Overhead Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    overhead_change_pct?: number | string | 'new' | null;
+    overhead_change_pct?: number | string | null;
 };
 
 /**
@@ -21872,13 +24928,21 @@ export type AnalyticsFinancialMargins = {
      */
     filter_type_label?: string | null;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Gross Margin Percent
      */
-    gross_margin_percent: number | string;
+    gross_margin_percent?: number | string | null;
     /**
      * Contribution Margin Percent
      */
-    contribution_margin_percent: number | string;
+    contribution_margin_percent?: number | string | null;
+    /**
+     * No Costs Recorded
+     */
+    no_costs_recorded?: boolean;
     /**
      * Margins By Product
      */
@@ -21901,18 +24965,22 @@ export type AnalyticsFinancialMargins = {
     prev_contribution_margin_pct?: number | string | null;
     /**
      * Gross Margin Change Pp
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    gross_margin_change_pp?: number | string | 'new' | null;
+    gross_margin_change_pp?: number | string | null;
     /**
      * Contribution Margin Change Pp
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    contribution_margin_change_pp?: number | string | 'new' | null;
+    contribution_margin_change_pp?: number | string | null;
 };
 
 /**
  * AnalyticsMarginItem
  *
- * Margin for a single entity
+ * Margin for a single entity. Null wherever that entity holds a row with no rate.
  */
 export type AnalyticsMarginItem = {
     /**
@@ -21922,25 +24990,25 @@ export type AnalyticsMarginItem = {
     /**
      * Revenue
      */
-    revenue: number | string;
+    revenue?: number | string | null;
     /**
      * Costs
      */
-    costs: number | string;
+    costs?: number | string | null;
     /**
      * Gross Margin
      */
-    gross_margin: number | string;
+    gross_margin?: number | string | null;
     /**
      * Gross Margin Percent
      */
-    gross_margin_percent: number | string;
+    gross_margin_percent?: number | string | null;
 };
 
 /**
  * AnalyticsARCustomerItem
  *
- * AR aging by customer
+ * AR aging by customer. Null wherever that band holds a receivable with no rate.
  */
 export type AnalyticsArCustomerItem = {
     /**
@@ -21950,29 +25018,37 @@ export type AnalyticsArCustomerItem = {
     /**
      * Current
      */
-    current: number | string;
+    current?: number | string | null;
     /**
      * Days 30
      */
-    days_30: number | string;
+    days_30?: number | string | null;
     /**
      * Days 60
      */
-    days_60: number | string;
+    days_60?: number | string | null;
+    /**
+     * Days 61 90
+     */
+    days_61_90?: number | string | null;
     /**
      * Days 90 Plus
      */
-    days_90_plus: number | string;
+    days_90_plus?: number | string | null;
     /**
      * Total
      */
-    total: number | string;
+    total?: number | string | null;
 };
 
 /**
  * AnalyticsFinancialAging
  *
- * AR/AP aging analysis
+ * AR/AP aging analysis.
+ *
+ * Every band is Optional. Only the two totals were, so the three overdue bands reported the rows
+ * that converted while the total above them was refused -- the bands added up to more than the
+ * figure they belonged to, and the wider one was the one marked unavailable.
  */
 export type AnalyticsFinancialAging = {
     /**
@@ -22040,25 +25116,37 @@ export type AnalyticsFinancialAging = {
      */
     filter_type_label?: string | null;
     /**
+     * Uncovered Currencies
+     */
+    uncovered_currencies?: Array<string>;
+    /**
      * Ar Total
      */
-    ar_total: number | string;
+    ar_total?: number | string | null;
     /**
      * Ar Current
      */
-    ar_current: number | string;
+    ar_current?: number | string | null;
     /**
      * Ar 30 Days
      */
-    ar_30_days: number | string;
+    ar_30_days?: number | string | null;
     /**
      * Ar 60 Days
      */
-    ar_60_days: number | string;
+    ar_60_days?: number | string | null;
+    /**
+     * Ar 61 90 Days
+     */
+    ar_61_90_days?: number | string | null;
     /**
      * Ar 90 Plus Days
      */
-    ar_90_plus_days: number | string;
+    ar_90_plus_days?: number | string | null;
+    /**
+     * Ar Risk Percent
+     */
+    ar_risk_percent?: number | string | null;
     /**
      * Ar By Customer
      */
@@ -22066,23 +25154,31 @@ export type AnalyticsFinancialAging = {
     /**
      * Ap Total
      */
-    ap_total: number | string;
+    ap_total?: number | string | null;
     /**
      * Ap Current
      */
-    ap_current: number | string;
+    ap_current?: number | string | null;
     /**
      * Ap 30 Days
      */
-    ap_30_days: number | string;
+    ap_30_days?: number | string | null;
     /**
      * Ap 60 Days
      */
-    ap_60_days: number | string;
+    ap_60_days?: number | string | null;
+    /**
+     * Ap 61 90 Days
+     */
+    ap_61_90_days?: number | string | null;
     /**
      * Ap 90 Plus Days
      */
-    ap_90_plus_days: number | string;
+    ap_90_plus_days?: number | string | null;
+    /**
+     * Ap Overdue Percent
+     */
+    ap_overdue_percent?: number | string | null;
     /**
      * Currency
      */
@@ -22171,6 +25267,10 @@ export type DeliveryKpis = {
      */
     total_pending_items: number;
     /**
+     * Remaining Items
+     */
+    remaining_items?: number;
+    /**
      * Overdue Items
      */
     overdue_items: number;
@@ -22183,13 +25283,13 @@ export type DeliveryKpis = {
      */
     backlog_status: string;
     /**
-     * Hours Logged Period
+     * Minutes Logged Period
      */
-    hours_logged_period: number;
+    minutes_logged_period: number;
     /**
-     * Hours Logged Total
+     * Minutes Logged Total
      */
-    hours_logged_total: number;
+    minutes_logged_total: number;
     /**
      * Progress Status
      */
@@ -22345,7 +25445,7 @@ export type AnalyticsProjectRemainingItem = {
     /**
      * Progress Pct
      */
-    progress_pct: number;
+    progress_pct: number | string;
 };
 
 /**
@@ -22429,7 +25529,7 @@ export type AnalyticsDeliveryMilestones = {
     /**
      * Avg Utilization
      */
-    avg_utilization: number;
+    avg_utilization: number | string;
     /**
      * Horizon Days
      */
@@ -22486,7 +25586,7 @@ export type AnalyticsTeamWorkloadItem = {
     /**
      * Utilization Pct
      */
-    utilization_pct?: number | null;
+    utilization_pct?: number | string | null;
     /**
      * Status
      */
@@ -22813,7 +25913,7 @@ export type ResourcesKpis = {
     /**
      * Utilization Percent
      */
-    utilization_percent: number | string;
+    utilization_percent?: number | string | null;
     /**
      * Utilization Target Low
      */
@@ -22849,7 +25949,7 @@ export type ResourcesKpis = {
     /**
      * Weeks Of Capacity
      */
-    weeks_of_capacity: number | string;
+    weeks_of_capacity?: number | string | null;
     /**
      * Total Resources
      */
@@ -22953,7 +26053,7 @@ export type AnalyticsResourcesUtilization = {
     /**
      * Overall Utilization Rate
      */
-    overall_utilization_rate: number | string;
+    overall_utilization_rate?: number | string | null;
     /**
      * Total Booked Hours
      */
@@ -23252,7 +26352,7 @@ export type AnalyticsResourcesAllocation = {
     /**
      * Allocation Efficiency
      */
-    allocation_efficiency: number | string;
+    allocation_efficiency?: number | string | null;
     /**
      * Overallocated Resources
      */
@@ -23693,8 +26793,10 @@ export type AnalyticsSupportSla = {
     prev_total_closed?: number | null;
     /**
      * Closed Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    closed_change_pct?: number | 'new' | null;
+    closed_change_pct?: number | string | null;
 };
 
 /**
@@ -23813,12 +26915,16 @@ export type AnalyticsSupportTrends = {
     prev_total_closed?: number | null;
     /**
      * Created Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    created_change_pct?: number | 'new' | null;
+    created_change_pct?: number | string | null;
     /**
      * Closed Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    closed_change_pct?: number | 'new' | null;
+    closed_change_pct?: number | string | null;
 };
 
 /**
@@ -24063,8 +27169,10 @@ export type AnalyticsFormsVolume = {
     prev_total_submissions?: number | null;
     /**
      * Submissions Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    submissions_change_pct?: number | 'new' | null;
+    submissions_change_pct?: number | string | null;
 };
 
 /**
@@ -24155,8 +27263,10 @@ export type AnalyticsFormsBreakdown = {
     prev_total_submissions?: number | null;
     /**
      * Total Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    total_change_pct?: number | 'new' | null;
+    total_change_pct?: number | string | null;
 };
 
 /**
@@ -24179,8 +27289,10 @@ export type AnalyticsFormsCountItem = {
     prev_count?: number | null;
     /**
      * Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    change_pct?: number | 'new' | null;
+    change_pct?: number | string | null;
 };
 
 /**
@@ -24291,8 +27403,10 @@ export type AnalyticsTopFormItem = {
     prev_count?: number | null;
     /**
      * Change Pct
+     *
+     * A percentage, or "new" when the prior period had nothing to compare against.
      */
-    change_pct?: number | 'new' | null;
+    change_pct?: number | string | null;
 };
 
 /**
@@ -24374,7 +27488,7 @@ export type TeamLoadSchema = {
     /**
      * Team Load Percentage
      */
-    team_load_percentage: number;
+    team_load_percentage: number | string;
 };
 
 /**
@@ -24456,7 +27570,64 @@ export type ResourceLoadSchema = {
     /**
      * Resource Load Percentage
      */
-    resource_load_percentage: number;
+    resource_load_percentage: number | string;
+};
+
+/**
+ * OutputLanguageOption
+ */
+export type OutputLanguageOption = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * OutputMyProfile
+ *
+ * The account-level profile the mobile app reads: one language preference
+ * shared with the web (User.language drives both surfaces).
+ */
+export type OutputMyProfile = {
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Full Name
+     */
+    full_name: string;
+    /**
+     * Language
+     */
+    language: string;
+    /**
+     * Timezone
+     */
+    timezone: string;
+    /**
+     * Languages
+     */
+    languages: Array<OutputLanguageOption>;
+};
+
+/**
+ * EditMyProfile
+ *
+ * Partial: an omitted key keeps the stored value. Valid languages are
+ * settings.LANGUAGES, validated in the function so new languages need no
+ * schema change.
+ */
+export type EditMyProfile = {
+    /**
+     * Language
+     */
+    language?: string | null;
 };
 
 /**
@@ -24826,6 +27997,10 @@ export type MyOperationalItem = {
      */
     priority: string;
     /**
+     * Priority Display
+     */
+    priority_display?: string | null;
+    /**
      * Due Date
      */
     due_date?: string | null;
@@ -25057,6 +28232,40 @@ export type OutputWebhookDelivery = {
      * Duration Ms
      */
     duration_ms?: number | null;
+};
+
+/**
+ * WebhookCreated
+ *
+ * `add_webhook` answer: the new endpoint's id, and — for a secure endpoint — its
+ * signing secret, returned once, here only. The browser also gets it via the session
+ * for one-time display; an API client has no session, so this is its only chance.
+ */
+export type WebhookCreated = {
+    /**
+     * Response Id
+     */
+    response_id: string;
+    /**
+     * Success
+     */
+    success: boolean;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Url
+     */
+    url?: string | null;
+    /**
+     * Webhook Id
+     */
+    webhook_id: string;
+    /**
+     * Secret Key
+     */
+    secret_key?: string | null;
 };
 
 /**
@@ -26664,6 +29873,460 @@ export type OutputDocuments = {
     entity_id?: string | null;
 };
 
+/**
+ * OutputShare
+ */
+export type OutputShare = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Org Id
+     */
+    org_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Language
+     */
+    language: string;
+    /**
+     * State
+     */
+    state: 'draft' | 'published' | 'unpublished' | 'expired';
+    /**
+     * Expires At
+     */
+    expires_at?: string | null;
+    /**
+     * Published At
+     */
+    published_at?: string | null;
+    /**
+     * First Published At
+     */
+    first_published_at?: string | null;
+    /**
+     * Has Link
+     */
+    has_link?: boolean;
+    /**
+     * Last Opened At
+     */
+    last_opened_at?: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Created By
+     */
+    created_by?: string | null;
+    /**
+     * Proposal Count
+     */
+    proposal_count?: number;
+    /**
+     * Document Count
+     */
+    document_count?: number;
+    /**
+     * File Count
+     */
+    file_count?: number;
+    /**
+     * Pending Count
+     */
+    pending_count?: number;
+};
+
+/**
+ * OutputShares
+ */
+export type OutputShares = {
+    /**
+     * Org Id
+     */
+    org_id: string;
+    /**
+     * Shares
+     */
+    shares: Array<OutputShare>;
+    /**
+     * Total Count
+     */
+    total_count?: number;
+    /**
+     * Has Portal Contacts
+     */
+    has_portal_contacts?: boolean;
+};
+
+/**
+ * AddShare
+ *
+ * A new share starts as a draft. The message is plain text. The language defaults from the
+ * organization's country; valid languages are settings.LANGUAGES, validated in the function.
+ */
+export type AddShare = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Message
+     */
+    message?: string | null;
+    /**
+     * Language
+     */
+    language?: string | null;
+};
+
+/**
+ * EditShare
+ *
+ * Partial: an omitted key keeps the stored value.
+ */
+export type EditShare = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Message
+     */
+    message?: string | null;
+    /**
+     * Language
+     */
+    language?: string | null;
+};
+
+/**
+ * PublishShare
+ *
+ * Publishes the share and every item waiting in it. The expiry is the end of the day, in the
+ * organization's timezone, `expires_in_days` from now; `no_expiry` overrides it. With neither, the
+ * share keeps the expiry an earlier publication chose while it is still ahead, or gets the default.
+ */
+export type PublishShare = {
+    /**
+     * Expires In Days
+     */
+    expires_in_days?: number | null;
+    /**
+     * No Expiry
+     */
+    no_expiry?: boolean | null;
+    /**
+     * Confirm Link Retirement
+     */
+    confirm_link_retirement?: boolean | null;
+    /**
+     * Replace Link
+     */
+    replace_link?: boolean | null;
+};
+
+/**
+ * OutputShareProposal
+ */
+export type OutputShareProposal = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Proposal Id
+     */
+    proposal_id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * State
+     */
+    state: 'current' | 'updated' | 'revising' | 'accepted' | 'lost' | 'gone';
+    /**
+     * Sent At
+     */
+    sent_at?: string | null;
+    /**
+     * Proposal Sent At
+     */
+    proposal_sent_at?: string | null;
+    /**
+     * Published
+     */
+    published?: boolean;
+    /**
+     * Added At
+     */
+    added_at: string;
+    /**
+     * Added By
+     */
+    added_by?: string | null;
+};
+
+/**
+ * OutputShareProposals
+ */
+export type OutputShareProposals = {
+    /**
+     * Share Id
+     */
+    share_id: string;
+    /**
+     * Share Open
+     */
+    share_open: boolean;
+    /**
+     * Items
+     */
+    items: Array<OutputShareProposal>;
+};
+
+/**
+ * AddShareProposal
+ */
+export type AddShareProposal = {
+    /**
+     * Proposal Id
+     */
+    proposal_id: string;
+};
+
+/**
+ * OutputShareDocument
+ */
+export type OutputShareDocument = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Document Id
+     */
+    document_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Page Route
+     */
+    page_route?: string | null;
+    /**
+     * Updated At
+     */
+    updated_at?: string | null;
+    /**
+     * Full Number
+     */
+    full_number?: string | null;
+    /**
+     * State
+     */
+    state: 'current' | 'changed' | 'gone';
+    /**
+     * Published
+     */
+    published?: boolean;
+    /**
+     * Added At
+     */
+    added_at: string;
+    /**
+     * Added By
+     */
+    added_by?: string | null;
+};
+
+/**
+ * OutputShareDocuments
+ */
+export type OutputShareDocuments = {
+    /**
+     * Share Id
+     */
+    share_id: string;
+    /**
+     * Share Open
+     */
+    share_open: boolean;
+    /**
+     * Items
+     */
+    items: Array<OutputShareDocument>;
+};
+
+/**
+ * AddShareDocument
+ */
+export type AddShareDocument = {
+    /**
+     * Document Id
+     */
+    document_id: string;
+};
+
+/**
+ * OutputShareFile
+ */
+export type OutputShareFile = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Entity Type
+     */
+    entity_type: 'org' | 'proposal';
+    /**
+     * Entity Id
+     */
+    entity_id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Size
+     */
+    size: number;
+    /**
+     * Content Type
+     */
+    content_type?: string;
+    /**
+     * State
+     */
+    state: 'current' | 'replaced' | 'gone';
+    /**
+     * Published
+     */
+    published?: boolean;
+    /**
+     * Added At
+     */
+    added_at: string;
+    /**
+     * Added By
+     */
+    added_by?: string | null;
+};
+
+/**
+ * OutputShareFiles
+ */
+export type OutputShareFiles = {
+    /**
+     * Share Id
+     */
+    share_id: string;
+    /**
+     * Share Open
+     */
+    share_open: boolean;
+    /**
+     * Items
+     */
+    items: Array<OutputShareFile>;
+};
+
+/**
+ * AddShareOrgFile
+ *
+ * `generation` is the storage generation the file list showed, so a file replaced since then
+ * is refused instead of shared unseen.
+ */
+export type AddShareOrgFile = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Generation
+     */
+    generation: number;
+};
+
+/**
+ * AddShareProposalFile
+ */
+export type AddShareProposalFile = {
+    /**
+     * Proposal Id
+     */
+    proposal_id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Generation
+     */
+    generation: number;
+};
+
+/**
+ * OutputShareAccess
+ */
+export type OutputShareAccess = {
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Channel
+     */
+    channel: string;
+    /**
+     * Item Type
+     */
+    item_type?: string;
+    /**
+     * Item Label
+     */
+    item_label?: string;
+    /**
+     * Who
+     */
+    who?: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * OutputShareAccesses
+ */
+export type OutputShareAccesses = {
+    /**
+     * Share Id
+     */
+    share_id: string;
+    /**
+     * Next Page
+     */
+    next_page: number;
+    /**
+     * Accesses
+     */
+    accesses: Array<OutputShareAccess>;
+};
+
 export type TenantInfoData = {
     body?: never;
     path: {
@@ -26859,6 +30522,10 @@ export type EditTenantPortalSettingsErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditTenantPortalSettingsError = EditTenantPortalSettingsErrors[keyof EditTenantPortalSettingsErrors];
@@ -27276,6 +30943,10 @@ export type ExcludeFromTeamData = {
 };
 
 export type ExcludeFromTeamErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
     /**
      * Not Found
      */
@@ -27732,6 +31403,27 @@ export type RevokeCustomerportalAccessResponses = {
 };
 
 export type RevokeCustomerportalAccessResponse = RevokeCustomerportalAccessResponses[keyof RevokeCustomerportalAccessResponses];
+
+export type MyPermissionsExplainData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/me/permissions/explain';
+};
+
+export type MyPermissionsExplainResponses = {
+    /**
+     * OK
+     */
+    200: MyPermissionsExplain;
+};
+
+export type MyPermissionsExplainResponse = MyPermissionsExplainResponses[keyof MyPermissionsExplainResponses];
 
 export type TenantRolesData = {
     body?: never;
@@ -29065,6 +32757,31 @@ export type WorkItemTemplateTagsResponses = {
 
 export type WorkItemTemplateTagsResponse = WorkItemTemplateTagsResponses[keyof WorkItemTemplateTagsResponses];
 
+export type WorkItemTemplateTagsVisualData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Template Id
+         */
+        template_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/work_item_template_tags_visual/{template_id}';
+};
+
+export type WorkItemTemplateTagsVisualResponses = {
+    /**
+     * OK
+     */
+    200: OutputWorkItemTemplateTags;
+};
+
+export type WorkItemTemplateTagsVisualResponse = WorkItemTemplateTagsVisualResponses[keyof WorkItemTemplateTagsVisualResponses];
+
 export type TagWorkItemTemplateData = {
     body?: never;
     path: {
@@ -29308,6 +33025,31 @@ export type OperationalWorkItemTagsResponses = {
 
 export type OperationalWorkItemTagsResponse = OperationalWorkItemTagsResponses[keyof OperationalWorkItemTagsResponses];
 
+export type OperationalWorkItemTagsVisualData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Work Item Id
+         */
+        work_item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/operational_work_item_tags_visual/{work_item_id}';
+};
+
+export type OperationalWorkItemTagsVisualResponses = {
+    /**
+     * OK
+     */
+    200: OutputOperationalWorkItemTags;
+};
+
+export type OperationalWorkItemTagsVisualResponse = OperationalWorkItemTagsVisualResponses[keyof OperationalWorkItemTagsVisualResponses];
+
 export type TagOperationalWorkItemData = {
     body?: never;
     path: {
@@ -29416,6 +33158,31 @@ export type DocumentTagsResponses = {
 };
 
 export type DocumentTagsResponse = DocumentTagsResponses[keyof DocumentTagsResponses];
+
+export type DocumentTagsVisualData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Document Id
+         */
+        document_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/document_tags_visual/{document_id}';
+};
+
+export type DocumentTagsVisualResponses = {
+    /**
+     * OK
+     */
+    200: OutputDocumentTags;
+};
+
+export type DocumentTagsVisualResponse = DocumentTagsVisualResponses[keyof DocumentTagsVisualResponses];
 
 export type TagDocumentData = {
     body?: never;
@@ -31147,6 +34914,10 @@ export type AddSubtenantData = {
 
 export type AddSubtenantErrors = {
     /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
      * Forbidden
      */
     403: ApiResponse;
@@ -31189,9 +34960,17 @@ export type EditSubtenantData = {
 
 export type EditSubtenantErrors = {
     /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditSubtenantError = EditSubtenantErrors[keyof EditSubtenantErrors];
@@ -32351,6 +36130,12 @@ export type TenantAllLeadsData = {
          */
         lead_list?: string | null;
         /**
+         * Unclaimed
+         *
+         * Only leads nobody owns that sit in no list
+         */
+        unclaimed?: boolean | null;
+        /**
          * Has Email
          *
          * Only leads with an email address
@@ -32491,6 +36276,27 @@ export type TenantLeadListsResponses = {
 };
 
 export type TenantLeadListsResponse = TenantLeadListsResponses[keyof TenantLeadListsResponses];
+
+export type LeadOwnerCandidatesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/lead_owner_candidates';
+};
+
+export type LeadOwnerCandidatesResponses = {
+    /**
+     * OK
+     */
+    200: OutputLeadOwnerCandidates;
+};
+
+export type LeadOwnerCandidatesResponse = LeadOwnerCandidatesResponses[keyof LeadOwnerCandidatesResponses];
 
 export type TenantLeadListDetailData = {
     body?: never;
@@ -33053,6 +36859,77 @@ export type MarkLeadConvertedResponses = {
 
 export type MarkLeadConvertedResponse = MarkLeadConvertedResponses[keyof MarkLeadConvertedResponses];
 
+export type FastProposalOptionsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Lead Id
+         */
+        lead_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/fast_proposal_options/{lead_id}';
+};
+
+export type FastProposalOptionsResponses = {
+    /**
+     * OK
+     */
+    200: OutputFastProposalOptions;
+};
+
+export type FastProposalOptionsResponse = FastProposalOptionsResponses[keyof FastProposalOptionsResponses];
+
+export type FastProposalData = {
+    body: FastProposal;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Lead Id
+         */
+        lead_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/fast_proposal/{lead_id}';
+};
+
+export type FastProposalErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type FastProposalError = FastProposalErrors[keyof FastProposalErrors];
+
+export type FastProposalResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type FastProposalResponse = FastProposalResponses[keyof FastProposalResponses];
+
 export type ReopenLeadData = {
     body: ReopenLead;
     path: {
@@ -33350,7 +37227,7 @@ export type EditLeadListResponses = {
 export type EditLeadListResponse = EditLeadListResponses[keyof EditLeadListResponses];
 
 export type DeleteLeadListData = {
-    body: DeleteLeadList;
+    body?: never;
     path: {
         /**
          * Tenant Path
@@ -33470,6 +37347,10 @@ export type ReassignLeadsInListErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type ReassignLeadsInListError = ReassignLeadsInListErrors[keyof ReassignLeadsInListErrors];
@@ -33507,6 +37388,31 @@ export type LeadTagsResponses = {
 };
 
 export type LeadTagsResponse = LeadTagsResponses[keyof LeadTagsResponses];
+
+export type LeadTagsVisualData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Lead Id
+         */
+        lead_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/lead_tags_visual/{lead_id}';
+};
+
+export type LeadTagsVisualResponses = {
+    /**
+     * OK
+     */
+    200: OutputLeadTags;
+};
+
+export type LeadTagsVisualResponse = LeadTagsVisualResponses[keyof LeadTagsVisualResponses];
 
 export type TagLeadData = {
     body?: never;
@@ -33880,6 +37786,10 @@ export type EditFunnelConfigurationErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditFunnelConfigurationError = EditFunnelConfigurationErrors[keyof EditFunnelConfigurationErrors];
@@ -34259,6 +38169,27 @@ export type TenantFunnelResponses = {
 
 export type TenantFunnelResponse = TenantFunnelResponses[keyof TenantFunnelResponses];
 
+export type ListSaleActivityTypesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/sale_activity_types';
+};
+
+export type ListSaleActivityTypesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSaleActivityTypes;
+};
+
+export type ListSaleActivityTypesResponse = ListSaleActivityTypesResponses[keyof ListSaleActivityTypesResponses];
+
 export type AddSalesActivityData = {
     body: AddSalesActivity;
     path: {
@@ -34440,6 +38371,10 @@ export type AddCatalogProductErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type AddCatalogProductError = AddCatalogProductErrors[keyof AddCatalogProductErrors];
@@ -34478,6 +38413,10 @@ export type EditCatalogProductErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditCatalogProductError = EditCatalogProductErrors[keyof EditCatalogProductErrors];
@@ -34642,7 +38581,7 @@ export type CatalogTotalProductsSoldResponses = {
 
 export type CatalogTotalProductsSoldResponse = CatalogTotalProductsSoldResponses[keyof CatalogTotalProductsSoldResponses];
 
-export type ProjectProductDetailsData = {
+export type ProductDetailsData = {
     body?: never;
     path: {
         /**
@@ -34658,14 +38597,697 @@ export type ProjectProductDetailsData = {
     url: '/api/v1/{tenant_path}/product_details/{product_id}';
 };
 
-export type ProjectProductDetailsResponses = {
+export type ProductDetailsResponses = {
     /**
      * OK
      */
-    200: ProposalProductDetails;
+    200: OutputProductDetails;
 };
 
-export type ProjectProductDetailsResponse = ProjectProductDetailsResponses[keyof ProjectProductDetailsResponses];
+export type ProductDetailsResponse = ProductDetailsResponses[keyof ProductDetailsResponses];
+
+export type AddPriceListData = {
+    body: AddPriceList;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_price_list';
+};
+
+export type AddPriceListErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddPriceListError = AddPriceListErrors[keyof AddPriceListErrors];
+
+export type AddPriceListResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddPriceListResponse = AddPriceListResponses[keyof AddPriceListResponses];
+
+export type EditPriceListData = {
+    body: EditPriceList;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Price List Id
+         */
+        price_list_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_price_list/{price_list_id}';
+};
+
+export type EditPriceListErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditPriceListError = EditPriceListErrors[keyof EditPriceListErrors];
+
+export type EditPriceListResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditPriceListResponse = EditPriceListResponses[keyof EditPriceListResponses];
+
+export type DeletePriceListData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Price List Id
+         */
+        price_list_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_price_list/{price_list_id}';
+};
+
+export type DeletePriceListErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type DeletePriceListError = DeletePriceListErrors[keyof DeletePriceListErrors];
+
+export type DeletePriceListResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeletePriceListResponse = DeletePriceListResponses[keyof DeletePriceListResponses];
+
+export type EditPriceListItemsData = {
+    body: EditPriceListItems;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Price List Id
+         */
+        price_list_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_price_list_items/{price_list_id}';
+};
+
+export type EditPriceListItemsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditPriceListItemsError = EditPriceListItemsErrors[keyof EditPriceListItemsErrors];
+
+export type EditPriceListItemsResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditPriceListItemsResponse = EditPriceListItemsResponses[keyof EditPriceListItemsResponses];
+
+export type SetOrgPriceListsData = {
+    body: SetPriceLists;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Subtenant Id
+         */
+        subtenant_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/set_org_price_lists/{subtenant_id}';
+};
+
+export type SetOrgPriceListsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SetOrgPriceListsError = SetOrgPriceListsErrors[keyof SetOrgPriceListsErrors];
+
+export type SetOrgPriceListsResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SetOrgPriceListsResponse = SetOrgPriceListsResponses[keyof SetOrgPriceListsResponses];
+
+export type SetBridgePriceListsData = {
+    body: SetPriceLists;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/set_bridge_price_lists/{bridge_id}';
+};
+
+export type SetBridgePriceListsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SetBridgePriceListsError = SetBridgePriceListsErrors[keyof SetBridgePriceListsErrors];
+
+export type SetBridgePriceListsResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SetBridgePriceListsResponse = SetBridgePriceListsResponses[keyof SetBridgePriceListsResponses];
+
+export type TenantTargetSchemesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/target_schemes';
+};
+
+export type TenantTargetSchemesResponses = {
+    /**
+     * OK
+     */
+    200: OutputTargetSchemes;
+};
+
+export type TenantTargetSchemesResponse = TenantTargetSchemesResponses[keyof TenantTargetSchemesResponses];
+
+export type TenantTargetSchemeData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Scheme Id
+         */
+        target_scheme_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/target_scheme/{target_scheme_id}';
+};
+
+export type TenantTargetSchemeErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type TenantTargetSchemeError = TenantTargetSchemeErrors[keyof TenantTargetSchemeErrors];
+
+export type TenantTargetSchemeResponses = {
+    /**
+     * OK
+     */
+    200: OutputTargetScheme;
+};
+
+export type TenantTargetSchemeResponse = TenantTargetSchemeResponses[keyof TenantTargetSchemeResponses];
+
+export type TenantSalesTargetsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: {
+        /**
+         * Member Id
+         */
+        member_id?: string;
+        /**
+         * Period
+         */
+        period?: string;
+    };
+    url: '/api/v1/{tenant_path}/sales_targets';
+};
+
+export type TenantSalesTargetsResponses = {
+    /**
+     * OK
+     */
+    200: OutputSalesTargets;
+};
+
+export type TenantSalesTargetsResponse = TenantSalesTargetsResponses[keyof TenantSalesTargetsResponses];
+
+export type AddTargetSchemeData = {
+    body: AddTargetScheme;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_target_scheme';
+};
+
+export type AddTargetSchemeErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddTargetSchemeError = AddTargetSchemeErrors[keyof AddTargetSchemeErrors];
+
+export type AddTargetSchemeResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddTargetSchemeResponse = AddTargetSchemeResponses[keyof AddTargetSchemeResponses];
+
+export type EditTargetSchemeData = {
+    body: EditTargetScheme;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Scheme Id
+         */
+        target_scheme_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_target_scheme/{target_scheme_id}';
+};
+
+export type EditTargetSchemeErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditTargetSchemeError = EditTargetSchemeErrors[keyof EditTargetSchemeErrors];
+
+export type EditTargetSchemeResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditTargetSchemeResponse = EditTargetSchemeResponses[keyof EditTargetSchemeResponses];
+
+export type DeleteTargetSchemeData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Scheme Id
+         */
+        target_scheme_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_target_scheme/{target_scheme_id}';
+};
+
+export type DeleteTargetSchemeErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type DeleteTargetSchemeError = DeleteTargetSchemeErrors[keyof DeleteTargetSchemeErrors];
+
+export type DeleteTargetSchemeResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteTargetSchemeResponse = DeleteTargetSchemeResponses[keyof DeleteTargetSchemeResponses];
+
+export type AddTargetBandData = {
+    body: AddTargetBand;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Scheme Id
+         */
+        target_scheme_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_target_band/{target_scheme_id}';
+};
+
+export type AddTargetBandErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddTargetBandError = AddTargetBandErrors[keyof AddTargetBandErrors];
+
+export type AddTargetBandResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddTargetBandResponse = AddTargetBandResponses[keyof AddTargetBandResponses];
+
+export type EditTargetBandData = {
+    body: EditTargetBand;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Scheme Id
+         */
+        target_scheme_id: string;
+        /**
+         * Target Band Id
+         */
+        target_band_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_target_band/{target_scheme_id}/{target_band_id}';
+};
+
+export type EditTargetBandErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditTargetBandError = EditTargetBandErrors[keyof EditTargetBandErrors];
+
+export type EditTargetBandResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditTargetBandResponse = EditTargetBandResponses[keyof EditTargetBandResponses];
+
+export type DeleteTargetBandData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Scheme Id
+         */
+        target_scheme_id: string;
+        /**
+         * Target Band Id
+         */
+        target_band_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_target_band/{target_scheme_id}/{target_band_id}';
+};
+
+export type DeleteTargetBandErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type DeleteTargetBandError = DeleteTargetBandErrors[keyof DeleteTargetBandErrors];
+
+export type DeleteTargetBandResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteTargetBandResponse = DeleteTargetBandResponses[keyof DeleteTargetBandResponses];
+
+export type AddSalesTargetData = {
+    body: AddSalesTarget;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_sales_target';
+};
+
+export type AddSalesTargetErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddSalesTargetError = AddSalesTargetErrors[keyof AddSalesTargetErrors];
+
+export type AddSalesTargetResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddSalesTargetResponse = AddSalesTargetResponses[keyof AddSalesTargetResponses];
+
+export type EditSalesTargetData = {
+    body: EditSalesTarget;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Id
+         */
+        target_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_sales_target/{target_id}';
+};
+
+export type EditSalesTargetErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditSalesTargetError = EditSalesTargetErrors[keyof EditSalesTargetErrors];
+
+export type EditSalesTargetResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditSalesTargetResponse = EditSalesTargetResponses[keyof EditSalesTargetResponses];
+
+export type DeleteSalesTargetData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Target Id
+         */
+        target_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_sales_target/{target_id}';
+};
+
+export type DeleteSalesTargetErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type DeleteSalesTargetError = DeleteSalesTargetErrors[keyof DeleteSalesTargetErrors];
+
+export type DeleteSalesTargetResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteSalesTargetResponse = DeleteSalesTargetResponses[keyof DeleteSalesTargetResponses];
 
 export type AddProposalData = {
     body: AddProposal;
@@ -34867,6 +39489,70 @@ export type ResourceProposalsResponses = {
 
 export type ResourceProposalsResponse = ResourceProposalsResponses[keyof ResourceProposalsResponses];
 
+export type MyPipelineData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_pipeline';
+};
+
+export type MyPipelineErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type MyPipelineError = MyPipelineErrors[keyof MyPipelineErrors];
+
+export type MyPipelineResponses = {
+    /**
+     * OK
+     */
+    200: OutputMyPipeline;
+};
+
+export type MyPipelineResponse = MyPipelineResponses[keyof MyPipelineResponses];
+
+export type MyStageProposalsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Stage Id
+         */
+        stage_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_stage_proposals/{stage_id}';
+};
+
+export type MyStageProposalsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type MyStageProposalsError = MyStageProposalsErrors[keyof MyStageProposalsErrors];
+
+export type MyStageProposalsResponses = {
+    /**
+     * OK
+     */
+    200: StageProposals;
+};
+
+export type MyStageProposalsResponse = MyStageProposalsResponses[keyof MyStageProposalsResponses];
+
 export type StageProposalsData = {
     body?: never;
     path: {
@@ -34921,6 +39607,10 @@ export type EditProposalErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditProposalError = EditProposalErrors[keyof EditProposalErrors];
@@ -34975,6 +39665,132 @@ export type ChangeProposalStageResponses = {
 };
 
 export type ChangeProposalStageResponse = ChangeProposalStageResponses[keyof ChangeProposalStageResponses];
+
+export type AcceptPortalOrderData = {
+    body: AcceptPortalOrder;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/proposals/{proposal_id}/accept_order';
+};
+
+export type AcceptPortalOrderErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AcceptPortalOrderError = AcceptPortalOrderErrors[keyof AcceptPortalOrderErrors];
+
+export type AcceptPortalOrderResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AcceptPortalOrderResponse = AcceptPortalOrderResponses[keyof AcceptPortalOrderResponses];
+
+export type MarkPortalOrderDeliveredData = {
+    body: MarkPortalOrderDelivered;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/proposals/{proposal_id}/mark_order_delivered';
+};
+
+export type MarkPortalOrderDeliveredErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type MarkPortalOrderDeliveredError = MarkPortalOrderDeliveredErrors[keyof MarkPortalOrderDeliveredErrors];
+
+export type MarkPortalOrderDeliveredResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type MarkPortalOrderDeliveredResponse = MarkPortalOrderDeliveredResponses[keyof MarkPortalOrderDeliveredResponses];
+
+export type RejectPortalOrderData = {
+    body: RejectPortalOrder;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/proposals/{proposal_id}/reject_order';
+};
+
+export type RejectPortalOrderErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type RejectPortalOrderError = RejectPortalOrderErrors[keyof RejectPortalOrderErrors];
+
+export type RejectPortalOrderResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type RejectPortalOrderResponse = RejectPortalOrderResponses[keyof RejectPortalOrderResponses];
 
 export type ReopenProposalData = {
     body?: never;
@@ -37607,6 +42423,14 @@ export type AddWorkLogErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Response
+     *
+     * Unprocessable Entity
+     */
+    422: {
+        [key: string]: unknown;
+    };
 };
 
 export type AddWorkLogError = AddWorkLogErrors[keyof AddWorkLogErrors];
@@ -37649,6 +42473,14 @@ export type EditWorkLogErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Response
+     *
+     * Unprocessable Entity
+     */
+    422: {
+        [key: string]: unknown;
+    };
 };
 
 export type EditWorkLogError = EditWorkLogErrors[keyof EditWorkLogErrors];
@@ -38251,6 +43083,15 @@ export type ProjectTeamMemberBookingHeatmapData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_team_member_booking_heatmap/{project_id}/{member_id}';
 };
+
+export type ProjectTeamMemberBookingHeatmapErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectTeamMemberBookingHeatmapError = ProjectTeamMemberBookingHeatmapErrors[keyof ProjectTeamMemberBookingHeatmapErrors];
 
 export type ProjectTeamMemberBookingHeatmapResponses = {
     /**
@@ -41953,6 +46794,10 @@ export type DeleteExchangeData = {
 
 export type DeleteExchangeErrors = {
     /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -42090,7 +46935,7 @@ export type AddApiKeyResponses = {
     /**
      * OK
      */
-    200: ApiResponse;
+    200: ApiKeyCreated;
 };
 
 export type AddApiKeyResponse = AddApiKeyResponses[keyof AddApiKeyResponses];
@@ -49814,6 +54659,52 @@ export type EditCustomerLocationResponses = {
 
 export type EditCustomerLocationResponse = EditCustomerLocationResponses[keyof EditCustomerLocationResponses];
 
+export type SetCustomerLocationCoordinatesData = {
+    body: SetEntityCoordinates;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Customer Location Id
+         */
+        customer_location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/set_customer_location_coordinates/{customer_location_id}';
+};
+
+export type SetCustomerLocationCoordinatesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: OutputCoordinatesConflict;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type SetCustomerLocationCoordinatesError = SetCustomerLocationCoordinatesErrors[keyof SetCustomerLocationCoordinatesErrors];
+
+export type SetCustomerLocationCoordinatesResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SetCustomerLocationCoordinatesResponse = SetCustomerLocationCoordinatesResponses[keyof SetCustomerLocationCoordinatesResponses];
+
 export type DeleteCustomerLocationData = {
     body?: never;
     path: {
@@ -49901,6 +54792,82 @@ export type ListCustomerLocationAssetsResponses = {
 };
 
 export type ListCustomerLocationAssetsResponse = ListCustomerLocationAssetsResponses[keyof ListCustomerLocationAssetsResponses];
+
+export type TenantCustomerAssetsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: {
+        /**
+         * Exclude Mode
+         *
+         * Invert filter logic to exclude matching results
+         */
+        exclude_mode?: boolean | null;
+        /**
+         * Search
+         *
+         * Search by asset name, serial number / URI, or internal code
+         */
+        search?: string | null;
+        /**
+         * Name
+         *
+         * Filter by asset name
+         */
+        name?: string | null;
+        /**
+         * Serial Number Or Uri
+         *
+         * Filter by serial number or URI
+         */
+        serial_number_or_uri?: string | null;
+        /**
+         * Customer
+         *
+         * Filter by customer organization (external id)
+         */
+        customer?: string | null;
+        /**
+         * Category
+         *
+         * Filter by asset category (external id)
+         */
+        category?: string | null;
+        /**
+         * Status
+         *
+         * Filter by lifecycle status (planned, active, maintenance, retired)
+         */
+        status?: string | null;
+        /**
+         * Placement
+         *
+         * Filter by placement: 'placed' or 'unplaced'
+         */
+        placement?: string | null;
+        /**
+         * Root Only
+         *
+         * Return only root-level assets (depth=0) instead of every depth
+         */
+        root_only?: boolean | null;
+    };
+    url: '/api/v1/{tenant_path}/tenant_customer_assets';
+};
+
+export type TenantCustomerAssetsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerAssets;
+};
+
+export type TenantCustomerAssetsResponse = TenantCustomerAssetsResponses[keyof TenantCustomerAssetsResponses];
 
 export type ListCustomerAssetsData = {
     body?: never;
@@ -50050,6 +55017,52 @@ export type DeleteCustomerAssetResponses = {
 
 export type DeleteCustomerAssetResponse = DeleteCustomerAssetResponses[keyof DeleteCustomerAssetResponses];
 
+export type SetCustomerAssetCoordinatesData = {
+    body: SetEntityCoordinates;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/set_customer_asset_coordinates/{asset_id}';
+};
+
+export type SetCustomerAssetCoordinatesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: OutputCoordinatesConflict;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type SetCustomerAssetCoordinatesError = SetCustomerAssetCoordinatesErrors[keyof SetCustomerAssetCoordinatesErrors];
+
+export type SetCustomerAssetCoordinatesResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SetCustomerAssetCoordinatesResponse = SetCustomerAssetCoordinatesResponses[keyof SetCustomerAssetCoordinatesResponses];
+
 export type ListCustomerAssetChildrenData = {
     body?: never;
     path: {
@@ -50074,6 +55087,31 @@ export type ListCustomerAssetChildrenResponses = {
 };
 
 export type ListCustomerAssetChildrenResponse = ListCustomerAssetChildrenResponses[keyof ListCustomerAssetChildrenResponses];
+
+export type GetCustomerAssetData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/customer_asset/{asset_id}';
+};
+
+export type GetCustomerAssetResponses = {
+    /**
+     * OK
+     */
+    200: OutputCustomerAsset;
+};
+
+export type GetCustomerAssetResponse = GetCustomerAssetResponses[keyof GetCustomerAssetResponses];
 
 export type ListCustomerAssetTicketsData = {
     body?: never;
@@ -50200,6 +55238,52 @@ export type EditLocationResponses = {
 };
 
 export type EditLocationResponse = EditLocationResponses[keyof EditLocationResponses];
+
+export type SetLocationCoordinatesData = {
+    body: SetEntityCoordinates;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/set_location_coordinates/{location_id}';
+};
+
+export type SetLocationCoordinatesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: OutputCoordinatesConflict;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type SetLocationCoordinatesError = SetLocationCoordinatesErrors[keyof SetLocationCoordinatesErrors];
+
+export type SetLocationCoordinatesResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SetLocationCoordinatesResponse = SetLocationCoordinatesResponses[keyof SetLocationCoordinatesResponses];
 
 export type ReorderLocationUpData = {
     body?: never;
@@ -50411,6 +55495,115 @@ export type MarkAllNotificationsReadResponses = {
 };
 
 export type MarkAllNotificationsReadResponse = MarkAllNotificationsReadResponses[keyof MarkAllNotificationsReadResponses];
+
+export type NotificationPreferencesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: {
+        /**
+         * Scope
+         */
+        scope?: string;
+    };
+    url: '/api/v1/{tenant_path}/notification_preferences';
+};
+
+export type NotificationPreferencesResponses = {
+    /**
+     * OK
+     */
+    200: OutputNotificationPreferences;
+};
+
+export type NotificationPreferencesResponse = NotificationPreferencesResponses[keyof NotificationPreferencesResponses];
+
+export type EditNotificationPreferencesData = {
+    body: EditNotificationPreferences;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/notification_preferences';
+};
+
+export type EditNotificationPreferencesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type EditNotificationPreferencesError = EditNotificationPreferencesErrors[keyof EditNotificationPreferencesErrors];
+
+export type EditNotificationPreferencesResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditNotificationPreferencesResponse = EditNotificationPreferencesResponses[keyof EditNotificationPreferencesResponses];
+
+export type MyNotificationPreferencesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/notification_preferences';
+};
+
+export type MyNotificationPreferencesResponses = {
+    /**
+     * OK
+     */
+    200: OutputNotificationPreferences;
+};
+
+export type MyNotificationPreferencesResponse = MyNotificationPreferencesResponses[keyof MyNotificationPreferencesResponses];
+
+export type EditMyNotificationPreferencesData = {
+    body: EditNotificationPreferences;
+    path?: never;
+    query?: never;
+    url: '/api/v1/notification_preferences';
+};
+
+export type EditMyNotificationPreferencesErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type EditMyNotificationPreferencesError = EditMyNotificationPreferencesErrors[keyof EditMyNotificationPreferencesErrors];
+
+export type EditMyNotificationPreferencesResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditMyNotificationPreferencesResponse = EditMyNotificationPreferencesResponses[keyof EditMyNotificationPreferencesResponses];
 
 export type PortalProposalsData = {
     body?: never;
@@ -50881,6 +56074,379 @@ export type PortalAcceptProposalResponses = {
 };
 
 export type PortalAcceptProposalResponse = PortalAcceptProposalResponses[keyof PortalAcceptProposalResponses];
+
+export type PortalQuoteCatalogData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/quote_catalog';
+};
+
+export type PortalQuoteCatalogResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalQuoteCatalog;
+};
+
+export type PortalQuoteCatalogResponse = PortalQuoteCatalogResponses[keyof PortalQuoteCatalogResponses];
+
+export type PortalQuoteRequestsData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/quote_requests';
+};
+
+export type PortalQuoteRequestsResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalQuoteRequests;
+};
+
+export type PortalQuoteRequestsResponse = PortalQuoteRequestsResponses[keyof PortalQuoteRequestsResponses];
+
+export type PortalQuoteRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/quote_requests/{proposal_id}';
+};
+
+export type PortalQuoteRequestResponses = {
+    /**
+     * OK
+     */
+    200: PortalQuoteRequest;
+};
+
+export type PortalQuoteRequestResponse = PortalQuoteRequestResponses[keyof PortalQuoteRequestResponses];
+
+export type AddQuoteRequestData = {
+    body: PortalRequestQuote;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/add_quote_request';
+};
+
+export type AddQuoteRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type AddQuoteRequestError = AddQuoteRequestErrors[keyof AddQuoteRequestErrors];
+
+export type AddQuoteRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddQuoteRequestResponse = AddQuoteRequestResponses[keyof AddQuoteRequestResponses];
+
+export type PortalWithdrawQuoteRequestData = {
+    body: PortalWithdrawQuoteRequest;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/quote_requests/{proposal_id}/withdraw';
+};
+
+export type PortalWithdrawQuoteRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type PortalWithdrawQuoteRequestError = PortalWithdrawQuoteRequestErrors[keyof PortalWithdrawQuoteRequestErrors];
+
+export type PortalWithdrawQuoteRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PortalWithdrawQuoteRequestResponse = PortalWithdrawQuoteRequestResponses[keyof PortalWithdrawQuoteRequestResponses];
+
+export type PortalOrderCatalogData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/order_catalog';
+};
+
+export type PortalOrderCatalogResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalQuoteCatalog;
+};
+
+export type PortalOrderCatalogResponse = PortalOrderCatalogResponses[keyof PortalOrderCatalogResponses];
+
+export type PortalOrdersData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/orders';
+};
+
+export type PortalOrdersResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalOrders;
+};
+
+export type PortalOrdersResponse = PortalOrdersResponses[keyof PortalOrdersResponses];
+
+export type PortalClosedOrdersData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/closed_orders';
+};
+
+export type PortalClosedOrdersResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalOrders;
+};
+
+export type PortalClosedOrdersResponse = PortalClosedOrdersResponses[keyof PortalClosedOrdersResponses];
+
+export type PortalOrderData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/orders/{proposal_id}';
+};
+
+export type PortalOrderResponses = {
+    /**
+     * OK
+     */
+    200: PortalOrder;
+};
+
+export type PortalOrderResponse = PortalOrderResponses[keyof PortalOrderResponses];
+
+export type AddOrderData = {
+    body: PortalPlaceOrder;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/add_order';
+};
+
+export type AddOrderErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type AddOrderError = AddOrderErrors[keyof AddOrderErrors];
+
+export type AddOrderResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddOrderResponse = AddOrderResponses[keyof AddOrderResponses];
+
+export type PortalCancelOrderData = {
+    body: PortalCancelOrder;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/orders/{proposal_id}/cancel';
+};
+
+export type PortalCancelOrderErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type PortalCancelOrderError = PortalCancelOrderErrors[keyof PortalCancelOrderErrors];
+
+export type PortalCancelOrderResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PortalCancelOrderResponse = PortalCancelOrderResponses[keyof PortalCancelOrderResponses];
+
+export type PortalConfirmOrderReceiptData = {
+    body: PortalConfirmOrderReceipt;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/orders/{proposal_id}/confirm_receipt';
+};
+
+export type PortalConfirmOrderReceiptErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type PortalConfirmOrderReceiptError = PortalConfirmOrderReceiptErrors[keyof PortalConfirmOrderReceiptErrors];
+
+export type PortalConfirmOrderReceiptResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PortalConfirmOrderReceiptResponse = PortalConfirmOrderReceiptResponses[keyof PortalConfirmOrderReceiptResponses];
 
 export type AddExternalSupportRequestData = {
     body: AddExternalSupportRequest;
@@ -51490,6 +57056,173 @@ export type PortalGenerateDownloadUrlResponses = {
 };
 
 export type PortalGenerateDownloadUrlResponse = PortalGenerateDownloadUrlResponses[keyof PortalGenerateDownloadUrlResponses];
+
+export type PortalSharesData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/shares';
+};
+
+export type PortalSharesResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalShares;
+};
+
+export type PortalSharesResponse = PortalSharesResponses[keyof PortalSharesResponses];
+
+export type PortalShareData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/shares/{share_id}';
+};
+
+export type PortalShareResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalShare;
+};
+
+export type PortalShareResponse = PortalShareResponses[keyof PortalShareResponses];
+
+export type PortalShareProposalData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/shares/{share_id}/proposal/{item_id}';
+};
+
+export type PortalShareProposalResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalShareProposalPreview;
+};
+
+export type PortalShareProposalResponse = PortalShareProposalResponses[keyof PortalShareProposalResponses];
+
+export type PortalShareProposalPdfData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/shares/{share_id}/proposal_pdf/{item_id}';
+};
+
+export type PortalShareProposalPdfResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type PortalShareDocumentPdfData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/shares/{share_id}/document_pdf/{item_id}';
+};
+
+export type PortalShareDocumentPdfResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type PortalShareGenerateDownloadUrlData = {
+    body?: never;
+    path: {
+        /**
+         * Customer Org Id
+         */
+        customer_org_id: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/portal/{customer_org_id}/shares/{share_id}/download_url/{item_id}';
+};
+
+export type PortalShareGenerateDownloadUrlErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PortalShareGenerateDownloadUrlError = PortalShareGenerateDownloadUrlErrors[keyof PortalShareGenerateDownloadUrlErrors];
+
+export type PortalShareGenerateDownloadUrlResponses = {
+    /**
+     * OK
+     */
+    200: DownloadUrlGcs;
+};
+
+export type PortalShareGenerateDownloadUrlResponse = PortalShareGenerateDownloadUrlResponses[keyof PortalShareGenerateDownloadUrlResponses];
 
 export type SubmitPortalFormData = {
     body: SubmitCustomForm;
@@ -53402,6 +59135,538 @@ export type PartnerPortalSolicitationDownloadUrlResponses = {
 
 export type PartnerPortalSolicitationDownloadUrlResponse = PartnerPortalSolicitationDownloadUrlResponses[keyof PartnerPortalSolicitationDownloadUrlResponses];
 
+export type PartnerPortalQuoteCatalogData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/quote_catalog';
+};
+
+export type PartnerPortalQuoteCatalogErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalQuoteCatalogError = PartnerPortalQuoteCatalogErrors[keyof PartnerPortalQuoteCatalogErrors];
+
+export type PartnerPortalQuoteCatalogResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalQuoteCatalog;
+};
+
+export type PartnerPortalQuoteCatalogResponse = PartnerPortalQuoteCatalogResponses[keyof PartnerPortalQuoteCatalogResponses];
+
+export type PartnerPortalQuoteRequestsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/quote_requests';
+};
+
+export type PartnerPortalQuoteRequestsErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalQuoteRequestsError = PartnerPortalQuoteRequestsErrors[keyof PartnerPortalQuoteRequestsErrors];
+
+export type PartnerPortalQuoteRequestsResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalQuoteRequests;
+};
+
+export type PartnerPortalQuoteRequestsResponse = PartnerPortalQuoteRequestsResponses[keyof PartnerPortalQuoteRequestsResponses];
+
+export type PartnerPortalQuoteRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/quote_requests/{proposal_id}';
+};
+
+export type PartnerPortalQuoteRequestErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalQuoteRequestError = PartnerPortalQuoteRequestErrors[keyof PartnerPortalQuoteRequestErrors];
+
+export type PartnerPortalQuoteRequestResponses = {
+    /**
+     * OK
+     */
+    200: PortalQuoteRequest;
+};
+
+export type PartnerPortalQuoteRequestResponse = PartnerPortalQuoteRequestResponses[keyof PartnerPortalQuoteRequestResponses];
+
+export type AddPartnerQuoteRequestData = {
+    body: PortalRequestQuote;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/add_quote_request';
+};
+
+export type AddPartnerQuoteRequestErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type AddPartnerQuoteRequestError = AddPartnerQuoteRequestErrors[keyof AddPartnerQuoteRequestErrors];
+
+export type AddPartnerQuoteRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddPartnerQuoteRequestResponse = AddPartnerQuoteRequestResponses[keyof AddPartnerQuoteRequestResponses];
+
+export type PartnerPortalWithdrawQuoteRequestData = {
+    body: PortalWithdrawQuoteRequest;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/quote_requests/{proposal_id}/withdraw';
+};
+
+export type PartnerPortalWithdrawQuoteRequestErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type PartnerPortalWithdrawQuoteRequestError = PartnerPortalWithdrawQuoteRequestErrors[keyof PartnerPortalWithdrawQuoteRequestErrors];
+
+export type PartnerPortalWithdrawQuoteRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PartnerPortalWithdrawQuoteRequestResponse = PartnerPortalWithdrawQuoteRequestResponses[keyof PartnerPortalWithdrawQuoteRequestResponses];
+
+export type PartnerPortalOrderCatalogData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/order_catalog';
+};
+
+export type PartnerPortalOrderCatalogErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalOrderCatalogError = PartnerPortalOrderCatalogErrors[keyof PartnerPortalOrderCatalogErrors];
+
+export type PartnerPortalOrderCatalogResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalQuoteCatalog;
+};
+
+export type PartnerPortalOrderCatalogResponse = PartnerPortalOrderCatalogResponses[keyof PartnerPortalOrderCatalogResponses];
+
+export type PartnerPortalOrdersData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/orders';
+};
+
+export type PartnerPortalOrdersErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalOrdersError = PartnerPortalOrdersErrors[keyof PartnerPortalOrdersErrors];
+
+export type PartnerPortalOrdersResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalOrders;
+};
+
+export type PartnerPortalOrdersResponse = PartnerPortalOrdersResponses[keyof PartnerPortalOrdersResponses];
+
+export type PartnerPortalClosedOrdersData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/closed_orders';
+};
+
+export type PartnerPortalClosedOrdersErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalClosedOrdersError = PartnerPortalClosedOrdersErrors[keyof PartnerPortalClosedOrdersErrors];
+
+export type PartnerPortalClosedOrdersResponses = {
+    /**
+     * OK
+     */
+    200: OutputPortalOrders;
+};
+
+export type PartnerPortalClosedOrdersResponse = PartnerPortalClosedOrdersResponses[keyof PartnerPortalClosedOrdersResponses];
+
+export type PartnerPortalOrderData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/orders/{proposal_id}';
+};
+
+export type PartnerPortalOrderErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type PartnerPortalOrderError = PartnerPortalOrderErrors[keyof PartnerPortalOrderErrors];
+
+export type PartnerPortalOrderResponses = {
+    /**
+     * OK
+     */
+    200: PortalOrder;
+};
+
+export type PartnerPortalOrderResponse = PartnerPortalOrderResponses[keyof PartnerPortalOrderResponses];
+
+export type AddPartnerOrderData = {
+    body: PortalPlaceOrder;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/add_order';
+};
+
+export type AddPartnerOrderErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type AddPartnerOrderError = AddPartnerOrderErrors[keyof AddPartnerOrderErrors];
+
+export type AddPartnerOrderResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddPartnerOrderResponse = AddPartnerOrderResponses[keyof AddPartnerOrderResponses];
+
+export type PartnerPortalCancelOrderData = {
+    body: PortalCancelOrder;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/orders/{proposal_id}/cancel';
+};
+
+export type PartnerPortalCancelOrderErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type PartnerPortalCancelOrderError = PartnerPortalCancelOrderErrors[keyof PartnerPortalCancelOrderErrors];
+
+export type PartnerPortalCancelOrderResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PartnerPortalCancelOrderResponse = PartnerPortalCancelOrderResponses[keyof PartnerPortalCancelOrderResponses];
+
+export type PartnerPortalConfirmOrderReceiptData = {
+    body: PortalConfirmOrderReceipt;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Bridge Id
+         */
+        bridge_id: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/partner_portal/{bridge_id}/orders/{proposal_id}/confirm_receipt';
+};
+
+export type PartnerPortalConfirmOrderReceiptErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type PartnerPortalConfirmOrderReceiptError = PartnerPortalConfirmOrderReceiptErrors[keyof PartnerPortalConfirmOrderReceiptErrors];
+
+export type PartnerPortalConfirmOrderReceiptResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PartnerPortalConfirmOrderReceiptResponse = PartnerPortalConfirmOrderReceiptResponses[keyof PartnerPortalConfirmOrderReceiptResponses];
+
 export type AddRfpData = {
     body: AddRfp;
     path: {
@@ -54305,6 +60570,88 @@ export type AnalyticsSalesPerformanceResponses = {
 
 export type AnalyticsSalesPerformanceResponse = AnalyticsSalesPerformanceResponses[keyof AnalyticsSalesPerformanceResponses];
 
+export type MySalesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: {
+        /**
+         * Period
+         */
+        period?: 'YTD' | 'QTD' | 'MTD' | 'R12' | 'Q1' | 'Q2' | 'Q3' | 'Q4';
+        /**
+         * Compare
+         */
+        compare?: 'none' | 'yoy' | 'pop' | 'mom';
+    };
+    url: '/api/v1/{tenant_path}/my_sales';
+};
+
+export type MySalesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type MySalesError = MySalesErrors[keyof MySalesErrors];
+
+export type MySalesResponses = {
+    /**
+     * OK
+     */
+    200: AnalyticsSalespersonSales;
+};
+
+export type MySalesResponse = MySalesResponses[keyof MySalesResponses];
+
+export type SalespersonSalesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Member Id
+         */
+        member_id: string;
+    };
+    query?: {
+        /**
+         * Period
+         */
+        period?: 'YTD' | 'QTD' | 'MTD' | 'R12' | 'Q1' | 'Q2' | 'Q3' | 'Q4';
+        /**
+         * Compare
+         */
+        compare?: 'none' | 'yoy' | 'pop' | 'mom';
+    };
+    url: '/api/v1/{tenant_path}/salesperson_sales/{member_id}';
+};
+
+export type SalespersonSalesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type SalespersonSalesError = SalespersonSalesErrors[keyof SalespersonSalesErrors];
+
+export type SalespersonSalesResponses = {
+    /**
+     * OK
+     */
+    200: AnalyticsSalespersonSales;
+};
+
+export type SalespersonSalesResponse = SalespersonSalesResponses[keyof SalespersonSalesResponses];
+
 export type AnalyticsSalesConversionData = {
     body?: never;
     path: {
@@ -55013,6 +61360,47 @@ export type ResourcesLoadResponses = {
 
 export type ResourcesLoadResponse = ResourcesLoadResponses[keyof ResourcesLoadResponses];
 
+export type MyProfileData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/my_profile';
+};
+
+export type MyProfileResponses = {
+    /**
+     * OK
+     */
+    200: OutputMyProfile;
+};
+
+export type MyProfileResponse = MyProfileResponses[keyof MyProfileResponses];
+
+export type EditMyProfileData = {
+    body: EditMyProfile;
+    path?: never;
+    query?: never;
+    url: '/api/v1/my_profile';
+};
+
+export type EditMyProfileErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditMyProfileError = EditMyProfileErrors[keyof EditMyProfileErrors];
+
+export type EditMyProfileResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditMyProfileResponse = EditMyProfileResponses[keyof EditMyProfileResponses];
+
 export type MyTenantsData = {
     body?: never;
     path?: never;
@@ -55092,6 +61480,48 @@ export type MyOperationalItemsResponses = {
 };
 
 export type MyOperationalItemsResponse = MyOperationalItemsResponses[keyof MyOperationalItemsResponses];
+
+export type TenantMyWorkItemsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_work_items';
+};
+
+export type TenantMyWorkItemsResponses = {
+    /**
+     * OK
+     */
+    200: OutputMyWorkItems;
+};
+
+export type TenantMyWorkItemsResponse = TenantMyWorkItemsResponses[keyof TenantMyWorkItemsResponses];
+
+export type TenantMyBookingsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_bookings';
+};
+
+export type TenantMyBookingsResponses = {
+    /**
+     * OK
+     */
+    200: OutputMyBookings;
+};
+
+export type TenantMyBookingsResponse = TenantMyBookingsResponses[keyof TenantMyBookingsResponses];
 
 export type EnrichCompanyData = {
     body?: never;
@@ -55197,7 +61627,7 @@ export type AddWebhookResponses = {
     /**
      * OK
      */
-    200: ApiResponse;
+    200: WebhookCreated;
 };
 
 export type AddWebhookResponse = AddWebhookResponses[keyof AddWebhookResponses];
@@ -58171,3 +64601,930 @@ export type ProposalDocumentsResponses = {
 };
 
 export type ProposalDocumentsResponse = ProposalDocumentsResponses[keyof ProposalDocumentsResponses];
+
+export type OrgSharesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Org Id
+         */
+        org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/org_shares/{org_id}';
+};
+
+export type OrgSharesResponses = {
+    /**
+     * OK
+     */
+    200: OutputShares;
+};
+
+export type OrgSharesResponse = OrgSharesResponses[keyof OrgSharesResponses];
+
+export type AddShareData = {
+    body: AddShare;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Org Id
+         */
+        org_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share/{org_id}';
+};
+
+export type AddShareErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareError = AddShareErrors[keyof AddShareErrors];
+
+export type AddShareResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareResponse = AddShareResponses[keyof AddShareResponses];
+
+export type EditShareData = {
+    body: EditShare;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_share/{share_id}';
+};
+
+export type EditShareErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditShareError = EditShareErrors[keyof EditShareErrors];
+
+export type EditShareResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditShareResponse = EditShareResponses[keyof EditShareResponses];
+
+export type PublishShareData = {
+    body: PublishShare;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/publish_share/{share_id}';
+};
+
+export type PublishShareErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Too Many Requests
+     */
+    429: ApiResponse;
+};
+
+export type PublishShareError = PublishShareErrors[keyof PublishShareErrors];
+
+export type PublishShareResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PublishShareResponse = PublishShareResponses[keyof PublishShareResponses];
+
+export type UnpublishShareData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/unpublish_share/{share_id}';
+};
+
+export type UnpublishShareErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type UnpublishShareError = UnpublishShareErrors[keyof UnpublishShareErrors];
+
+export type UnpublishShareResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type UnpublishShareResponse = UnpublishShareResponses[keyof UnpublishShareResponses];
+
+export type DeleteShareData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_share/{share_id}';
+};
+
+export type DeleteShareErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type DeleteShareError = DeleteShareErrors[keyof DeleteShareErrors];
+
+export type DeleteShareResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteShareResponse = DeleteShareResponses[keyof DeleteShareResponses];
+
+export type ShareProposalsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/share_proposals/{share_id}';
+};
+
+export type ShareProposalsResponses = {
+    /**
+     * OK
+     */
+    200: OutputShareProposals;
+};
+
+export type ShareProposalsResponse = ShareProposalsResponses[keyof ShareProposalsResponses];
+
+export type AddShareProposalData = {
+    body: AddShareProposal;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_proposal/{share_id}';
+};
+
+export type AddShareProposalErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareProposalError = AddShareProposalErrors[keyof AddShareProposalErrors];
+
+export type AddShareProposalResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareProposalResponse = AddShareProposalResponses[keyof AddShareProposalResponses];
+
+export type RemoveShareProposalData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/remove_share_proposal/{share_id}/{item_id}';
+};
+
+export type RemoveShareProposalErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type RemoveShareProposalError = RemoveShareProposalErrors[keyof RemoveShareProposalErrors];
+
+export type RemoveShareProposalResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type RemoveShareProposalResponse = RemoveShareProposalResponses[keyof RemoveShareProposalResponses];
+
+export type ShareDocumentsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/share_documents/{share_id}';
+};
+
+export type ShareDocumentsResponses = {
+    /**
+     * OK
+     */
+    200: OutputShareDocuments;
+};
+
+export type ShareDocumentsResponse = ShareDocumentsResponses[keyof ShareDocumentsResponses];
+
+export type AddShareOrgDocumentData = {
+    body: AddShareDocument;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_org_document/{share_id}';
+};
+
+export type AddShareOrgDocumentErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareOrgDocumentError = AddShareOrgDocumentErrors[keyof AddShareOrgDocumentErrors];
+
+export type AddShareOrgDocumentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareOrgDocumentResponse = AddShareOrgDocumentResponses[keyof AddShareOrgDocumentResponses];
+
+export type AddShareCustomerAssetDocumentData = {
+    body: AddShareDocument;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_customer_asset_document/{share_id}';
+};
+
+export type AddShareCustomerAssetDocumentErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareCustomerAssetDocumentError = AddShareCustomerAssetDocumentErrors[keyof AddShareCustomerAssetDocumentErrors];
+
+export type AddShareCustomerAssetDocumentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareCustomerAssetDocumentResponse = AddShareCustomerAssetDocumentResponses[keyof AddShareCustomerAssetDocumentResponses];
+
+export type AddShareExternalSupportRequestDocumentData = {
+    body: AddShareDocument;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_external_support_request_document/{share_id}';
+};
+
+export type AddShareExternalSupportRequestDocumentErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareExternalSupportRequestDocumentError = AddShareExternalSupportRequestDocumentErrors[keyof AddShareExternalSupportRequestDocumentErrors];
+
+export type AddShareExternalSupportRequestDocumentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareExternalSupportRequestDocumentResponse = AddShareExternalSupportRequestDocumentResponses[keyof AddShareExternalSupportRequestDocumentResponses];
+
+export type AddShareProposalDocumentData = {
+    body: AddShareDocument;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_proposal_document/{share_id}';
+};
+
+export type AddShareProposalDocumentErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareProposalDocumentError = AddShareProposalDocumentErrors[keyof AddShareProposalDocumentErrors];
+
+export type AddShareProposalDocumentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareProposalDocumentResponse = AddShareProposalDocumentResponses[keyof AddShareProposalDocumentResponses];
+
+export type AddShareGeneralDocumentData = {
+    body: AddShareDocument;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_general_document/{share_id}';
+};
+
+export type AddShareGeneralDocumentErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareGeneralDocumentError = AddShareGeneralDocumentErrors[keyof AddShareGeneralDocumentErrors];
+
+export type AddShareGeneralDocumentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareGeneralDocumentResponse = AddShareGeneralDocumentResponses[keyof AddShareGeneralDocumentResponses];
+
+export type RemoveShareDocumentData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/remove_share_document/{share_id}/{item_id}';
+};
+
+export type RemoveShareDocumentErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type RemoveShareDocumentError = RemoveShareDocumentErrors[keyof RemoveShareDocumentErrors];
+
+export type RemoveShareDocumentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type RemoveShareDocumentResponse = RemoveShareDocumentResponses[keyof RemoveShareDocumentResponses];
+
+export type ShareFilesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/share_files/{share_id}';
+};
+
+export type ShareFilesResponses = {
+    /**
+     * OK
+     */
+    200: OutputShareFiles;
+};
+
+export type ShareFilesResponse = ShareFilesResponses[keyof ShareFilesResponses];
+
+export type AddShareOrgFileData = {
+    body: AddShareOrgFile;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_org_file/{share_id}';
+};
+
+export type AddShareOrgFileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareOrgFileError = AddShareOrgFileErrors[keyof AddShareOrgFileErrors];
+
+export type AddShareOrgFileResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareOrgFileResponse = AddShareOrgFileResponses[keyof AddShareOrgFileResponses];
+
+export type AddShareProposalFileData = {
+    body: AddShareProposalFile;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_share_proposal_file/{share_id}';
+};
+
+export type AddShareProposalFileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddShareProposalFileError = AddShareProposalFileErrors[keyof AddShareProposalFileErrors];
+
+export type AddShareProposalFileResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddShareProposalFileResponse = AddShareProposalFileResponses[keyof AddShareProposalFileResponses];
+
+export type RemoveShareFileData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Item Id
+         */
+        item_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/remove_share_file/{share_id}/{item_id}';
+};
+
+export type RemoveShareFileErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type RemoveShareFileError = RemoveShareFileErrors[keyof RemoveShareFileErrors];
+
+export type RemoveShareFileResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type RemoveShareFileResponse = RemoveShareFileResponses[keyof RemoveShareFileResponses];
+
+export type ShareAccessesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+        /**
+         * Page Number
+         */
+        page_number: number;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/share_accesses/{share_id}/{page_number}';
+};
+
+export type ShareAccessesResponses = {
+    /**
+     * OK
+     */
+    200: OutputShareAccesses;
+};
+
+export type ShareAccessesResponse = ShareAccessesResponses[keyof ShareAccessesResponses];
+
+export type RemoveShareLinkData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/remove_share_link/{share_id}';
+};
+
+export type RemoveShareLinkErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type RemoveShareLinkError = RemoveShareLinkErrors[keyof RemoveShareLinkErrors];
+
+export type RemoveShareLinkResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type RemoveShareLinkResponse = RemoveShareLinkResponses[keyof RemoveShareLinkResponses];
