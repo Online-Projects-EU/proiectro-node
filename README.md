@@ -34,7 +34,7 @@ if (data) {
 
 ## Authentication
 
-Create an API key in your workspace under **Settings > API Keys**. The SDK sends it as a Bearer token on every request.
+Create an API key in your workspace under **Personal > My API Keys**. The SDK sends it as a Bearer token on every request.
 
 ```typescript
 import { client } from 'proiectro';

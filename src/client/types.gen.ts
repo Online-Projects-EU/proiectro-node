@@ -336,6 +336,10 @@ export type EditTenant = {
      * Geofence Radius M
      */
     geofence_radius_m?: number | null;
+    /**
+     * Time Off Requires Approval
+     */
+    time_off_requires_approval?: boolean | null;
 };
 
 /**
@@ -1632,6 +1636,10 @@ export type FeedEventContent = {
      * Description
      */
     description: string;
+    /**
+     * Link Url
+     */
+    link_url?: string | null;
 };
 
 /**
@@ -3213,6 +3221,140 @@ export type SubtenantLegalInfo = {
 };
 
 /**
+ * OutputCsvImportCell
+ */
+export type OutputCsvImportCell = {
+    /**
+     * Column
+     */
+    column: string;
+    /**
+     * Message
+     */
+    message?: string;
+    /**
+     * Before
+     */
+    before?: string;
+    /**
+     * After
+     */
+    after?: string;
+};
+
+/**
+ * OutputCsvImportPreview
+ *
+ * What a CSV import would do, row by row, before anything is written.
+ */
+export type OutputCsvImportPreview = {
+    /**
+     * Recognised Columns
+     */
+    recognised_columns: Array<string>;
+    /**
+     * Ignored Columns
+     */
+    ignored_columns: Array<string>;
+    /**
+     * Row Count
+     */
+    row_count: number;
+    /**
+     * Create Count
+     */
+    create_count: number;
+    /**
+     * Update Count
+     */
+    update_count: number;
+    /**
+     * Unchanged Count
+     */
+    unchanged_count: number;
+    /**
+     * Error Count
+     */
+    error_count: number;
+    /**
+     * Notes
+     */
+    notes?: Array<string>;
+    /**
+     * New Item Names
+     */
+    new_item_names: Array<string>;
+    /**
+     * More New Items
+     */
+    more_new_items: number;
+    /**
+     * Upload Token
+     */
+    upload_token: string;
+    /**
+     * Rows
+     */
+    rows: Array<OutputCsvImportRow>;
+};
+
+/**
+ * OutputCsvImportRow
+ */
+export type OutputCsvImportRow = {
+    /**
+     * Row Number
+     */
+    row_number: number;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Key
+     */
+    key?: string;
+    /**
+     * Action
+     */
+    action: 'create' | 'update' | 'unchanged' | 'error';
+    /**
+     * Changes
+     */
+    changes?: Array<OutputCsvImportCell>;
+    /**
+     * Errors
+     */
+    errors?: Array<OutputCsvImportCell>;
+};
+
+/**
+ * OutputCsvImportSummary
+ */
+export type OutputCsvImportSummary = {
+    /**
+     * Created Count
+     */
+    created_count: number;
+    /**
+     * Updated Count
+     */
+    updated_count: number;
+    /**
+     * Unchanged Count
+     */
+    unchanged_count: number;
+    /**
+     * Error Count
+     */
+    error_count: number;
+    /**
+     * Rows
+     */
+    rows: Array<OutputCsvImportRow>;
+};
+
+/**
  * AddSubtenant
  */
 export type AddSubtenant = {
@@ -4253,7 +4395,7 @@ export type OutputLeadBucket = {
 /**
  * OutputLeadBuckets
  *
- * Worklist response — four buckets stacked vertically.
+ * Worklist response, four buckets stacked vertically.
  */
 export type OutputLeadBuckets = {
     overdue: OutputLeadBucket;
@@ -4409,7 +4551,7 @@ export type OutputAllLeads = {
 /**
  * OutputLeadListList
  *
- * Lists tab payload — owned, peer-owned and pool lists, plus the unclaimed leads in no list.
+ * Lists tab payload, owned, peer-owned and pool lists, plus the unclaimed leads in no list.
  */
 export type OutputLeadListList = {
     /**
@@ -5247,7 +5389,7 @@ export type ClaimLead = {
 /**
  * OutputLeadImportPreview
  *
- * Preview-state of CSV import — shown before the rep clicks Confirm.
+ * Preview-state of CSV import, shown before the rep clicks Confirm.
  */
 export type OutputLeadImportPreview = {
     /**
@@ -6376,6 +6518,10 @@ export type CatalogProduct = {
      * Available In Partner Portals
      */
     available_in_partner_portals?: boolean;
+    /**
+     * Image Url
+     */
+    image_url?: string | null;
 };
 
 /**
@@ -8111,6 +8257,10 @@ export type ProposalProduct = {
      */
     catalog_internal_code?: string | null;
     /**
+     * Image Url
+     */
+    image_url?: string | null;
+    /**
      * Is Linked
      */
     is_linked?: boolean;
@@ -8819,6 +8969,10 @@ export type PaymentDetail = {
      */
     paid_date?: string | null;
     /**
+     * Invoiced Date
+     */
+    invoiced_date?: string | null;
+    /**
      * Payment Integration Id
      */
     payment_integration_id?: string | null;
@@ -8912,6 +9066,10 @@ export type EditPayment = {
      * Due Date
      */
     due_date?: string | null;
+    /**
+     * Invoiced Date
+     */
+    invoiced_date?: string | null;
     /**
      * Amount
      */
@@ -9239,6 +9397,10 @@ export type OutputProposalPreview = {
     products: Array<{
         [key: string]: unknown;
     }>;
+    /**
+     * Has Product Pictures
+     */
+    has_product_pictures?: boolean;
     /**
      * Payment Schedule
      */
@@ -9918,7 +10080,7 @@ export type WorkItemReference = {
 /**
  * GanttTask
  *
- * Single task for Frappe Gantt visualization
+ * One work item on a Gantt timeline.
  */
 export type GanttTask = {
     /**
@@ -9962,7 +10124,7 @@ export type GanttTask = {
 /**
  * OutputProjectGanttData
  *
- * Frappe Gantt data for project visualization
+ * A project's work items as a Gantt timeline.
  */
 export type OutputProjectGanttData = {
     /**
@@ -12528,6 +12690,14 @@ export type ProjectCashFlowMetrics = {
      * Monthly Projections
      */
     monthly_projections?: Array<MonthlyProjection>;
+    /**
+     * Expenses Tracked
+     */
+    expenses_tracked?: boolean;
+    /**
+     * Costs Tracked
+     */
+    costs_tracked?: boolean;
 };
 
 /**
@@ -12647,14 +12817,16 @@ export type RequestUploadUrlGcs = {
      * Contenttype
      */
     contentType: string;
+};
+
+/**
+ * APIError
+ */
+export type ApiError = {
     /**
-     * Attachmentnodetype
+     * Message
      */
-    attachmentNodeType: 'user' | 'member' | 'tenant' | 'org_branding' | 'org' | 'proposal' | 'resource' | 'internal_support_request' | 'external_support_request' | 'support_request_comment' | 'project_comment' | 'product_comment' | 'payment_comment' | 'work_item_comment' | 'project_work_item' | 'operational_work_item' | 'rfp';
-    /**
-     * Attachmentnodeid
-     */
-    attachmentNodeId: string;
+    message?: string | null;
 };
 
 /**
@@ -12697,16 +12869,6 @@ export type RequestDeleteFileGcs = {
      * Filepath
      */
     filePath: string;
-};
-
-/**
- * APIError
- */
-export type ApiError = {
-    /**
-     * Message
-     */
-    message?: string | null;
 };
 
 /**
@@ -13698,6 +13860,54 @@ export type OutputApiKey = {
      * Last Used Ip
      */
     last_used_ip?: string | null;
+    /**
+     * Granted Permissions
+     */
+    granted_permissions?: Array<string>;
+    /**
+     * Access
+     */
+    access?: Array<OutputApiKeyGrant>;
+    /**
+     * Access Working
+     */
+    access_working?: number;
+    /**
+     * Access Not Working
+     */
+    access_not_working?: number;
+};
+
+/**
+ * OutputApiKeyGrant
+ *
+ * One permission an API key is limited to, and whether the key can use it right now.
+ *
+ * `state` is `usable`, `needs_operation` (the key lacks the operation the permission is for),
+ * or `not_held` (the key's owner no longer has the permission). `operation` is the permission's
+ * own operation: create, read, update, delete, or `all` for a whole area or a feature switch.
+ */
+export type OutputApiKeyGrant = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Group
+     */
+    group: string;
+    /**
+     * Operation
+     */
+    operation: string;
+    /**
+     * Covers Area
+     */
+    covers_area: boolean;
+    /**
+     * State
+     */
+    state: string;
 };
 
 /**
@@ -13784,6 +13994,10 @@ export type AddApiKey = {
      * Expires At
      */
     expires_at?: string | null;
+    /**
+     * Granted Permissions
+     */
+    granted_permissions?: Array<string> | null;
 };
 
 /**
@@ -13820,6 +14034,10 @@ export type EditApiKey = {
      * Expires At
      */
     expires_at?: string | null;
+    /**
+     * Granted Permissions
+     */
+    granted_permissions?: Array<string> | null;
 };
 
 /**
@@ -13960,6 +14178,170 @@ export type EditHoliday = {
      * Territory
      */
     territory?: string | null;
+};
+
+/**
+ * OutputTimeOff
+ *
+ * Output schema for one stretch of time off
+ */
+export type OutputTimeOff = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Member Id
+     */
+    member_id: string;
+    /**
+     * Member Name
+     */
+    member_name: string;
+    /**
+     * Exception Type
+     */
+    exception_type: string;
+    /**
+     * Exception Type Name
+     */
+    exception_type_name: string;
+    /**
+     * Start Date
+     */
+    start_date: string;
+    /**
+     * End Date
+     */
+    end_date: string;
+    /**
+     * Days
+     */
+    days: number;
+    /**
+     * Note
+     */
+    note?: string | null;
+    /**
+     * Approval State
+     */
+    approval_state: string;
+    /**
+     * Approval State Name
+     */
+    approval_state_name: string;
+    /**
+     * Decided By Name
+     */
+    decided_by_name?: string | null;
+    /**
+     * Decided At
+     */
+    decided_at?: string | null;
+    /**
+     * Decision Note
+     */
+    decision_note?: string | null;
+};
+
+/**
+ * OutputTimeOffList
+ *
+ * Output schema for a list of time off
+ */
+export type OutputTimeOffList = {
+    /**
+     * Items
+     */
+    items: Array<OutputTimeOff>;
+    /**
+     * Total
+     */
+    total: number;
+    /**
+     * Requires Approval
+     */
+    requires_approval: boolean;
+    /**
+     * Types
+     */
+    types?: Array<OutputTimeOffType>;
+};
+
+/**
+ * OutputTimeOffType
+ *
+ * One type of time off a member can ask for
+ */
+export type OutputTimeOffType = {
+    /**
+     * Value
+     */
+    value: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * AddMyTimeOff
+ *
+ * Input schema for asking for time off
+ */
+export type AddMyTimeOff = {
+    /**
+     * Exception Type
+     */
+    exception_type: string;
+    /**
+     * Start Date
+     */
+    start_date: string;
+    /**
+     * End Date
+     */
+    end_date: string;
+    /**
+     * Note
+     */
+    note?: string | null;
+};
+
+/**
+ * EditMyTimeOff
+ *
+ * Input schema for changing your time off
+ */
+export type EditMyTimeOff = {
+    /**
+     * Exception Type
+     */
+    exception_type?: string | null;
+    /**
+     * Start Date
+     */
+    start_date?: string | null;
+    /**
+     * End Date
+     */
+    end_date?: string | null;
+    /**
+     * Note
+     */
+    note?: string | null;
+};
+
+/**
+ * RejectTimeOff
+ *
+ * Input schema for turning down a time off request
+ */
+export type RejectTimeOff = {
+    /**
+     * Decision Note
+     */
+    decision_note?: string | null;
 };
 
 /**
@@ -14625,6 +15007,10 @@ export type OutputSupportRequestQueue = {
      */
     automatically_assign: boolean;
     /**
+     * Expire After Days
+     */
+    expire_after_days?: number | null;
+    /**
      * Open Count
      */
     open_count?: number;
@@ -14696,6 +15082,10 @@ export type AddSupportRequestQueue = {
      * Automatically Assign
      */
     automatically_assign?: boolean | null;
+    /**
+     * Expire After Days
+     */
+    expire_after_days?: number | null;
 };
 
 /**
@@ -14728,6 +15118,10 @@ export type EditSupportRequestQueue = {
      * Automatically Assign
      */
     automatically_assign?: boolean | null;
+    /**
+     * Expire After Days
+     */
+    expire_after_days?: number | null;
 };
 
 /**
@@ -15900,6 +16294,10 @@ export type OutputProcess = {
      * Item Count
      */
     item_count?: number;
+    /**
+     * Setup Warnings
+     */
+    setup_warnings?: Array<string>;
 };
 
 /**
@@ -16255,6 +16653,10 @@ export type OutputProcessSummary = {
      */
     pending_approval?: number;
     /**
+     * Can Add
+     */
+    can_add?: boolean;
+    /**
      * Assignable Members
      */
     assignable_members?: Array<OutputProcessAssignee>;
@@ -16369,6 +16771,10 @@ export type OutputOperationalItem = {
      */
     transitions?: Array<OutputOperationalItemTransition>;
     /**
+     * Filled when you fetch one item. On list rows every value is false, which does not mean the action is refused.
+     */
+    actions?: OutputOperationalItemActions;
+    /**
      * Is Billed
      */
     is_billed?: boolean;
@@ -16380,6 +16786,18 @@ export type OutputOperationalItem = {
      * Proposal Id
      */
     proposal_id?: string | null;
+    /**
+     * Source Type
+     */
+    source_type?: string | null;
+    /**
+     * Source Id
+     */
+    source_id?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
     /**
      * Anchor Latitude
      */
@@ -16404,6 +16822,42 @@ export type OutputOperationalItem = {
      * Proximity Source
      */
     proximity_source?: string | null;
+};
+
+/**
+ * OutputOperationalItemActions
+ *
+ * What the caller's participation in the process allows on this item.
+ */
+export type OutputOperationalItemActions = {
+    /**
+     * Can Annotate
+     */
+    can_annotate?: boolean;
+    /**
+     * Can Edit
+     */
+    can_edit?: boolean;
+    /**
+     * Can Delete
+     */
+    can_delete?: boolean;
+    /**
+     * Can Move
+     */
+    can_move?: boolean;
+    /**
+     * Can Approve
+     */
+    can_approve?: boolean;
+    /**
+     * Can Reject
+     */
+    can_reject?: boolean;
+    /**
+     * Can Reassign
+     */
+    can_reassign?: boolean;
 };
 
 /**
@@ -17789,10 +18243,6 @@ export type CommentOutput = {
      */
     edited: boolean;
     /**
-     * Attachments
-     */
-    attachments: boolean;
-    /**
      * Replies
      */
     replies?: Array<CommentOutput>;
@@ -18085,11 +18535,9 @@ export type EditCustomerLocation = {
 /**
  * OutputCoordinatesConflict
  *
- * 409 body for GPS capture on an entity that already has a pin.
- *
- * APIResponse-superset: the middleware still renders the message as a toast,
- * and the client gets the stored point so it can show how far the pin would
- * move before the user confirms the overwrite.
+ * 409 body for GPS capture on an entity that already has a pin: the message, plus the
+ * stored point, so the client can show how far the pin would move before the user confirms
+ * the overwrite.
  */
 export type OutputCoordinatesConflict = {
     /**
@@ -18127,7 +18575,7 @@ export type OutputCoordinatesConflict = {
  *
  * Field GPS capture for a location / customer location / customer asset.
  *
- * `accuracy_m` is the device-reported fix accuracy and is mandatory — writes
+ * `accuracy_m` is the device-reported fix accuracy and is mandatory, writes
  * above the workspace's `geo_capture_max_accuracy_m` floor are rejected, so a
  * 500 m fix never gets stored as truth. An existing point is never silently
  * overwritten: without `confirm_overwrite` the endpoint answers 409 with the
@@ -18233,6 +18681,10 @@ export type OutputCustomerAsset = {
      */
     warranty_expiration?: string | null;
     /**
+     * Next Service Date
+     */
+    next_service_date?: string | null;
+    /**
      * Is Customer Visible
      */
     is_customer_visible: boolean;
@@ -18333,6 +18785,10 @@ export type AddCustomerAsset = {
      */
     warranty_expiration?: string | null;
     /**
+     * Next Service Date
+     */
+    next_service_date?: string | null;
+    /**
      * Is Customer Visible
      */
     is_customer_visible?: boolean;
@@ -18390,6 +18846,10 @@ export type EditCustomerAsset = {
      * Warranty Expiration
      */
     warranty_expiration?: string | null;
+    /**
+     * Next Service Date
+     */
+    next_service_date?: string | null;
     /**
      * Is Customer Visible
      */
@@ -18770,7 +19230,7 @@ export type OutputNotificationPreferences = {
  * opinion about: `{"support": {"web": false}, "support_assigned": {"mobile": true}}`.
  *
  * Only the keys sent are written. An absent key keeps whatever was stored, and a stored key
- * that is absent here is not cleared — matching how every other edit in this codebase
+ * that is absent here is not cleared, matching how every other edit in this codebase
  * behaves. To go back to following the product default, send the key with an empty object
  * and it is removed.
  */
@@ -19189,6 +19649,10 @@ export type PortalQuoteCatalogItem = {
      * Currency
      */
     currency?: string;
+    /**
+     * Image Url
+     */
+    image_url?: string | null;
 };
 
 /**
@@ -19280,6 +19744,10 @@ export type PortalQuoteRequestLine = {
      * Unit Of Measure
      */
     unit_of_measure?: string;
+    /**
+     * Image Url
+     */
+    image_url?: string | null;
 };
 
 /**
@@ -19478,6 +19946,10 @@ export type PortalOrderLineOutput = {
      * Status Type
      */
     status_type?: string | null;
+    /**
+     * Image Url
+     */
+    image_url?: string | null;
 };
 
 /**
@@ -19613,7 +20085,7 @@ export type AddExternalSupportRequestForProject = {
 /**
  * PortalEditExternalSupportRequest
  *
- * Portal-safe schema — excludes root_cause_asset (internal-only field).
+ * Portal-safe schema, excludes root_cause_asset (internal-only field).
  */
 export type PortalEditExternalSupportRequest = {
     /**
@@ -19836,6 +20308,10 @@ export type OutputPortalShareProposalPreview = {
     products: Array<{
         [key: string]: unknown;
     }>;
+    /**
+     * Has Product Pictures
+     */
+    has_product_pictures?: boolean;
     /**
      * Payment Schedule
      */
@@ -20550,18 +21026,6 @@ export type AcceptPartnerProposal = {
  */
 export type PartnerApproveProduct = {
     /**
-     * Bridge Id
-     */
-    bridge_id: string;
-    /**
-     * Project Id
-     */
-    project_id: string;
-    /**
-     * Product Id
-     */
-    product_id: string;
-    /**
      * Notes
      */
     notes?: string | null;
@@ -20573,22 +21037,6 @@ export type PartnerApproveProduct = {
  * Input schema for partner rejecting a deliverable in partner portal
  */
 export type PartnerRejectProduct = {
-    /**
-     * Bridge Id
-     */
-    bridge_id: string;
-    /**
-     * Project Id
-     */
-    project_id: string;
-    /**
-     * Product Id
-     */
-    product_id: string;
-    /**
-     * Status Id
-     */
-    status_id: string;
     /**
      * Reason
      */
@@ -22681,6 +23129,10 @@ export type AnalyticsCashflowOverview = {
      */
     payments_made_percent?: number | string | null;
     /**
+     * Outflows Tracked
+     */
+    outflows_tracked?: boolean;
+    /**
      * Uncovered Currencies
      */
     uncovered_currencies?: Array<string>;
@@ -22820,6 +23272,10 @@ export type AnalyticsCashflowProjections = {
      * Quarters
      */
     quarters?: Array<AnalyticsCashflowBucket>;
+    /**
+     * Outflows Tracked
+     */
+    outflows_tracked?: boolean;
     /**
      * Currency
      */
@@ -24424,6 +24880,10 @@ export type FinancialKpis = {
      */
     one_time_revenue?: number | string | null;
     /**
+     * Margin Tracked
+     */
+    margin_tracked?: boolean;
+    /**
      * Gross Margin Percent
      */
     gross_margin_percent?: number | string | null;
@@ -25551,7 +26011,7 @@ export type AnalyticsDeliveryMilestones = {
  *
  * ``remaining_hours`` is the open work-item backlog and has no time horizon. ``booked_hours`` and
  * ``available_hours`` are both summed over the utilization horizon, and utilization is the ratio
- * of the two — ``available_hours`` is None when the member has no weekly schedule on file, which
+ * of the two, ``available_hours`` is None when the member has no weekly schedule on file, which
  * makes utilization unknowable rather than zero.
  */
 export type AnalyticsTeamWorkloadItem = {
@@ -25839,7 +26299,7 @@ export type AnalyticsTimelineItem = {
  *
  * Billable/non-billable percentages and the skills-gap counts are GONE: the product models
  * neither (WorkLog has no billable flag, and there is no Skill model), so they could only ever
- * have been invented — which is exactly what the old implementation did.
+ * have been invented, which is exactly what the old implementation did.
  */
 export type ResourcesKpis = {
     /**
@@ -26089,7 +26549,7 @@ export type AnalyticsResourcesUtilization = {
  *
  * Booked against available hours, for one resource or one category.
  *
- * `utilization_rate` is None when the entity has no weekly schedule on file — capacity is
+ * `utilization_rate` is None when the entity has no weekly schedule on file, capacity is
  * unknown, not zero, and a rate of 0% would read as "idle".
  */
 export type AnalyticsUtilizationItem = {
@@ -27619,9 +28079,8 @@ export type OutputMyProfile = {
 /**
  * EditMyProfile
  *
- * Partial: an omitted key keeps the stored value. Valid languages are
- * settings.LANGUAGES, validated in the function so new languages need no
- * schema change.
+ * Partial: an omitted key keeps the stored value. `language` is one of the platform's
+ * languages, such as `en` or `ro`.
  */
 export type EditMyProfile = {
     /**
@@ -28074,6 +28533,8 @@ export type OutputMyOperationalItems = {
 
 /**
  * CompanyEnrichmentResultSchema
+ *
+ * A Romanian company looked up by CUI (enrich_company, through enrichment_anaf).
  */
 export type CompanyEnrichmentResultSchema = {
     /**
@@ -28237,7 +28698,7 @@ export type OutputWebhookDelivery = {
 /**
  * WebhookCreated
  *
- * `add_webhook` answer: the new endpoint's id, and — for a secure endpoint — its
+ * `add_webhook` answer: the new endpoint's id, and, for a secure endpoint, its
  * signing secret, returned once, here only. The browser also gets it via the session
  * for one-time display; an API client has no session, so this is its only chance.
  */
@@ -29086,6 +29547,14 @@ export type OutputWorkItemStageForms = {
      * Has Blocking
      */
     has_blocking?: boolean;
+    /**
+     * Can Fill
+     */
+    can_fill?: boolean;
+    /**
+     * Fill Locked Reason
+     */
+    fill_locked_reason?: string;
 };
 
 /**
@@ -29492,6 +29961,14 @@ export type OutputDocumentTemplate = {
      */
     entity_type_display: string;
     /**
+     * Kind
+     */
+    kind?: string;
+    /**
+     * Kind Display
+     */
+    kind_display?: string;
+    /**
      * Default Series
      */
     default_series?: string | null;
@@ -29544,6 +30021,14 @@ export type AddDocumentTemplate = {
      */
     entity_type?: string;
     /**
+     * Kind
+     */
+    kind?: 'document' | 'email' | 'chat_message';
+    /**
+     * Subject
+     */
+    subject?: string | null;
+    /**
      * Body
      */
     body?: string | null;
@@ -29581,6 +30066,14 @@ export type EditDocumentTemplate = {
      * Entity Type
      */
     entity_type?: string | null;
+    /**
+     * Kind
+     */
+    kind?: 'document' | 'email' | 'chat_message' | null;
+    /**
+     * Subject
+     */
+    subject?: string | null;
     /**
      * Body
      */
@@ -29762,7 +30255,7 @@ export type FinalizeDocument = {
     /**
      * Series Id
      */
-    series_id: string;
+    series_id?: string | null;
 };
 
 /**
@@ -29818,6 +30311,10 @@ export type OutputDocument = {
      */
     context_label?: string;
     /**
+     * Redacted
+     */
+    redacted?: boolean;
+    /**
      * Render Route
      */
     render_route?: string | null;
@@ -29871,6 +30368,100 @@ export type OutputDocuments = {
      * Entity Id
      */
     entity_id?: string | null;
+};
+
+/**
+ * OutputSentMessage
+ *
+ * An email or chat message as it went out: never numbered, never edited.
+ */
+export type OutputSentMessage = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Sent At
+     */
+    sent_at?: string | null;
+    /**
+     * Sent Through
+     */
+    sent_through?: string;
+    /**
+     * Sent By
+     */
+    sent_by?: string;
+    /**
+     * Delivery State
+     */
+    delivery_state?: string;
+    /**
+     * Delivery Error
+     */
+    delivery_error?: string;
+    /**
+     * Recipients
+     */
+    recipients?: Array<string>;
+    /**
+     * Context Type
+     */
+    context_type?: string | null;
+    /**
+     * Context Label
+     */
+    context_label?: string;
+    /**
+     * Org Label
+     */
+    org_label?: string;
+    /**
+     * Render Route
+     */
+    render_route?: string | null;
+};
+
+/**
+ * OutputSentMessages
+ */
+export type OutputSentMessages = {
+    /**
+     * Messages
+     */
+    messages: Array<OutputSentMessage>;
+    /**
+     * Total Count
+     */
+    total_count?: number;
+    /**
+     * Page
+     */
+    page?: number;
+    /**
+     * Has Next
+     */
+    has_next?: boolean;
+    /**
+     * Kind
+     */
+    kind?: string | null;
+    /**
+     * Entity Id
+     */
+    entity_id?: string | null;
+    /**
+     * Query
+     */
+    query?: string;
 };
 
 /**
@@ -29973,7 +30564,7 @@ export type OutputShares = {
  * AddShare
  *
  * A new share starts as a draft. The message is plain text. The language defaults from the
- * organization's country; valid languages are settings.LANGUAGES, validated in the function.
+ * organization's country; it is one of the platform's languages, such as `en` or `ro`.
  */
 export type AddShare = {
     /**
@@ -31707,6 +32298,10 @@ export type AddRoleErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type AddRoleError = AddRoleErrors[keyof AddRoleErrors];
@@ -31741,6 +32336,10 @@ export type EditRoleErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditRoleError = EditRoleErrors[keyof EditRoleErrors];
@@ -32023,6 +32622,10 @@ export type AddTagErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type AddTagError = AddTagErrors[keyof AddTagErrors];
@@ -32061,6 +32664,10 @@ export type EditTagErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditTagError = EditTagErrors[keyof EditTagErrors];
@@ -33076,6 +33683,10 @@ export type TagOperationalWorkItemErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -33117,6 +33728,10 @@ export type UntagOperationalWorkItemErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Conflict
      */
@@ -33210,6 +33825,10 @@ export type TagDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -33251,6 +33870,10 @@ export type UntagDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Conflict
      */
@@ -33303,6 +33926,10 @@ export type AddLabelData = {
 
 export type AddLabelErrors = {
     /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -33336,6 +33963,10 @@ export type EditLabelData = {
 };
 
 export type EditLabelErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
     /**
      * Internal Server Error
      */
@@ -34021,6 +34652,10 @@ export type LabelOperationalWorkItemErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34062,6 +34697,10 @@ export type UnlabelOperationalWorkItemErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -34240,6 +34879,10 @@ export type LabelDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34281,6 +34924,10 @@ export type UnlabelDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -34899,6 +35546,122 @@ export type SubtenantLegalInfoResponses = {
 };
 
 export type SubtenantLegalInfoResponse = SubtenantLegalInfoResponses[keyof SubtenantLegalInfoResponses];
+
+export type ImportOrgsPreviewData = {
+    /**
+     * MultiPartBodyParams
+     */
+    body: {
+        /**
+         * Upload Token
+         */
+        upload_token?: string | null;
+        /**
+         * File
+         */
+        file: Blob | File;
+    };
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/import_orgs_preview';
+};
+
+export type ImportOrgsPreviewErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Request Entity Too Large
+     */
+    413: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type ImportOrgsPreviewError = ImportOrgsPreviewErrors[keyof ImportOrgsPreviewErrors];
+
+export type ImportOrgsPreviewResponses = {
+    /**
+     * OK
+     */
+    200: OutputCsvImportPreview;
+};
+
+export type ImportOrgsPreviewResponse = ImportOrgsPreviewResponses[keyof ImportOrgsPreviewResponses];
+
+export type ImportOrgsData = {
+    /**
+     * MultiPartBodyParams
+     */
+    body: {
+        /**
+         * Upload Token
+         */
+        upload_token?: string | null;
+        /**
+         * File
+         */
+        file?: Blob | File;
+    };
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/import_orgs';
+};
+
+export type ImportOrgsErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Gone
+     */
+    410: ApiResponse;
+    /**
+     * Request Entity Too Large
+     */
+    413: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Too Many Requests
+     */
+    429: ApiResponse;
+};
+
+export type ImportOrgsError = ImportOrgsErrors[keyof ImportOrgsErrors];
+
+export type ImportOrgsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCsvImportSummary;
+};
+
+export type ImportOrgsResponse = ImportOrgsResponses[keyof ImportOrgsResponses];
 
 export type AddSubtenantData = {
     body: AddSubtenant;
@@ -38429,6 +39192,126 @@ export type EditCatalogProductResponses = {
 };
 
 export type EditCatalogProductResponse = EditCatalogProductResponses[keyof EditCatalogProductResponses];
+
+export type ImportCatalogPreviewData = {
+    /**
+     * MultiPartBodyParams
+     */
+    body: {
+        /**
+         * Make New Active
+         */
+        make_new_active?: boolean | null;
+        /**
+         * Upload Token
+         */
+        upload_token?: string | null;
+        /**
+         * File
+         */
+        file: Blob | File;
+    };
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/import_catalog_preview';
+};
+
+export type ImportCatalogPreviewErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Request Entity Too Large
+     */
+    413: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type ImportCatalogPreviewError = ImportCatalogPreviewErrors[keyof ImportCatalogPreviewErrors];
+
+export type ImportCatalogPreviewResponses = {
+    /**
+     * OK
+     */
+    200: OutputCsvImportPreview;
+};
+
+export type ImportCatalogPreviewResponse = ImportCatalogPreviewResponses[keyof ImportCatalogPreviewResponses];
+
+export type ImportCatalogData = {
+    /**
+     * MultiPartBodyParams
+     */
+    body: {
+        /**
+         * Make New Active
+         */
+        make_new_active?: boolean | null;
+        /**
+         * Upload Token
+         */
+        upload_token?: string | null;
+        /**
+         * File
+         */
+        file?: Blob | File;
+    };
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/import_catalog';
+};
+
+export type ImportCatalogErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Gone
+     */
+    410: ApiResponse;
+    /**
+     * Request Entity Too Large
+     */
+    413: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Too Many Requests
+     */
+    429: ApiResponse;
+};
+
+export type ImportCatalogError = ImportCatalogErrors[keyof ImportCatalogErrors];
+
+export type ImportCatalogResponses = {
+    /**
+     * OK
+     */
+    200: OutputCsvImportSummary;
+};
+
+export type ImportCatalogResponse = ImportCatalogResponses[keyof ImportCatalogResponses];
 
 export type DeleteCatalogProductData = {
     body?: never;
@@ -44134,33 +45017,21 @@ export type OrgProjectsResponses = {
 
 export type OrgProjectsResponse = OrgProjectsResponses[keyof OrgProjectsResponses];
 
-export type GenerateUploadUrlMemberAvatarData = {
-    body: RequestUploadUrlGcs;
-    path: {
-        /**
-         * Tenant Path
-         */
-        tenant_path: string;
-    };
-    query?: never;
-    url: '/api/v1/{tenant_path}/generate_upload_url_member_avatar';
-};
-
-export type GenerateUploadUrlMemberAvatarResponses = {
-    /**
-     * OK
-     */
-    200: UploadUrlGcs;
-};
-
-export type GenerateUploadUrlMemberAvatarResponse = GenerateUploadUrlMemberAvatarResponses[keyof GenerateUploadUrlMemberAvatarResponses];
-
 export type GenerateUploadUrlUserAvatarData = {
     body: RequestUploadUrlGcs;
     path?: never;
     query?: never;
     url: '/api/v1/generate_upload_url_user_avatar';
 };
+
+export type GenerateUploadUrlUserAvatarErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: ApiResponse;
+};
+
+export type GenerateUploadUrlUserAvatarError = GenerateUploadUrlUserAvatarErrors[keyof GenerateUploadUrlUserAvatarErrors];
 
 export type GenerateUploadUrlUserAvatarResponses = {
     /**
@@ -44171,137 +45042,8 @@ export type GenerateUploadUrlUserAvatarResponses = {
 
 export type GenerateUploadUrlUserAvatarResponse = GenerateUploadUrlUserAvatarResponses[keyof GenerateUploadUrlUserAvatarResponses];
 
-export type GenerateUploadUrlTenantBrandingData = {
-    body: RequestUploadUrlGcs;
-    path: {
-        /**
-         * Tenant Path
-         */
-        tenant_path: string;
-    };
-    query?: never;
-    url: '/api/v1/{tenant_path}/generate_upload_url_tenant_branding';
-};
-
-export type GenerateUploadUrlTenantBrandingResponses = {
-    /**
-     * OK
-     */
-    200: UploadUrlGcs;
-};
-
-export type GenerateUploadUrlTenantBrandingResponse = GenerateUploadUrlTenantBrandingResponses[keyof GenerateUploadUrlTenantBrandingResponses];
-
-export type GenerateUploadUrlOrgBrandingData = {
-    body: RequestUploadUrlGcs;
-    path: {
-        /**
-         * Tenant Path
-         */
-        tenant_path: string;
-        /**
-         * Org Id
-         */
-        org_id: string;
-    };
-    query?: never;
-    url: '/api/v1/{tenant_path}/generate_upload_url_org_branding/{org_id}';
-};
-
-export type GenerateUploadUrlOrgBrandingResponses = {
-    /**
-     * OK
-     */
-    200: UploadUrlGcs;
-};
-
-export type GenerateUploadUrlOrgBrandingResponse = GenerateUploadUrlOrgBrandingResponses[keyof GenerateUploadUrlOrgBrandingResponses];
-
-export type GenerateDownloadUrlUserAvatarData = {
-    body: RequestDownloadUrlGcs;
-    path?: never;
-    query?: never;
-    url: '/api/v1/generate_download_url_user_avatar';
-};
-
-export type GenerateDownloadUrlUserAvatarResponses = {
-    /**
-     * OK
-     */
-    200: DownloadUrlGcs;
-};
-
-export type GenerateDownloadUrlUserAvatarResponse = GenerateDownloadUrlUserAvatarResponses[keyof GenerateDownloadUrlUserAvatarResponses];
-
-export type GenerateDownloadUrlMemberAvatarData = {
-    body: RequestDownloadUrlGcs;
-    path: {
-        /**
-         * Tenant Path
-         */
-        tenant_path: string;
-    };
-    query?: never;
-    url: '/api/v1/{tenant_path}/generate_download_url_member_avatar';
-};
-
-export type GenerateDownloadUrlMemberAvatarResponses = {
-    /**
-     * OK
-     */
-    200: DownloadUrlGcs;
-};
-
-export type GenerateDownloadUrlMemberAvatarResponse = GenerateDownloadUrlMemberAvatarResponses[keyof GenerateDownloadUrlMemberAvatarResponses];
-
-export type GenerateDownloadUrlTenantBrandingData = {
-    body: RequestDownloadUrlGcs;
-    path: {
-        /**
-         * Tenant Path
-         */
-        tenant_path: string;
-    };
-    query?: never;
-    url: '/api/v1/{tenant_path}/generate_download_url_tenant_branding';
-};
-
-export type GenerateDownloadUrlTenantBrandingResponses = {
-    /**
-     * OK
-     */
-    200: DownloadUrlGcs;
-};
-
-export type GenerateDownloadUrlTenantBrandingResponse = GenerateDownloadUrlTenantBrandingResponses[keyof GenerateDownloadUrlTenantBrandingResponses];
-
-export type GenerateDownloadUrlOrgBrandingData = {
-    body: RequestDownloadUrlGcs;
-    path: {
-        /**
-         * Tenant Path
-         */
-        tenant_path: string;
-        /**
-         * Org Id
-         */
-        org_id: string;
-    };
-    query?: never;
-    url: '/api/v1/{tenant_path}/generate_download_url_org_branding/{org_id}';
-};
-
-export type GenerateDownloadUrlOrgBrandingResponses = {
-    /**
-     * OK
-     */
-    200: DownloadUrlGcs;
-};
-
-export type GenerateDownloadUrlOrgBrandingResponse = GenerateDownloadUrlOrgBrandingResponses[keyof GenerateDownloadUrlOrgBrandingResponses];
-
 export type MarkUserAvatarAsDeletedData = {
-    body: RequestDeleteFileGcs;
+    body?: never;
     path?: never;
     query?: never;
     url: '/api/v1/mark_user_avatar_as_deleted';
@@ -44325,8 +45067,38 @@ export type MarkUserAvatarAsDeletedResponses = {
 
 export type MarkUserAvatarAsDeletedResponse = MarkUserAvatarAsDeletedResponses[keyof MarkUserAvatarAsDeletedResponses];
 
+export type GenerateUploadUrlMemberAvatarData = {
+    body: RequestUploadUrlGcs;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/generate_upload_url_member_avatar';
+};
+
+export type GenerateUploadUrlMemberAvatarErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: ApiResponse;
+};
+
+export type GenerateUploadUrlMemberAvatarError = GenerateUploadUrlMemberAvatarErrors[keyof GenerateUploadUrlMemberAvatarErrors];
+
+export type GenerateUploadUrlMemberAvatarResponses = {
+    /**
+     * OK
+     */
+    200: UploadUrlGcs;
+};
+
+export type GenerateUploadUrlMemberAvatarResponse = GenerateUploadUrlMemberAvatarResponses[keyof GenerateUploadUrlMemberAvatarResponses];
+
 export type MarkMemberAvatarAsDeletedData = {
-    body: RequestDeleteFileGcs;
+    body?: never;
     path: {
         /**
          * Tenant Path
@@ -44355,8 +45127,38 @@ export type MarkMemberAvatarAsDeletedResponses = {
 
 export type MarkMemberAvatarAsDeletedResponse = MarkMemberAvatarAsDeletedResponses[keyof MarkMemberAvatarAsDeletedResponses];
 
+export type GenerateUploadUrlTenantBrandingData = {
+    body: RequestUploadUrlGcs;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/generate_upload_url_tenant_branding';
+};
+
+export type GenerateUploadUrlTenantBrandingErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: ApiResponse;
+};
+
+export type GenerateUploadUrlTenantBrandingError = GenerateUploadUrlTenantBrandingErrors[keyof GenerateUploadUrlTenantBrandingErrors];
+
+export type GenerateUploadUrlTenantBrandingResponses = {
+    /**
+     * OK
+     */
+    200: UploadUrlGcs;
+};
+
+export type GenerateUploadUrlTenantBrandingResponse = GenerateUploadUrlTenantBrandingResponses[keyof GenerateUploadUrlTenantBrandingResponses];
+
 export type MarkTenantBrandingAsDeletedData = {
-    body: RequestDeleteFileGcs;
+    body?: never;
     path: {
         /**
          * Tenant Path
@@ -44385,39 +45187,73 @@ export type MarkTenantBrandingAsDeletedResponses = {
 
 export type MarkTenantBrandingAsDeletedResponse = MarkTenantBrandingAsDeletedResponses[keyof MarkTenantBrandingAsDeletedResponses];
 
-export type MarkOrgBrandingAsDeletedData = {
-    body: RequestDeleteFileGcs;
+export type GenerateUploadUrlCatalogPictureData = {
+    body: RequestUploadUrlGcs;
     path: {
         /**
          * Tenant Path
          */
         tenant_path: string;
         /**
-         * Org Id
+         * Catalog Id
          */
-        org_id: string;
+        catalog_id: string;
     };
     query?: never;
-    url: '/api/v1/{tenant_path}/mark_org_branding_as_deleted/{org_id}';
+    url: '/api/v1/{tenant_path}/generate_upload_url_catalog_picture/{catalog_id}';
 };
 
-export type MarkOrgBrandingAsDeletedErrors = {
+export type GenerateUploadUrlCatalogPictureErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: ApiResponse;
+};
+
+export type GenerateUploadUrlCatalogPictureError = GenerateUploadUrlCatalogPictureErrors[keyof GenerateUploadUrlCatalogPictureErrors];
+
+export type GenerateUploadUrlCatalogPictureResponses = {
+    /**
+     * OK
+     */
+    200: UploadUrlGcs;
+};
+
+export type GenerateUploadUrlCatalogPictureResponse = GenerateUploadUrlCatalogPictureResponses[keyof GenerateUploadUrlCatalogPictureResponses];
+
+export type MarkCatalogPictureAsDeletedData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Catalog Id
+         */
+        catalog_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/mark_catalog_picture_as_deleted/{catalog_id}';
+};
+
+export type MarkCatalogPictureAsDeletedErrors = {
     /**
      * Bad Request
      */
     400: ApiResponse;
 };
 
-export type MarkOrgBrandingAsDeletedError = MarkOrgBrandingAsDeletedErrors[keyof MarkOrgBrandingAsDeletedErrors];
+export type MarkCatalogPictureAsDeletedError = MarkCatalogPictureAsDeletedErrors[keyof MarkCatalogPictureAsDeletedErrors];
 
-export type MarkOrgBrandingAsDeletedResponses = {
+export type MarkCatalogPictureAsDeletedResponses = {
     /**
      * OK
      */
     200: ApiResponse;
 };
 
-export type MarkOrgBrandingAsDeletedResponse = MarkOrgBrandingAsDeletedResponses[keyof MarkOrgBrandingAsDeletedResponses];
+export type MarkCatalogPictureAsDeletedResponse = MarkCatalogPictureAsDeletedResponses[keyof MarkCatalogPictureAsDeletedResponses];
 
 export type GenerateUploadUrlOrgData = {
     body: RequestUploadUrlGcs;
@@ -44989,6 +45825,10 @@ export type GenerateUploadUrlOperationalWorkItemErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiError;
@@ -45051,6 +45891,10 @@ export type MarkOperationalWorkItemFileAsDeletedErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
 };
 
 export type MarkOperationalWorkItemFileAsDeletedError = MarkOperationalWorkItemFileAsDeletedErrors[keyof MarkOperationalWorkItemFileAsDeletedErrors];
@@ -45892,6 +46736,10 @@ export type AddCostTypeData = {
 };
 
 export type AddCostTypeErrors = {
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -46916,6 +47764,10 @@ export type AddApiKeyData = {
 
 export type AddApiKeyErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -46958,6 +47810,10 @@ export type EditApiKeyData = {
 
 export type EditApiKeyErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -46999,6 +47855,10 @@ export type DeleteApiKeyData = {
 };
 
 export type DeleteApiKeyErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -47235,6 +48095,226 @@ export type EditHolidayResponses = {
 };
 
 export type EditHolidayResponse = EditHolidayResponses[keyof EditHolidayResponses];
+
+export type ListMyTimeOffData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_time_off';
+};
+
+export type ListMyTimeOffResponses = {
+    /**
+     * OK
+     */
+    200: OutputTimeOffList;
+};
+
+export type ListMyTimeOffResponse = ListMyTimeOffResponses[keyof ListMyTimeOffResponses];
+
+export type AddMyTimeOffData = {
+    body: AddMyTimeOff;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_time_off';
+};
+
+export type AddMyTimeOffErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type AddMyTimeOffError = AddMyTimeOffErrors[keyof AddMyTimeOffErrors];
+
+export type AddMyTimeOffResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddMyTimeOffResponse = AddMyTimeOffResponses[keyof AddMyTimeOffResponses];
+
+export type DeleteMyTimeOffData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Time Off Id
+         */
+        time_off_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_time_off/{time_off_id}';
+};
+
+export type DeleteMyTimeOffErrors = {
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type DeleteMyTimeOffError = DeleteMyTimeOffErrors[keyof DeleteMyTimeOffErrors];
+
+export type DeleteMyTimeOffResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteMyTimeOffResponse = DeleteMyTimeOffResponses[keyof DeleteMyTimeOffResponses];
+
+export type EditMyTimeOffData = {
+    body: EditMyTimeOff;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Time Off Id
+         */
+        time_off_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/my_time_off/{time_off_id}';
+};
+
+export type EditMyTimeOffErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type EditMyTimeOffError = EditMyTimeOffErrors[keyof EditMyTimeOffErrors];
+
+export type EditMyTimeOffResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditMyTimeOffResponse = EditMyTimeOffResponses[keyof EditMyTimeOffResponses];
+
+export type ListTimeOffRequestsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/time_off_requests';
+};
+
+export type ListTimeOffRequestsResponses = {
+    /**
+     * OK
+     */
+    200: OutputTimeOffList;
+};
+
+export type ListTimeOffRequestsResponse = ListTimeOffRequestsResponses[keyof ListTimeOffRequestsResponses];
+
+export type ApproveTimeOffData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Time Off Id
+         */
+        time_off_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/time_off/{time_off_id}/approve';
+};
+
+export type ApproveTimeOffErrors = {
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type ApproveTimeOffError = ApproveTimeOffErrors[keyof ApproveTimeOffErrors];
+
+export type ApproveTimeOffResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type ApproveTimeOffResponse = ApproveTimeOffResponses[keyof ApproveTimeOffResponses];
+
+export type RejectTimeOffData = {
+    body: RejectTimeOff;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Time Off Id
+         */
+        time_off_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/time_off/{time_off_id}/reject';
+};
+
+export type RejectTimeOffErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type RejectTimeOffError = RejectTimeOffErrors[keyof RejectTimeOffErrors];
+
+export type RejectTimeOffResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type RejectTimeOffResponse = RejectTimeOffResponses[keyof RejectTimeOffResponses];
 
 export type ProposalTeamBookingsData = {
     body?: never;
@@ -54258,6 +55338,10 @@ export type AddOperationalWorkItemCommentData = {
 };
 
 export type AddOperationalWorkItemCommentErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Conflict
      */
@@ -62465,6 +63549,10 @@ export type SubmitWorkItemFormErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -63518,6 +64606,10 @@ export type AddDocumentTemplateErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -63564,6 +64656,10 @@ export type DeleteDocumentTemplateErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -63609,6 +64705,10 @@ export type EditDocumentTemplateErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -63673,6 +64773,10 @@ export type AddDocumentSeriesErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -63718,6 +64822,10 @@ export type DeleteDocumentSeriesErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -63765,6 +64873,10 @@ export type EditDocumentSeriesErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -63806,6 +64918,10 @@ export type GenerateGeneralDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -63853,6 +64969,10 @@ export type GenerateOrgDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -63898,6 +65018,10 @@ export type GenerateCustomerAssetDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -63945,6 +65069,10 @@ export type GenerateLocationDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -63990,6 +65118,10 @@ export type GenerateInternalSupportRequestDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -64037,6 +65169,10 @@ export type GenerateExternalSupportRequestDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -64082,6 +65218,10 @@ export type GenerateOperationalWorkItemDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -64129,6 +65269,10 @@ export type GenerateProposalDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -64174,6 +65318,10 @@ export type EditDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -64221,6 +65369,10 @@ export type FinalizeDocumentErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -64266,6 +65418,10 @@ export type DeleteDocumentErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -64601,6 +65757,121 @@ export type ProposalDocumentsResponses = {
 };
 
 export type ProposalDocumentsResponse = ProposalDocumentsResponses[keyof ProposalDocumentsResponses];
+
+export type TenantMessagesListData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Kind
+         */
+        kind: string;
+    };
+    query?: {
+        /**
+         * Recipient
+         */
+        recipient?: string | null;
+        /**
+         * Record
+         */
+        record?: string | null;
+        /**
+         * Since
+         */
+        since?: string | null;
+        /**
+         * Until
+         */
+        until?: string | null;
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/messages_list/{kind}';
+};
+
+export type TenantMessagesListErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type TenantMessagesListError = TenantMessagesListErrors[keyof TenantMessagesListErrors];
+
+export type TenantMessagesListResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type TenantMessagesListResponse = TenantMessagesListResponses[keyof TenantMessagesListResponses];
+
+export type ProposalMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/proposal_messages/{proposal_id}';
+};
+
+export type ProposalMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type ProposalMessagesResponse = ProposalMessagesResponses[keyof ProposalMessagesResponses];
+
+export type OrgMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Org Id
+         */
+        org_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/org_messages/{org_id}';
+};
+
+export type OrgMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type OrgMessagesResponse = OrgMessagesResponses[keyof OrgMessagesResponses];
 
 export type OrgSharesData = {
     body?: never;

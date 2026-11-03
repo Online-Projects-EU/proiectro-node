@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.5.0
+
+990 operations across 43 namespaces.
+
+### New namespace
+
+- `time_off` - members ask for time off, change or withdraw it, and approvers list, approve or reject
+  it (`add_my_time_off`, `list_my_time_off`, `list_time_off_requests`, `approve_time_off`,
+  `reject_time_off`).
+
+### Other new operations
+
+- `import_orgs`, `import_orgs_preview`, `import_catalog`, `import_catalog_preview` - import customers
+  and catalog items, with a preview first.
+- `tenant_messages_list`, `org_messages`, `proposal_messages` - the messages your workspace sent.
+- `generate_upload_url_catalog_picture`, `mark_catalog_picture_as_deleted` - catalog pictures.
+
+### Changes
+
+- `finalize_document`: `series_id` is optional; a document from a template with no series finalizes
+  without a number.
+- Task lists carry `actions` and `source_*`; assets accept `next_service_date`; payments accept
+  `invoiced_date`.
+
+### Breaking changes
+
+- Removed: `generate_download_url_member_avatar`, `generate_download_url_org_branding`,
+  `generate_download_url_tenant_branding`, `generate_download_url_user_avatar`,
+  `generate_upload_url_org_branding`, `mark_org_branding_as_deleted`.
+- `generate_upload_url_*` no longer take `attachmentNodeId` or `attachmentNodeType`.
+- `mark_member_avatar_as_deleted`, `mark_tenant_branding_as_deleted` and `mark_user_avatar_as_deleted`
+  no longer take a body.
+- `partner_approve_product` and `partner_reject_product` take their ids from the path only.
+- `list_work_item_comments` and `list_operational_work_item_comments` no longer return `attachments`.
+
 ## 0.4.0
 
 980 operations across 42 namespaces.
