@@ -172,6 +172,18 @@ export type OutputTenantLegalInfo = {
      * Legal Postal Code
      */
     legal_postal_code?: string | null;
+    /**
+     * Legal Contact Email
+     */
+    legal_contact_email?: string | null;
+    /**
+     * Legal Contact Phone
+     */
+    legal_contact_phone?: string | null;
+    /**
+     * Legal Brand Name
+     */
+    legal_brand_name?: string | null;
 };
 
 /**
@@ -456,6 +468,18 @@ export type EditTenantLegalInfo = {
      * Legal Postal Code
      */
     legal_postal_code?: string | null;
+    /**
+     * Legal Contact Email
+     */
+    legal_contact_email?: string | null;
+    /**
+     * Legal Contact Phone
+     */
+    legal_contact_phone?: string | null;
+    /**
+     * Legal Brand Name
+     */
+    legal_brand_name?: string | null;
 };
 
 /**
@@ -640,6 +664,131 @@ export type EditTenantPortalSettings = {
      * Portal Quote Funnel
      */
     portal_quote_funnel?: string | null;
+};
+
+/**
+ * EditTenantPublicPageSettings
+ *
+ * The workspace's public page (plans/PUBLIC_INBOUND.md C3). An omitted key keeps the stored
+ * value; an empty lead list or questions form means none.
+ */
+export type EditTenantPublicPageSettings = {
+    /**
+     * Published
+     */
+    published?: boolean | null;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Show Prices
+     */
+    show_prices?: boolean | null;
+    /**
+     * Show Forms
+     */
+    show_forms?: boolean | null;
+    /**
+     * Lead Owner
+     */
+    lead_owner?: string | null;
+    /**
+     * Lead List
+     */
+    lead_list?: string | null;
+    /**
+     * Phone Required
+     */
+    phone_required?: boolean | null;
+    /**
+     * Company Required
+     */
+    company_required?: boolean | null;
+    /**
+     * Custom Form
+     */
+    custom_form?: string | null;
+    /**
+     * Privacy Notice
+     */
+    privacy_notice?: string | null;
+};
+
+/**
+ * EditTenantMeetingsSettings
+ *
+ * The workspace's meeting pages (plans/PUBLIC_INBOUND.md D1). An omitted key keeps the stored
+ * value; an empty lead list or questions form means none. Minimum notice is in hours, the booking
+ * horizon in days.
+ */
+export type EditTenantMeetingsSettings = {
+    /**
+     * Enabled
+     */
+    enabled?: boolean | null;
+    /**
+     * Phone Required
+     */
+    phone_required?: boolean | null;
+    /**
+     * Company Required
+     */
+    company_required?: boolean | null;
+    /**
+     * Lead List
+     */
+    lead_list?: string | null;
+    /**
+     * Custom Form
+     */
+    custom_form?: string | null;
+    /**
+     * Min Notice Hours
+     */
+    min_notice_hours?: number | null;
+    /**
+     * Horizon Days
+     */
+    horizon_days?: number | null;
+};
+
+/**
+ * AddWebLink
+ *
+ * A link to the workspace's website or a social profile (PUBLIC_INBOUND.md C1).
+ */
+export type AddWebLink = {
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Url
+     */
+    url: string;
+};
+
+/**
+ * EditWebLink
+ */
+export type EditWebLink = {
+    /**
+     * Url
+     */
+    url: string;
+};
+
+/**
+ * ReorderWebLinks
+ *
+ * Every link of the workspace, in the order to show them.
+ */
+export type ReorderWebLinks = {
+    /**
+     * Order
+     */
+    order: Array<string>;
 };
 
 /**
@@ -1561,6 +1710,10 @@ export type Feed = {
      * Next Page
      */
     next_page: number;
+    /**
+     * Can Post
+     */
+    can_post?: boolean;
 };
 
 /**
@@ -1586,6 +1739,22 @@ export type FeedEvent = {
     possible_reactions: {
         [key: string]: unknown;
     };
+    /**
+     * Comment Count
+     */
+    comment_count?: number;
+    /**
+     * Edited
+     */
+    edited?: boolean;
+    /**
+     * Can Edit
+     */
+    can_edit?: boolean;
+    /**
+     * Can Delete
+     */
+    can_delete?: boolean;
 };
 
 /**
@@ -1640,6 +1809,38 @@ export type FeedEventContent = {
      * Link Url
      */
     link_url?: string | null;
+};
+
+/**
+ * AddFeedPost
+ *
+ * Input schema for a member's post in the activity feed
+ */
+export type AddFeedPost = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Description
+     */
+    description: string;
+};
+
+/**
+ * EditFeedPost
+ *
+ * Only what you send changes; an omitted field keeps the stored value.
+ */
+export type EditFeedPost = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Description
+     */
+    description?: string | null;
 };
 
 /**
@@ -4862,6 +5063,72 @@ export type OutputLeadTeamRollupRow = {
 };
 
 /**
+ * InboundItemSummary
+ */
+export type InboundItemSummary = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Image Url
+     */
+    image_url?: string | null;
+};
+
+/**
+ * InboundMeetingSummary
+ */
+export type InboundMeetingSummary = {
+    /**
+     * Start At
+     */
+    start_at: string;
+    /**
+     * End At
+     */
+    end_at: string;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * State Label
+     */
+    state_label: string;
+};
+
+/**
+ * InboundSummary
+ *
+ * What a public surface added to an activity (PUBLIC_INBOUND.md 4.6): where it came from, the
+ * catalog items picked, the form answers and the meeting asked for. The text itself is the note.
+ */
+export type InboundSummary = {
+    /**
+     * Channel
+     */
+    channel: string;
+    /**
+     * Channel Label
+     */
+    channel_label: string;
+    /**
+     * Form Title
+     */
+    form_title?: string | null;
+    /**
+     * Items
+     */
+    items?: Array<InboundItemSummary>;
+    /**
+     * Form Submission Id
+     */
+    form_submission_id?: string | null;
+    meeting?: InboundMeetingSummary | null;
+};
+
+/**
  * SalesActivityContent
  */
 export type SalesActivityContent = {
@@ -4917,6 +5184,7 @@ export type SalesActivityContent = {
      * Addable Contacts
      */
     addable_contacts?: Array<string>;
+    inbound?: InboundSummary | null;
 };
 
 /**
@@ -4961,6 +5229,135 @@ export type SalesFeedActivity = {
 };
 
 /**
+ * OutputLeadHistory
+ *
+ * A lead's statuses and sales activities in one timeline, newest first.
+ */
+export type OutputLeadHistory = {
+    /**
+     * Lead Id
+     */
+    lead_id: string;
+    /**
+     * Lead Name
+     */
+    lead_name: string;
+    /**
+     * History
+     */
+    history: Array<OutputLeadHistoryEntry>;
+    /**
+     * Total Duration Days
+     */
+    total_duration_days?: number;
+};
+
+/**
+ * OutputLeadHistoryEntry
+ *
+ * Single entry in a lead's unified timeline: a status it was in, or a sales activity logged on it.
+ */
+export type OutputLeadHistoryEntry = {
+    /**
+     * Kind
+     */
+    kind: 'status' | 'activity';
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Type
+     */
+    type: string;
+    /**
+     * Activity Icon
+     */
+    activity_icon?: string | null;
+    /**
+     * Entry Datetime
+     */
+    entry_datetime: string;
+    /**
+     * Exit Datetime
+     */
+    exit_datetime?: string | null;
+    /**
+     * Duration Days
+     */
+    duration_days?: number | null;
+    /**
+     * Duration Hours
+     */
+    duration_hours?: number | null;
+    /**
+     * Member Name
+     */
+    member_name?: string | null;
+    /**
+     * Member Email
+     */
+    member_email?: string;
+    /**
+     * Note
+     */
+    note?: string | null;
+    /**
+     * Is Current
+     */
+    is_current?: boolean;
+    /**
+     * Is Autonomous
+     */
+    is_autonomous?: boolean;
+};
+
+/**
+ * OutputProposalLeadHistory
+ *
+ * The timelines of the leads a proposal's customer came from.
+ */
+export type OutputProposalLeadHistory = {
+    /**
+     * Proposal Id
+     */
+    proposal_id: string;
+    /**
+     * Leads
+     */
+    leads: Array<OutputLeadHistory>;
+};
+
+/**
+ * LeadCreated
+ *
+ * `add_lead` answer: the new lead's id, so a caller with no page to look at can log
+ * an activity on the lead or change its status straight away.
+ */
+export type LeadCreated = {
+    /**
+     * Response Id
+     */
+    response_id: string;
+    /**
+     * Success
+     */
+    success: boolean;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Url
+     */
+    url?: string | null;
+    /**
+     * Lead Id
+     */
+    lead_id: string;
+};
+
+/**
  * AddLead
  */
 export type AddLead = {
@@ -4995,7 +5392,7 @@ export type AddLead = {
     /**
      * Status
      */
-    status?: 'new' | 'contacted' | 'replied' | 'nurturing' | 'qualified' | 'do_not_contact' | 'disqualified' | 'converted';
+    status?: 'new' | 'contacted' | 'replied' | 'nurturing' | 'qualified' | 'do_not_contact' | 'disqualified';
     /**
      * Owner
      */
@@ -5072,8 +5469,10 @@ export type EditLead = {
     source_note?: string | null;
     /**
      * Status
+     *
+     * Read-only here: a lead changes status through the status actions, never by editing.
      */
-    status?: 'new' | 'contacted' | 'replied' | 'nurturing' | 'qualified' | 'do_not_contact' | 'disqualified' | 'converted';
+    status?: string | null;
     /**
      * Owner
      */
@@ -6359,6 +6758,10 @@ export type AddCatalogProduct = {
      */
     available_in_partner_portals?: boolean | null;
     /**
+     * Available On Public Page
+     */
+    available_on_public_page?: boolean | null;
+    /**
      * Price Lists
      */
     price_lists?: Array<string> | null;
@@ -6441,6 +6844,10 @@ export type EditCatalogProduct = {
      */
     available_in_partner_portals?: boolean | null;
     /**
+     * Available On Public Page
+     */
+    available_on_public_page?: boolean | null;
+    /**
      * Price Lists
      */
     price_lists?: Array<string> | null;
@@ -6518,6 +6925,10 @@ export type CatalogProduct = {
      * Available In Partner Portals
      */
     available_in_partner_portals?: boolean;
+    /**
+     * Available On Public Page
+     */
+    available_on_public_page?: boolean;
     /**
      * Image Url
      */
@@ -7629,7 +8040,7 @@ export type ProposalHistoryEntry = {
     /**
      * Kind
      */
-    kind: 'stage' | 'lifecycle';
+    kind: 'stage' | 'lifecycle' | 'activity';
     /**
      * Name
      */
@@ -7638,6 +8049,10 @@ export type ProposalHistoryEntry = {
      * Type
      */
     type: string;
+    /**
+     * Activity Icon
+     */
+    activity_icon?: string | null;
     /**
      * Entry Datetime
      */
@@ -7702,6 +8117,10 @@ export type ProposalHistoryOutput = {
      * Total Duration Days
      */
     total_duration_days: number;
+    /**
+     * Has Lead History
+     */
+    has_lead_history?: boolean;
 };
 
 /**
@@ -8108,6 +8527,10 @@ export type AcceptPortalOrder = {
      * Confirmation
      */
     confirmation: boolean;
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -8120,6 +8543,10 @@ export type MarkPortalOrderDelivered = {
      * Confirmation
      */
     confirmation: boolean;
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -8132,6 +8559,10 @@ export type RejectPortalOrder = {
      * Reason
      */
     reason: string;
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -9374,6 +9805,12 @@ export type OutputProposalPreview = {
         [key: string]: unknown;
     };
     /**
+     * Workspace
+     */
+    workspace?: {
+        [key: string]: unknown;
+    } | null;
+    /**
      * Customer
      */
     customer: {
@@ -9689,6 +10126,18 @@ export type EditProject = {
      * Project Enable Earned Value Management
      */
     project_enable_earned_value_management?: boolean | null;
+};
+
+/**
+ * MarkProjectDelivered
+ *
+ * Input schema for marking a project delivered
+ */
+export type MarkProjectDelivered = {
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -12820,6 +13269,22 @@ export type RequestUploadUrlGcs = {
 };
 
 /**
+ * EditBrandCoverFocus
+ *
+ * Where the cover picture stays centred on a narrower screen, in percent of its width and height.
+ */
+export type EditBrandCoverFocus = {
+    /**
+     * Focal X
+     */
+    focal_x: number;
+    /**
+     * Focal Y
+     */
+    focal_y: number;
+};
+
+/**
  * APIError
  */
 export type ApiError = {
@@ -15708,6 +16173,10 @@ export type ChangeExternalSupportRequestStatus = {
      * Reason
      */
     reason: string;
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -15736,6 +16205,10 @@ export type CloseExternalSupportRequest = {
      * Reason
      */
     reason: string;
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -15800,6 +16273,10 @@ export type AddExternalSupportRequestComment = {
      * Show To Requester
      */
     show_to_requester?: boolean;
+    /**
+     * Send Email
+     */
+    send_email?: boolean;
 };
 
 /**
@@ -16287,6 +16764,10 @@ export type OutputProcess = {
      */
     allow_skip_move: boolean;
     /**
+     * Allow Take Over
+     */
+    allow_take_over?: boolean;
+    /**
      * Stage Count
      */
     stage_count?: number;
@@ -16330,6 +16811,10 @@ export type AddProcess = {
      * Allow Skip Move
      */
     allow_skip_move?: boolean | null;
+    /**
+     * Allow Take Over
+     */
+    allow_take_over?: boolean | null;
 };
 
 /**
@@ -16356,6 +16841,10 @@ export type EditProcess = {
      * Allow Skip Move
      */
     allow_skip_move?: boolean | null;
+    /**
+     * Allow Take Over
+     */
+    allow_take_over?: boolean | null;
 };
 
 /**
@@ -16854,6 +17343,10 @@ export type OutputOperationalItemActions = {
      * Can Reject
      */
     can_reject?: boolean;
+    /**
+     * Can Claim
+     */
+    can_claim?: boolean;
     /**
      * Can Reassign
      */
@@ -18274,6 +18767,10 @@ export type OutputCommentsFeed = {
      * Entity Id
      */
     entity_id: string;
+    /**
+     * Total
+     */
+    total?: number | null;
 };
 
 /**
@@ -18318,6 +18815,26 @@ export type AddOperationalWorkItemComment = {
      * Operational Work Item Id
      */
     operational_work_item_id: string;
+    /**
+     * Content
+     */
+    content: string;
+    /**
+     * Parent Id
+     */
+    parent_id?: string | null;
+};
+
+/**
+ * AddFeedPostComment
+ *
+ * Input schema for adding a comment to an activity feed post
+ */
+export type AddFeedPostComment = {
+    /**
+     * Feed Post Id
+     */
+    feed_post_id: string;
     /**
      * Content
      */
@@ -20284,6 +20801,12 @@ export type OutputPortalShareProposalPreview = {
     company: {
         [key: string]: unknown;
     };
+    /**
+     * Workspace
+     */
+    workspace?: {
+        [key: string]: unknown;
+    } | null;
     /**
      * Customer
      */
@@ -23541,6 +24064,18 @@ export type SalesKpis = {
      */
     pipeline_weighted_value?: number | string | null;
     /**
+     * Pipeline Weighted Waiting On
+     */
+    pipeline_weighted_waiting_on?: Array<StageNotMeasuredYet>;
+    /**
+     * Pipeline Deals Slower Than Usual
+     */
+    pipeline_deals_slower_than_usual?: number;
+    /**
+     * Pipeline Value Slower Than Usual
+     */
+    pipeline_value_slower_than_usual?: number | string | null;
+    /**
      * Pipeline Status
      */
     pipeline_status: string;
@@ -23583,6 +24118,30 @@ export type SalesKpis = {
 };
 
 /**
+ * StageNotMeasuredYet
+ *
+ * A stage whose win probability is not shown yet, and what it still needs.
+ */
+export type StageNotMeasuredYet = {
+    /**
+     * Stage Id
+     */
+    stage_id: string;
+    /**
+     * Stage Name
+     */
+    stage_name: string;
+    /**
+     * Outcomes Known
+     */
+    outcomes_known: number;
+    /**
+     * Outcomes Needed
+     */
+    outcomes_needed: number;
+};
+
+/**
  * AnalyticsSalesFunnel
  *
  * Summary info for a single funnel (used in tabs)
@@ -23612,11 +24171,14 @@ export type AnalyticsSalesFunnel = {
  * Sales pipeline analysis for a specific funnel.
  *
  * Weighted Value Explanation:
- * Weighted pipeline value adjusts the raw deal values by the probability
- * of winning at each stage. For example, a $100K deal in Negotiation (75%
- * probability) contributes $75K to weighted value, while the same deal in
- * Lead stage (10% probability) would only contribute $10K. This gives a
- * more realistic view of expected revenue from the pipeline.
+ * Weighted pipeline value multiplies the open value in each stage by that
+ * stage's win probability, measured from the workspace's own deals. A deal
+ * worth 100K in a stage where 60% of the deals with a known outcome were
+ * won contributes 60K. A stage with too few known outcomes has no win
+ * probability yet, and the weighted total waits for every stage that holds
+ * a deal to weigh: `weighted_waiting_on` lists them. A deal sitting in its
+ * stage longer than is usual there is set aside: it stays in the pipeline
+ * total and is reported in `value_slower_than_usual` instead of being weighed.
  */
 export type AnalyticsSalesPipeline = {
     /**
@@ -23704,6 +24266,18 @@ export type AnalyticsSalesPipeline = {
      */
     weighted_pipeline_value?: number | string | null;
     /**
+     * Weighted Waiting On
+     */
+    weighted_waiting_on?: Array<StageNotMeasuredYet>;
+    /**
+     * Deals Slower Than Usual
+     */
+    deals_slower_than_usual?: number;
+    /**
+     * Value Slower Than Usual
+     */
+    value_slower_than_usual?: number | string | null;
+    /**
      * Uncovered Currencies
      */
     uncovered_currencies?: Array<string>;
@@ -23754,7 +24328,51 @@ export type AnalyticsSalesPipelineStage = {
     /**
      * Probability Percent
      */
-    probability_percent: number;
+    probability_percent?: number | string | null;
+    /**
+     * Probability Low
+     */
+    probability_low?: number | string | null;
+    /**
+     * Probability High
+     */
+    probability_high?: number | string | null;
+    /**
+     * Outcomes Known
+     */
+    outcomes_known?: number;
+    /**
+     * Outcomes Won
+     */
+    outcomes_won?: number;
+    /**
+     * Outcomes Lost
+     */
+    outcomes_lost?: number;
+    /**
+     * Outcomes Slower Than Usual
+     */
+    outcomes_slower_than_usual?: number;
+    /**
+     * Outcomes Needed
+     */
+    outcomes_needed?: number;
+    /**
+     * Deals Still Moving
+     */
+    deals_still_moving?: number;
+    /**
+     * Usual Stay Days
+     */
+    usual_stay_days?: number | null;
+    /**
+     * Stays Counted
+     */
+    stays_counted?: number;
+    /**
+     * Stays Needed
+     */
+    stays_needed?: number;
     /**
      * Deal Count
      */
@@ -23767,6 +24385,14 @@ export type AnalyticsSalesPipelineStage = {
      * Weighted Value
      */
     weighted_value?: number | string | null;
+    /**
+     * Deals Slower Than Usual
+     */
+    deals_slower_than_usual?: number;
+    /**
+     * Value Slower Than Usual
+     */
+    value_slower_than_usual?: number | string | null;
     /**
      * Avg Days In Stage
      */
@@ -24616,8 +25242,8 @@ export type AnalyticsSalesConversionStage = {
  * Sales forecast - aggregated across all funnels.
  *
  * Projects future revenue based on current pipeline deals weighted by
- * stage probability. Deals are grouped by expected close date into
- * time buckets (monthly for short horizons, quarterly for long).
+ * their stage's measured win probability. Deals are grouped by expected
+ * close date into time buckets (monthly for short horizons, quarterly for long).
  *
  * Note: Comparisons (YoY, PoP) are not applicable to forecasts since
  * forecasts are projections, not historical data.
@@ -24708,6 +25334,18 @@ export type AnalyticsSalesForecast = {
      */
     total_worst_case?: number | string | null;
     /**
+     * Weighted Waiting On
+     */
+    weighted_waiting_on?: Array<StageNotMeasuredYet>;
+    /**
+     * Deals Slower Than Usual
+     */
+    deals_slower_than_usual?: number;
+    /**
+     * Value Slower Than Usual
+     */
+    value_slower_than_usual?: number | string | null;
+    /**
      * Total Deals
      */
     total_deals: number;
@@ -24735,6 +25373,18 @@ export type AnalyticsSalesForecast = {
      * Value Without Close Date
      */
     value_without_close_date?: number | string | null;
+    /**
+     * Deals Placed By Estimate
+     */
+    deals_placed_by_estimate?: number;
+    /**
+     * Value Placed By Estimate
+     */
+    value_placed_by_estimate?: number | string | null;
+    /**
+     * Close Date Waiting On
+     */
+    close_date_waiting_on?: Array<StageNotTimedYet>;
     /**
      * Currency
      */
@@ -24779,6 +25429,189 @@ export type AnalyticsSalesForecastBucket = {
      * Worst Case
      */
     worst_case?: number | string | null;
+};
+
+/**
+ * StageNotTimedYet
+ *
+ * A stage whose deals cannot be given an estimated close date yet, and what it still needs.
+ */
+export type StageNotTimedYet = {
+    /**
+     * Stage Id
+     */
+    stage_id: string;
+    /**
+     * Stage Name
+     */
+    stage_name: string;
+    /**
+     * Won Known
+     */
+    won_known: number;
+    /**
+     * Won Needed
+     */
+    won_needed: number;
+};
+
+/**
+ * AnalyticsSalesLeads
+ *
+ * What each lead list, or each lead source, produced among the leads first contacted in the period.
+ *
+ * A lead counts for a milestone if it ever reached it or anything beyond it, whatever happened
+ * to it afterwards. Shares are given from the first contacted lead, with their likely range.
+ */
+export type AnalyticsSalesLeads = {
+    /**
+     * Period
+     */
+    period?: string;
+    /**
+     * Temporal Type
+     */
+    temporal_type?: string;
+    /**
+     * Generated At
+     */
+    generated_at?: string | null;
+    /**
+     * Period Label
+     */
+    period_label?: string | null;
+    /**
+     * Horizon
+     */
+    horizon?: string | null;
+    /**
+     * Horizon Label
+     */
+    horizon_label?: string | null;
+    /**
+     * Horizon Options
+     */
+    horizon_options?: Array<HorizonOption> | null;
+    /**
+     * Compare
+     */
+    compare?: string | null;
+    /**
+     * Compare Label
+     */
+    compare_label?: string | null;
+    /**
+     * Compare Options
+     */
+    compare_options?: Array<CompareOption> | null;
+    /**
+     * Filter Severity
+     */
+    filter_severity?: string | null;
+    /**
+     * Filter Severity Label
+     */
+    filter_severity_label?: string | null;
+    /**
+     * Filter Category
+     */
+    filter_category?: string | null;
+    /**
+     * Filter Category Label
+     */
+    filter_category_label?: string | null;
+    /**
+     * Filter Type
+     */
+    filter_type?: string | null;
+    /**
+     * Filter Type Label
+     */
+    filter_type_label?: string | null;
+    /**
+     * Split By
+     */
+    split_by?: string;
+    /**
+     * Split Options
+     */
+    split_options?: Array<SplitOption>;
+    /**
+     * Rows
+     */
+    rows?: Array<AnalyticsSalesLeadsRow>;
+    workspace?: AnalyticsSalesLeadsRow | null;
+    /**
+     * Leads Not Contacted
+     */
+    leads_not_contacted?: number;
+};
+
+/**
+ * AnalyticsSalesLeadsRow
+ *
+ * What the leads of one list, or from one source, produced.
+ */
+export type AnalyticsSalesLeadsRow = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Contacted
+     */
+    contacted: number;
+    replied: LeadMilestoneRate;
+    qualified: LeadMilestoneRate;
+    opportunity: LeadMilestoneRate;
+};
+
+/**
+ * LeadMilestoneRate
+ *
+ * How many of the contacted leads reached a milestone, as a count and as a share with its likely range.
+ */
+export type LeadMilestoneRate = {
+    /**
+     * Reached
+     */
+    reached: number;
+    /**
+     * Percent
+     */
+    percent?: number | string | null;
+    /**
+     * Low
+     */
+    low?: number | string | null;
+    /**
+     * High
+     */
+    high?: number | string | null;
+    /**
+     * Verdict
+     */
+    verdict?: string;
+};
+
+/**
+ * SplitOption
+ *
+ * One way of splitting a card's rows, for the selector.
+ */
+export type SplitOption = {
+    /**
+     * Value
+     */
+    value: string;
+    /**
+     * Label
+     */
+    label: string;
 };
 
 /**
@@ -28034,6 +28867,533 @@ export type ResourceLoadSchema = {
 };
 
 /**
+ * BeliefEstimate
+ *
+ * A figure with what it rests on. A share carries `rate` and `successes`; an average carries `average`
+ * and `middle`. `low` and `high` are the two ends of the likely range. Everything is empty while `needed`
+ * cases are still missing.
+ */
+export type BeliefEstimate = {
+    /**
+     * Rate
+     */
+    rate?: number | string | null;
+    /**
+     * Average
+     */
+    average?: number | string | null;
+    /**
+     * Middle
+     */
+    middle?: number | string | null;
+    /**
+     * Low
+     */
+    low?: number | string | null;
+    /**
+     * High
+     */
+    high?: number | string | null;
+    /**
+     * Observed
+     */
+    observed?: number;
+    /**
+     * Successes
+     */
+    successes?: number | null;
+    /**
+     * Needed
+     */
+    needed?: number;
+};
+
+/**
+ * OutputBelief
+ */
+export type OutputBelief = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Statement
+     */
+    statement: string;
+    /**
+     * Evidence
+     */
+    evidence: string;
+    /**
+     * Evidence Label
+     */
+    evidence_label: string;
+    /**
+     * Reading
+     */
+    reading: string;
+    /**
+     * Split By
+     */
+    split_by?: string;
+    /**
+     * Form
+     */
+    form?: string | null;
+    /**
+     * Form Name
+     */
+    form_name?: string | null;
+    /**
+     * Field Name
+     */
+    field_name?: string;
+    /**
+     * Field Label
+     */
+    field_label?: string;
+    /**
+     * Option
+     */
+    option?: string;
+    /**
+     * Threshold
+     */
+    threshold?: number | string | null;
+    /**
+     * Threshold Side
+     */
+    threshold_side?: string;
+    /**
+     * Guess
+     */
+    guess?: number | string | null;
+    /**
+     * Guess Weight
+     */
+    guess_weight?: number | null;
+    /**
+     * Guess Is Autonomous
+     */
+    guess_is_autonomous?: boolean;
+    /**
+     * Bar
+     */
+    bar?: number | string | null;
+    /**
+     * Count From
+     */
+    count_from: string;
+    /**
+     * Includes History
+     */
+    includes_history?: boolean;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string | null;
+    estimate: BeliefEstimate;
+    counted_alone: BeliefEstimate;
+    /**
+     * Chance Above Bar
+     */
+    chance_above_bar?: number | string | null;
+    /**
+     * Verdict
+     */
+    verdict?: string;
+};
+
+/**
+ * OutputBeliefs
+ */
+export type OutputBeliefs = {
+    summary: OutputBeliefsSummary;
+    /**
+     * Beliefs
+     */
+    beliefs?: Array<OutputBelief>;
+};
+
+/**
+ * OutputBeliefsSummary
+ */
+export type OutputBeliefsSummary = {
+    /**
+     * Count
+     */
+    count?: number;
+};
+
+/**
+ * BeliefSplitRow
+ */
+export type BeliefSplitRow = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+    estimate: BeliefEstimate;
+    /**
+     * Verdict
+     */
+    verdict?: string;
+};
+
+/**
+ * OutputBeliefDetail
+ */
+export type OutputBeliefDetail = {
+    summary: OutputBelief;
+    /**
+     * Split
+     */
+    split?: Array<BeliefSplitRow>;
+    /**
+     * Items
+     */
+    items?: Array<{
+        [key: string]: unknown;
+    }>;
+};
+
+/**
+ * BeliefOverTimePoint
+ */
+export type BeliefOverTimePoint = {
+    /**
+     * At
+     */
+    at: string;
+    /**
+     * Value
+     */
+    value?: number | string | null;
+    /**
+     * Low
+     */
+    low?: number | string | null;
+    /**
+     * High
+     */
+    high?: number | string | null;
+    /**
+     * Observed
+     */
+    observed?: number;
+};
+
+/**
+ * OutputBeliefOverTime
+ *
+ * How a belief's figure moved as its cases arrived, oldest first, with the likely range at each moment.
+ */
+export type OutputBeliefOverTime = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Statement
+     */
+    statement: string;
+    /**
+     * Reading
+     */
+    reading: string;
+    /**
+     * Guess
+     */
+    guess?: number | string | null;
+    /**
+     * Bar
+     */
+    bar?: number | string | null;
+    /**
+     * Points
+     */
+    points?: Array<BeliefOverTimePoint>;
+};
+
+/**
+ * AddBelief
+ *
+ * A belief names what is counted as evidence and, optionally, your own starting guess. For evidence
+ * `form`, name the form and one of its questions: a yes/no question is counted as it is, a choice question
+ * by one `option`, and a number either against a `threshold` or, with none, as an average. `guess` and
+ * `bar` are a percentage from 0 to 100 for a share and a plain number for an average.
+ */
+export type AddBelief = {
+    /**
+     * Statement
+     */
+    statement: string;
+    /**
+     * Evidence
+     */
+    evidence: 'lead_replied' | 'lead_qualified' | 'lead_opportunity' | 'lead_customer' | 'proposal_won' | 'form';
+    /**
+     * Split By
+     */
+    split_by?: 'list' | 'source' | 'owner' | 'funnel' | null;
+    /**
+     * Form
+     */
+    form?: string | null;
+    /**
+     * Field Name
+     */
+    field_name?: string | null;
+    /**
+     * Option
+     */
+    option?: string | null;
+    /**
+     * Threshold
+     */
+    threshold?: number | string | null;
+    /**
+     * Threshold Side
+     */
+    threshold_side?: 'above' | 'below' | null;
+    /**
+     * Guess
+     */
+    guess?: number | string | null;
+    /**
+     * Guess Weight
+     */
+    guess_weight?: number | null;
+    /**
+     * Bar
+     */
+    bar?: number | string | null;
+    /**
+     * Count From
+     */
+    count_from?: string | null;
+};
+
+/**
+ * EditBelief
+ *
+ * Only what you send changes. What a belief counts as evidence is fixed when it is added: a different
+ * question is a different belief. Send `guess`, `bar` or `split_by` empty to remove it.
+ */
+export type EditBelief = {
+    /**
+     * Statement
+     */
+    statement?: string | null;
+    /**
+     * Split By
+     */
+    split_by?: 'list' | 'source' | 'owner' | 'funnel' | null;
+    /**
+     * Guess
+     */
+    guess?: number | string | null;
+    /**
+     * Guess Weight
+     */
+    guess_weight?: number | null;
+    /**
+     * Bar
+     */
+    bar?: number | string | null;
+    /**
+     * Count From
+     */
+    count_from?: string | null;
+};
+
+/**
+ * ChainFinish
+ */
+export type ChainFinish = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Rate
+     */
+    rate?: number | string | null;
+    /**
+     * Low
+     */
+    low?: number | string | null;
+    /**
+     * High
+     */
+    high?: number | string | null;
+    /**
+     * Waiting On
+     */
+    waiting_on?: Array<ChainWaitingOn>;
+};
+
+/**
+ * ChainNextStep
+ */
+export type ChainNextStep = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+    estimate: BeliefEstimate;
+};
+
+/**
+ * ChainOption
+ */
+export type ChainOption = {
+    /**
+     * Value
+     */
+    value: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * ChainOutcome
+ */
+export type ChainOutcome = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * ChainState
+ */
+export type ChainState = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Exits
+     */
+    exits?: number;
+    /**
+     * Next Steps
+     */
+    next_steps?: Array<ChainNextStep>;
+    /**
+     * Finishes
+     */
+    finishes?: Array<ChainFinish>;
+    /**
+     * Stays Ended
+     */
+    stays_ended?: number;
+    /**
+     * Usual Stay Days
+     */
+    usual_stay_days?: number | null;
+    /**
+     * Middle Stay Days
+     */
+    middle_stay_days?: number | null;
+};
+
+/**
+ * ChainWaitingOn
+ */
+export type ChainWaitingOn = {
+    /**
+     * Key
+     */
+    key: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Short
+     */
+    short: number;
+};
+
+/**
+ * OutputChain
+ *
+ * A pipeline read from its counted moves: where an item in each state goes next, where it is likely to
+ * finish, and how long it usually stays.
+ */
+export type OutputChain = {
+    /**
+     * Pipeline
+     */
+    pipeline: string;
+    /**
+     * Pipeline Label
+     */
+    pipeline_label: string;
+    /**
+     * Pipelines
+     */
+    pipelines?: Array<ChainOption>;
+    /**
+     * Scope
+     */
+    scope?: string;
+    /**
+     * Scopes
+     */
+    scopes?: Array<ChainOption>;
+    /**
+     * Period
+     */
+    period?: string;
+    /**
+     * Periods
+     */
+    periods?: Array<ChainOption>;
+    /**
+     * Moves
+     */
+    moves?: number;
+    /**
+     * States
+     */
+    states?: Array<ChainState>;
+    /**
+     * Outcomes
+     */
+    outcomes?: Array<ChainOutcome>;
+};
+
+/**
  * OutputLanguageOption
  */
 export type OutputLanguageOption = {
@@ -29941,6 +31301,104 @@ export type AttachPartnerPortalForm = {
 };
 
 /**
+ * AddPublicForm
+ *
+ * A custom form published at its own address (PUBLIC_INBOUND.md Part E). The address is the last
+ * part of the link, lowercase letters, digits and dashes; left empty, it is made from the title.
+ * `lead_list` empty means no list.
+ */
+export type AddPublicForm = {
+    /**
+     * Custom Form
+     */
+    custom_form: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Slug
+     */
+    slug?: string | null;
+    /**
+     * Intro
+     */
+    intro?: string | null;
+    /**
+     * Owner
+     */
+    owner: string;
+    /**
+     * Lead List
+     */
+    lead_list?: string | null;
+    /**
+     * Phone Required
+     */
+    phone_required?: boolean | null;
+    /**
+     * Company Required
+     */
+    company_required?: boolean | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+    /**
+     * Thank You Text
+     */
+    thank_you_text?: string | null;
+};
+
+/**
+ * EditPublicForm
+ *
+ * Every field may be left out to keep its stored value. `lead_list` empty means no list.
+ */
+export type EditPublicForm = {
+    /**
+     * Custom Form
+     */
+    custom_form?: string | null;
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Slug
+     */
+    slug?: string | null;
+    /**
+     * Intro
+     */
+    intro?: string | null;
+    /**
+     * Owner
+     */
+    owner?: string | null;
+    /**
+     * Lead List
+     */
+    lead_list?: string | null;
+    /**
+     * Phone Required
+     */
+    phone_required?: boolean | null;
+    /**
+     * Company Required
+     */
+    company_required?: boolean | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+    /**
+     * Thank You Text
+     */
+    thank_you_text?: string | null;
+};
+
+/**
  * OutputDocumentTemplate
  */
 export type OutputDocumentTemplate = {
@@ -30097,6 +31555,57 @@ export type EditDocumentTemplate = {
 };
 
 /**
+ * OutputEmailTemplateDefault
+ *
+ * One kind of email and the template it uses by default, if any.
+ */
+export type OutputEmailTemplateDefault = {
+    /**
+     * Purpose
+     */
+    purpose: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Group
+     */
+    group?: string;
+    /**
+     * Template Id
+     */
+    template_id?: string | null;
+    /**
+     * Template Name
+     */
+    template_name?: string;
+};
+
+/**
+ * OutputEmailTemplateDefaults
+ */
+export type OutputEmailTemplateDefaults = {
+    /**
+     * Purposes
+     */
+    purposes?: Array<OutputEmailTemplateDefault>;
+};
+
+/**
+ * SetEmailTemplateDefault
+ *
+ * `template_id`: the email template this kind of email uses by default; empty, none, and the person sending
+ * chooses each time.
+ */
+export type SetEmailTemplateDefault = {
+    /**
+     * Template Id
+     */
+    template_id?: string | null;
+};
+
+/**
  * OutputDocumentSeries
  */
 export type OutputDocumentSeries = {
@@ -30228,6 +31737,124 @@ export type GenerateDocument = {
      * Data Classification
      */
     data_classification?: 'internal' | 'confidential' | 'personal_data' | null;
+};
+
+/**
+ * SendProposalByEmail
+ */
+export type SendProposalByEmail = {
+    /**
+     * Template Id
+     */
+    template_id: string;
+    /**
+     * To
+     */
+    to: string;
+    /**
+     * Subject
+     */
+    subject: string;
+    /**
+     * Body
+     */
+    body: string;
+    /**
+     * Idempotency Key
+     */
+    idempotency_key: string;
+    /**
+     * Connection Id
+     */
+    connection_id?: string | null;
+    /**
+     * Record Activity
+     */
+    record_activity?: boolean;
+    /**
+     * Attach Pdf
+     */
+    attach_pdf?: boolean;
+};
+
+/**
+ * SendProposalByEmailAndMove
+ */
+export type SendProposalByEmailAndMove = {
+    /**
+     * Template Id
+     */
+    template_id: string;
+    /**
+     * To
+     */
+    to: string;
+    /**
+     * Subject
+     */
+    subject: string;
+    /**
+     * Body
+     */
+    body: string;
+    /**
+     * Idempotency Key
+     */
+    idempotency_key: string;
+    /**
+     * Connection Id
+     */
+    connection_id?: string | null;
+    /**
+     * Record Activity
+     */
+    record_activity?: boolean;
+    /**
+     * Attach Pdf
+     */
+    attach_pdf?: boolean;
+    /**
+     * Move Stage
+     */
+    move_stage?: boolean;
+    /**
+     * I Have Followed The Instructions
+     */
+    i_have_followed_the_instructions?: boolean;
+};
+
+/**
+ * SendDocumentByEmail
+ */
+export type SendDocumentByEmail = {
+    /**
+     * Template Id
+     */
+    template_id: string;
+    /**
+     * To
+     */
+    to: string;
+    /**
+     * Subject
+     */
+    subject: string;
+    /**
+     * Body
+     */
+    body: string;
+    /**
+     * Idempotency Key
+     */
+    idempotency_key: string;
+    /**
+     * Connection Id
+     */
+    connection_id?: string | null;
+    /**
+     * Record Activity
+     */
+    record_activity?: boolean;
 };
 
 /**
@@ -30401,6 +32028,10 @@ export type OutputSentMessage = {
      */
     sent_by?: string;
     /**
+     * Sent By Rule
+     */
+    sent_by_rule?: string;
+    /**
      * Delivery State
      */
     delivery_state?: string;
@@ -30408,6 +32039,14 @@ export type OutputSentMessage = {
      * Delivery Error
      */
     delivery_error?: string;
+    /**
+     * Delivery Reason
+     */
+    delivery_reason?: string;
+    /**
+     * Attachments
+     */
+    attachments?: Array<OutputSentMessageAttachment>;
     /**
      * Recipients
      */
@@ -30428,6 +32067,31 @@ export type OutputSentMessage = {
      * Render Route
      */
     render_route?: string | null;
+};
+
+/**
+ * OutputSentMessageAttachment
+ *
+ * A file an email carried, kept as it went out. `purged_at` is when its content was removed, after the
+ * days a sent file is kept; its name and size stay.
+ */
+export type OutputSentMessageAttachment = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Size
+     */
+    size: number;
+    /**
+     * Purged At
+     */
+    purged_at?: string | null;
 };
 
 /**
@@ -30918,6 +32582,53 @@ export type OutputShareAccesses = {
     accesses: Array<OutputShareAccess>;
 };
 
+/**
+ * EditMyMeetingPage
+ *
+ * Your own meeting page (plans/PUBLIC_INBOUND.md D1). Created on first save. The address is the
+ * last part of the link, lowercase letters, digits and dashes; left empty, it is made from your
+ * name. Duration is 15, 30, 45, 60 or 90 minutes; the buffer 0, 5, 10 or 15, kept free before and
+ * after each meeting. An omitted key keeps the stored value.
+ */
+export type EditMyMeetingPage = {
+    /**
+     * Slug
+     */
+    slug?: string | null;
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Duration Minutes
+     */
+    duration_minutes?: number | null;
+    /**
+     * Buffer Minutes
+     */
+    buffer_minutes?: number | null;
+    /**
+     * Location
+     */
+    location?: string | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+};
+
+/**
+ * AnswerMeetingRequest
+ *
+ * An optional note to the requester, shown in the email they receive.
+ */
+export type AnswerMeetingRequest = {
+    /**
+     * Note
+     */
+    note?: string | null;
+};
+
 export type TenantInfoData = {
     body?: never;
     path: {
@@ -31129,6 +32840,243 @@ export type EditTenantPortalSettingsResponses = {
 };
 
 export type EditTenantPortalSettingsResponse = EditTenantPortalSettingsResponses[keyof EditTenantPortalSettingsResponses];
+
+export type EditTenantPublicPageSettingsData = {
+    body: EditTenantPublicPageSettings;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_tenant_public_page_settings';
+};
+
+export type EditTenantPublicPageSettingsErrors = {
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditTenantPublicPageSettingsError = EditTenantPublicPageSettingsErrors[keyof EditTenantPublicPageSettingsErrors];
+
+export type EditTenantPublicPageSettingsResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditTenantPublicPageSettingsResponse = EditTenantPublicPageSettingsResponses[keyof EditTenantPublicPageSettingsResponses];
+
+export type PublishPublicPagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/publish_public_pages';
+};
+
+export type PublishPublicPagesResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type PublishPublicPagesResponse = PublishPublicPagesResponses[keyof PublishPublicPagesResponses];
+
+export type EditTenantMeetingsSettingsData = {
+    body: EditTenantMeetingsSettings;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_tenant_meetings_settings';
+};
+
+export type EditTenantMeetingsSettingsErrors = {
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditTenantMeetingsSettingsError = EditTenantMeetingsSettingsErrors[keyof EditTenantMeetingsSettingsErrors];
+
+export type EditTenantMeetingsSettingsResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditTenantMeetingsSettingsResponse = EditTenantMeetingsSettingsResponses[keyof EditTenantMeetingsSettingsResponses];
+
+export type AddWebLinkData = {
+    body: AddWebLink;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_web_link';
+};
+
+export type AddWebLinkErrors = {
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddWebLinkError = AddWebLinkErrors[keyof AddWebLinkErrors];
+
+export type AddWebLinkResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddWebLinkResponse = AddWebLinkResponses[keyof AddWebLinkResponses];
+
+export type EditWebLinkData = {
+    body: EditWebLink;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Link Id
+         */
+        link_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_web_link/{link_id}';
+};
+
+export type EditWebLinkErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditWebLinkError = EditWebLinkErrors[keyof EditWebLinkErrors];
+
+export type EditWebLinkResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditWebLinkResponse = EditWebLinkResponses[keyof EditWebLinkResponses];
+
+export type DeleteWebLinkData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Link Id
+         */
+        link_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_web_link/{link_id}';
+};
+
+export type DeleteWebLinkErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type DeleteWebLinkError = DeleteWebLinkErrors[keyof DeleteWebLinkErrors];
+
+export type DeleteWebLinkResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteWebLinkResponse = DeleteWebLinkResponses[keyof DeleteWebLinkResponses];
+
+export type ReorderWebLinksData = {
+    body: ReorderWebLinks;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/reorder_web_links';
+};
+
+export type ReorderWebLinksErrors = {
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type ReorderWebLinksError = ReorderWebLinksErrors[keyof ReorderWebLinksErrors];
+
+export type ReorderWebLinksResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type ReorderWebLinksResponse = ReorderWebLinksResponses[keyof ReorderWebLinksResponses];
 
 export type TenantBusinessProcessData = {
     body?: never;
@@ -31623,6 +33571,10 @@ export type EditMemberData = {
 
 export type EditMemberErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -31660,6 +33612,10 @@ export type EditMemberMiscPreferencesData = {
 };
 
 export type EditMemberMiscPreferencesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -31799,6 +33755,10 @@ export type DeleteContactData = {
 
 export type DeleteContactErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -31840,6 +33800,10 @@ export type InviteContactData = {
 };
 
 export type InviteContactErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -31974,6 +33938,10 @@ export type RevokeCustomerportalAccessData = {
 };
 
 export type RevokeCustomerportalAccessErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -32333,6 +34301,10 @@ export type EditRoleData = {
 
 export type EditRoleErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -32375,6 +34347,10 @@ export type DeleteMemberFromRoleData = {
 
 export type DeleteMemberFromRoleErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -32413,6 +34389,10 @@ export type DeletePermissionFromRoleData = {
 
 export type DeletePermissionFromRoleErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -32446,6 +34426,10 @@ export type DeleteRoleData = {
 };
 
 export type DeleteRoleErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -32488,6 +34472,40 @@ export type TenantFeedResponses = {
 
 export type TenantFeedResponse = TenantFeedResponses[keyof TenantFeedResponses];
 
+export type FeedPostData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/feed_post/{post_id}';
+};
+
+export type FeedPostErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type FeedPostError = FeedPostErrors[keyof FeedPostErrors];
+
+export type FeedPostResponses = {
+    /**
+     * OK
+     */
+    200: FeedEvent;
+};
+
+export type FeedPostResponse = FeedPostResponses[keyof FeedPostResponses];
+
 export type ToggleFeedReactionData = {
     body?: never;
     path: {
@@ -32513,6 +34531,10 @@ export type ToggleFeedReactionErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type ToggleFeedReactionError = ToggleFeedReactionErrors[keyof ToggleFeedReactionErrors];
@@ -32554,6 +34576,216 @@ export type FeedEventReactionsResponses = {
 };
 
 export type FeedEventReactionsResponse = FeedEventReactionsResponses[keyof FeedEventReactionsResponses];
+
+export type AddFeedPostData = {
+    body: AddFeedPost;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/feed_post';
+};
+
+export type AddFeedPostErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type AddFeedPostError = AddFeedPostErrors[keyof AddFeedPostErrors];
+
+export type AddFeedPostResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddFeedPostResponse = AddFeedPostResponses[keyof AddFeedPostResponses];
+
+export type EditOwnFeedPostData = {
+    body: EditFeedPost;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_own_feed_post/{post_id}';
+};
+
+export type EditOwnFeedPostErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type EditOwnFeedPostError = EditOwnFeedPostErrors[keyof EditOwnFeedPostErrors];
+
+export type EditOwnFeedPostResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditOwnFeedPostResponse = EditOwnFeedPostResponses[keyof EditOwnFeedPostResponses];
+
+export type EditFeedPostData = {
+    body: EditFeedPost;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_feed_post/{post_id}';
+};
+
+export type EditFeedPostErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type EditFeedPostError = EditFeedPostErrors[keyof EditFeedPostErrors];
+
+export type EditFeedPostResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditFeedPostResponse = EditFeedPostResponses[keyof EditFeedPostResponses];
+
+export type DeleteOwnFeedPostData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_own_feed_post/{post_id}';
+};
+
+export type DeleteOwnFeedPostErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type DeleteOwnFeedPostError = DeleteOwnFeedPostErrors[keyof DeleteOwnFeedPostErrors];
+
+export type DeleteOwnFeedPostResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteOwnFeedPostResponse = DeleteOwnFeedPostResponses[keyof DeleteOwnFeedPostResponses];
+
+export type DeleteFeedPostData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_feed_post/{post_id}';
+};
+
+export type DeleteFeedPostErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type DeleteFeedPostError = DeleteFeedPostErrors[keyof DeleteFeedPostErrors];
+
+export type DeleteFeedPostResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteFeedPostResponse = DeleteFeedPostResponses[keyof DeleteFeedPostResponses];
 
 export type TenantTagsData = {
     body?: never;
@@ -32661,6 +34893,10 @@ export type EditTagErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -32702,6 +34938,10 @@ export type DeleteTagErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -32812,6 +35052,10 @@ export type UntagMemberErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -32920,6 +35164,10 @@ export type UntagRoleErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -33055,6 +35303,10 @@ export type UntagOrgErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -33188,6 +35440,10 @@ export type UntagResourceErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -33323,6 +35579,10 @@ export type UntagProposalErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -33457,6 +35717,10 @@ export type UntagWorkItemTemplateErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -33590,6 +35854,10 @@ export type UntagProjectWorkItemErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -33732,6 +36000,10 @@ export type UntagOperationalWorkItemErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -33964,6 +36236,10 @@ export type EditLabelData = {
 
 export type EditLabelErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -34001,6 +36277,10 @@ export type DeleteLabelData = {
 };
 
 export type DeleteLabelErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -34145,6 +36425,10 @@ export type UnlabelMemberData = {
 
 export type UnlabelMemberErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34237,6 +36521,10 @@ export type UnlabelRoleData = {
 };
 
 export type UnlabelRoleErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -34331,6 +36619,10 @@ export type UnlabelOrgData = {
 
 export type UnlabelOrgErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34424,6 +36716,10 @@ export type UnlabelResourceData = {
 
 export type UnlabelResourceErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34516,6 +36812,10 @@ export type UnlabelProposalData = {
 };
 
 export type UnlabelProposalErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -34618,6 +36918,10 @@ export type UnlabelProjectWorkItemErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34702,6 +37006,10 @@ export type UnlabelOperationalWorkItemErrors = {
      */
     403: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34757,6 +37065,10 @@ export type LabelWorkItemTemplateData = {
 
 export type LabelWorkItemTemplateErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -34794,6 +37106,10 @@ export type UnlabelWorkItemTemplateData = {
 };
 
 export type UnlabelWorkItemTemplateErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -35119,6 +37435,10 @@ export type AutomationUpdateErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -35152,6 +37472,10 @@ export type AutomationPauseData = {
 };
 
 export type AutomationPauseErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -35187,6 +37511,10 @@ export type AutomationResumeData = {
 
 export type AutomationResumeErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -35220,6 +37548,10 @@ export type AutomationDeleteData = {
 };
 
 export type AutomationDeleteErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -35765,6 +38097,10 @@ export type EditSubtenantLegalInfoData = {
 
 export type EditSubtenantLegalInfoErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -35798,6 +38134,10 @@ export type DeleteSubtenantData = {
 };
 
 export type DeleteSubtenantErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -35903,6 +38243,10 @@ export type AddMemberAvailabilityErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type AddMemberAvailabilityError = AddMemberAvailabilityErrors[keyof AddMemberAvailabilityErrors];
@@ -35937,6 +38281,10 @@ export type AddResourceAvailabilityErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type AddResourceAvailabilityError = AddResourceAvailabilityErrors[keyof AddResourceAvailabilityErrors];
@@ -35971,6 +38319,10 @@ export type DeleteMemberAvailabilityErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteMemberAvailabilityError = DeleteMemberAvailabilityErrors[keyof DeleteMemberAvailabilityErrors];
@@ -36009,6 +38361,10 @@ export type DeleteResourceAvailabilityErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteResourceAvailabilityError = DeleteResourceAvailabilityErrors[keyof DeleteResourceAvailabilityErrors];
@@ -36091,6 +38447,10 @@ export type EditWbsConfigurationData = {
 
 export type EditWbsConfigurationErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -36128,6 +38488,10 @@ export type DeleteWbsConfigurationData = {
 };
 
 export type DeleteWbsConfigurationErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -36220,6 +38584,10 @@ export type DeleteWbsConfigurationRuleData = {
 };
 
 export type DeleteWbsConfigurationRuleErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -36322,6 +38690,10 @@ export type AddWorkItemTemplateData = {
 
 export type AddWorkItemTemplateErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -36363,6 +38735,10 @@ export type EditWorkItemTemplateData = {
 };
 
 export type EditWorkItemTemplateErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -36410,6 +38786,10 @@ export type DeleteWorkItemTemplateErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -36474,6 +38854,10 @@ export type LinkWorkItemTemplateToProductData = {
 
 export type LinkWorkItemTemplateToProductErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -36519,6 +38903,10 @@ export type UnlinkWorkItemTemplateFromProductData = {
 };
 
 export type UnlinkWorkItemTemplateFromProductErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -36633,6 +39021,10 @@ export type ReorderTemplateUpErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -36674,6 +39066,10 @@ export type ReorderTemplateDownErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -36768,6 +39164,10 @@ export type EditWorkItemTypeData = {
 
 export type EditWorkItemTypeErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -36805,6 +39205,10 @@ export type DeleteWorkItemTypeData = {
 };
 
 export type DeleteWorkItemTypeErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -37203,6 +39607,56 @@ export type TenantLeadActivitiesResponses = {
 
 export type TenantLeadActivitiesResponse = TenantLeadActivitiesResponses[keyof TenantLeadActivitiesResponses];
 
+export type LeadHistoryData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Lead Id
+         */
+        lead_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/lead_history/{lead_id}';
+};
+
+export type LeadHistoryResponses = {
+    /**
+     * OK
+     */
+    200: OutputLeadHistory;
+};
+
+export type LeadHistoryResponse = LeadHistoryResponses[keyof LeadHistoryResponses];
+
+export type ProposalLeadHistoryData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/proposal_lead_history/{proposal_id}';
+};
+
+export type ProposalLeadHistoryResponses = {
+    /**
+     * OK
+     */
+    200: OutputProposalLeadHistory;
+};
+
+export type ProposalLeadHistoryResponse = ProposalLeadHistoryResponses[keyof ProposalLeadHistoryResponses];
+
 export type TenantLeadsActivityFeedData = {
     body?: never;
     path: {
@@ -37261,7 +39715,7 @@ export type AddLeadResponses = {
     /**
      * OK
      */
-    200: ApiResponse;
+    200: LeadCreated;
 };
 
 export type AddLeadResponse = AddLeadResponses[keyof AddLeadResponses];
@@ -38444,6 +40898,10 @@ export type EditProductlifecycleErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -38481,6 +40939,10 @@ export type DeleteProductlifecycleErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -38550,6 +41012,10 @@ export type EditFunnelConfigurationErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -38587,6 +41053,10 @@ export type DeleteFunnelConfigurationErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -38688,6 +41158,10 @@ export type DeleteFunnelConfigurationStageErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteFunnelConfigurationStageError = DeleteFunnelConfigurationStageErrors[keyof DeleteFunnelConfigurationStageErrors];
@@ -38726,6 +41200,10 @@ export type EditFunnelConfigurationStageErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type EditFunnelConfigurationStageError = EditFunnelConfigurationStageErrors[keyof EditFunnelConfigurationStageErrors];
@@ -38828,6 +41306,10 @@ export type DeleteProductLifecycleStageErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -38869,6 +41351,10 @@ export type EditProductLifecycleStageErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -38970,6 +41456,10 @@ export type AddSalesActivityErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type AddSalesActivityError = AddSalesActivityErrors[keyof AddSalesActivityErrors];
@@ -39004,6 +41494,10 @@ export type DeleteSalesActivityErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteSalesActivityError = DeleteSalesActivityErrors[keyof DeleteSalesActivityErrors];
@@ -39042,6 +41536,10 @@ export type DeleteOwnSalesActivityErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteOwnSalesActivityError = DeleteOwnSalesActivityErrors[keyof DeleteOwnSalesActivityErrors];
@@ -39131,6 +41629,10 @@ export type AddCatalogProductErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -39172,6 +41674,10 @@ export type EditCatalogProductErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -39334,6 +41840,10 @@ export type DeleteCatalogProductErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteCatalogProductError = DeleteCatalogProductErrors[keyof DeleteCatalogProductErrors];
@@ -40263,6 +42773,15 @@ export type ProposalHistoryData = {
     url: '/api/v1/{tenant_path}/proposal_history/{proposal_id}';
 };
 
+export type ProposalHistoryErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProposalHistoryError = ProposalHistoryErrors[keyof ProposalHistoryErrors];
+
 export type ProposalHistoryResponses = {
     /**
      * OK
@@ -40533,6 +43052,10 @@ export type ChangeProposalStageErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -40566,6 +43089,10 @@ export type AcceptPortalOrderData = {
 };
 
 export type AcceptPortalOrderErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -40609,6 +43136,10 @@ export type MarkPortalOrderDeliveredData = {
 
 export type MarkPortalOrderDeliveredErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -40650,6 +43181,10 @@ export type RejectPortalOrderData = {
 };
 
 export type RejectPortalOrderErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
     /**
      * Not Found
      */
@@ -40743,6 +43278,10 @@ export type DeleteProposalErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -40774,6 +43313,15 @@ export type ProposalProductsData = {
     query?: never;
     url: '/api/v1/{tenant_path}/proposal_products/{proposal_id}';
 };
+
+export type ProposalProductsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProposalProductsError = ProposalProductsErrors[keyof ProposalProductsErrors];
 
 export type ProposalProductsResponses = {
     /**
@@ -40864,6 +43412,10 @@ export type ChangeProductStatusErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -40901,6 +43453,10 @@ export type DeleteProductErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -40959,6 +43515,15 @@ export type ProductMenuItemsData = {
     url: '/api/v1/{tenant_path}/product_menu_items/{product_id}';
 };
 
+export type ProductMenuItemsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProductMenuItemsError = ProductMenuItemsErrors[keyof ProductMenuItemsErrors];
+
 export type ProductMenuItemsResponses = {
     /**
      * OK
@@ -40983,6 +43548,15 @@ export type CatalogTemplateDataData = {
     query?: never;
     url: '/api/v1/{tenant_path}/catalog_template_data/{catalog_id}';
 };
+
+export type CatalogTemplateDataErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type CatalogTemplateDataError = CatalogTemplateDataErrors[keyof CatalogTemplateDataErrors];
 
 export type CatalogTemplateDataResponses = {
     /**
@@ -41014,6 +43588,10 @@ export type AddProductFromCatalogErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -42087,6 +44665,15 @@ export type ProjectProductsData = {
     url: '/api/v1/{tenant_path}/project_products/{project_id}';
 };
 
+export type ProjectProductsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectProductsError = ProjectProductsErrors[keyof ProjectProductsErrors];
+
 export type ProjectProductsResponses = {
     /**
      * OK
@@ -42111,6 +44698,15 @@ export type ProjectWbsConfigData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_wbs_config/{project_id}';
 };
+
+export type ProjectWbsConfigErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectWbsConfigError = ProjectWbsConfigErrors[keyof ProjectWbsConfigErrors];
 
 export type ProjectWbsConfigResponses = {
     /**
@@ -42142,6 +44738,10 @@ export type UpdateProjectWbsErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -42231,6 +44831,10 @@ export type DeleteProjectErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -42248,7 +44852,7 @@ export type DeleteProjectResponses = {
 export type DeleteProjectResponse = DeleteProjectResponses[keyof DeleteProjectResponses];
 
 export type MarkProjectDeliveredData = {
-    body?: never;
+    body?: MarkProjectDelivered;
     path: {
         /**
          * Tenant Path
@@ -42269,6 +44873,10 @@ export type MarkProjectDeliveredErrors = {
      */
     400: ApiResponse;
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -42276,6 +44884,10 @@ export type MarkProjectDeliveredErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type MarkProjectDeliveredError = MarkProjectDeliveredErrors[keyof MarkProjectDeliveredErrors];
@@ -42686,6 +45298,15 @@ export type KeyProjectActivitiesData = {
     url: '/api/v1/{tenant_path}/key_project_activities/{project_id}';
 };
 
+export type KeyProjectActivitiesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type KeyProjectActivitiesError = KeyProjectActivitiesErrors[keyof KeyProjectActivitiesErrors];
+
 export type KeyProjectActivitiesResponses = {
     /**
      * OK
@@ -42710,6 +45331,15 @@ export type ProjectScheduleData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_schedule/{project_id}';
 };
+
+export type ProjectScheduleErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectScheduleError = ProjectScheduleErrors[keyof ProjectScheduleErrors];
 
 export type ProjectScheduleResponses = {
     /**
@@ -42736,6 +45366,15 @@ export type ProjectGanttDataData = {
     url: '/api/v1/{tenant_path}/project_gantt_data/{project_id}';
 };
 
+export type ProjectGanttDataErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectGanttDataError = ProjectGanttDataErrors[keyof ProjectGanttDataErrors];
+
 export type ProjectGanttDataResponses = {
     /**
      * OK
@@ -42760,6 +45399,15 @@ export type ProjectEvmMetricsData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_evm_metrics/{project_id}';
 };
+
+export type ProjectEvmMetricsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectEvmMetricsError = ProjectEvmMetricsErrors[keyof ProjectEvmMetricsErrors];
 
 export type ProjectEvmMetricsResponses = {
     /**
@@ -42813,13 +45461,17 @@ export type AddWorkItemErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
     /**
      * Unprocessable Entity
      */
-    422: ApiResponse;
+    422: PydanticDetail;
     /**
      * Internal Server Error
      */
@@ -42855,9 +45507,17 @@ export type InstantiateWorkItemTemplateErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type InstantiateWorkItemTemplateError = InstantiateWorkItemTemplateErrors[keyof InstantiateWorkItemTemplateErrors];
@@ -42892,6 +45552,10 @@ export type EditProjectWorkItemErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -42935,6 +45599,10 @@ export type UpdateWorkItemStatusErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -42977,6 +45645,10 @@ export type ReorderWorkItemUpErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -43015,6 +45687,10 @@ export type ReorderWorkItemDownErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -43049,13 +45725,17 @@ export type AddWorkItemPredecessorErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
     /**
      * Unprocessable Entity
      */
-    422: ApiResponse;
+    422: PydanticDetail;
 };
 
 export type AddWorkItemPredecessorError = AddWorkItemPredecessorErrors[keyof AddWorkItemPredecessorErrors];
@@ -43087,13 +45767,17 @@ export type AddWorkItemSuccessorErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
     /**
      * Unprocessable Entity
      */
-    422: ApiResponse;
+    422: PydanticDetail;
 };
 
 export type AddWorkItemSuccessorError = AddWorkItemSuccessorErrors[keyof AddWorkItemSuccessorErrors];
@@ -43122,6 +45806,15 @@ export type WorkItemDependenciesData = {
     query?: never;
     url: '/api/v1/{tenant_path}/work_item_dependencies/{work_item_id}';
 };
+
+export type WorkItemDependenciesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type WorkItemDependenciesError = WorkItemDependenciesErrors[keyof WorkItemDependenciesErrors];
 
 export type WorkItemDependenciesResponses = {
     /**
@@ -43153,6 +45846,10 @@ export type DeleteWorkItemDependencyErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -43201,6 +45898,10 @@ export type DeleteWorkItemErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -43235,9 +45936,17 @@ export type AddWorkItemCostErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type AddWorkItemCostError = AddWorkItemCostErrors[keyof AddWorkItemCostErrors];
@@ -43269,9 +45978,17 @@ export type AddWorkItemExpenseErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type AddWorkItemExpenseError = AddWorkItemExpenseErrors[keyof AddWorkItemExpenseErrors];
@@ -43303,17 +46020,17 @@ export type AddWorkLogErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
     /**
-     * Response
-     *
      * Unprocessable Entity
      */
-    422: {
-        [key: string]: unknown;
-    };
+    422: PydanticDetail;
 };
 
 export type AddWorkLogError = AddWorkLogErrors[keyof AddWorkLogErrors];
@@ -43352,6 +46069,10 @@ export type EditWorkLogErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -43402,6 +46123,10 @@ export type DeleteWorkLogErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
 };
 
 export type DeleteWorkLogError = DeleteWorkLogErrors[keyof DeleteWorkLogErrors];
@@ -43433,9 +46158,17 @@ export type AddWorkResourceUsageErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type AddWorkResourceUsageError = AddWorkResourceUsageErrors[keyof AddWorkResourceUsageErrors];
@@ -43470,6 +46203,10 @@ export type EditWorkResourceUsageErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -43509,6 +46246,10 @@ export type DeleteWorkResourceUsageErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -43546,6 +46287,10 @@ export type EditWorkItemCostErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -43585,6 +46330,10 @@ export type EditWorkItemExpenseErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -43622,6 +46371,10 @@ export type DeleteWorkItemCostErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -43661,6 +46414,10 @@ export type DeleteWorkItemExpenseErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -43693,6 +46450,15 @@ export type WorkItemCostsData = {
     url: '/api/v1/{tenant_path}/work_item_costs/{work_item_id}';
 };
 
+export type WorkItemCostsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type WorkItemCostsError = WorkItemCostsErrors[keyof WorkItemCostsErrors];
+
 export type WorkItemCostsResponses = {
     /**
      * OK
@@ -43717,6 +46483,15 @@ export type WorkItemExpensesData = {
     query?: never;
     url: '/api/v1/{tenant_path}/work_item_expenses/{work_item_id}';
 };
+
+export type WorkItemExpensesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type WorkItemExpensesError = WorkItemExpensesErrors[keyof WorkItemExpensesErrors];
 
 export type WorkItemExpensesResponses = {
     /**
@@ -43743,6 +46518,15 @@ export type WorkItemWorkLogsData = {
     url: '/api/v1/{tenant_path}/work_item_work_logs/{work_item_id}';
 };
 
+export type WorkItemWorkLogsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type WorkItemWorkLogsError = WorkItemWorkLogsErrors[keyof WorkItemWorkLogsErrors];
+
 export type WorkItemWorkLogsResponses = {
     /**
      * OK
@@ -43768,6 +46552,15 @@ export type WorkItemResourceUsageData = {
     url: '/api/v1/{tenant_path}/work_item_resource_usage/{work_item_id}';
 };
 
+export type WorkItemResourceUsageErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type WorkItemResourceUsageError = WorkItemResourceUsageErrors[keyof WorkItemResourceUsageErrors];
+
 export type WorkItemResourceUsageResponses = {
     /**
      * OK
@@ -43792,6 +46585,15 @@ export type ProjectTeamMembersData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_team_members/{project_id}';
 };
+
+export type ProjectTeamMembersErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectTeamMembersError = ProjectTeamMembersErrors[keyof ProjectTeamMembersErrors];
 
 export type ProjectTeamMembersResponses = {
     /**
@@ -43821,6 +46623,15 @@ export type ProjectTeamMemberBookingsData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_team_member_bookings/{project_id}/{member_id}';
 };
+
+export type ProjectTeamMemberBookingsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectTeamMemberBookingsError = ProjectTeamMemberBookingsErrors[keyof ProjectTeamMemberBookingsErrors];
 
 export type ProjectTeamMemberBookingsResponses = {
     /**
@@ -43909,6 +46720,15 @@ export type ProjectTeamMemberCostsData = {
     url: '/api/v1/{tenant_path}/project_team_member_costs/{project_id}/{member_id}';
 };
 
+export type ProjectTeamMemberCostsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectTeamMemberCostsError = ProjectTeamMemberCostsErrors[keyof ProjectTeamMemberCostsErrors];
+
 export type ProjectTeamMemberCostsResponses = {
     /**
      * OK
@@ -43937,6 +46757,15 @@ export type ProjectTeamMemberExpensesData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_team_member_expenses/{project_id}/{member_id}';
 };
+
+export type ProjectTeamMemberExpensesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectTeamMemberExpensesError = ProjectTeamMemberExpensesErrors[keyof ProjectTeamMemberExpensesErrors];
 
 export type ProjectTeamMemberExpensesResponses = {
     /**
@@ -44001,6 +46830,15 @@ export type ProjectTeamPeopleData = {
     url: '/api/v1/{tenant_path}/project_team_people/{project_id}';
 };
 
+export type ProjectTeamPeopleErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectTeamPeopleError = ProjectTeamPeopleErrors[keyof ProjectTeamPeopleErrors];
+
 export type ProjectTeamPeopleResponses = {
     /**
      * OK
@@ -44026,6 +46864,15 @@ export type ProjectResourcesData = {
     url: '/api/v1/{tenant_path}/project_resources/{project_id}';
 };
 
+export type ProjectResourcesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourcesError = ProjectResourcesErrors[keyof ProjectResourcesErrors];
+
 export type ProjectResourcesResponses = {
     /**
      * OK
@@ -44050,6 +46897,15 @@ export type ProjectResourceItemsData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_resource_items/{project_id}';
 };
+
+export type ProjectResourceItemsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourceItemsError = ProjectResourceItemsErrors[keyof ProjectResourceItemsErrors];
 
 export type ProjectResourceItemsResponses = {
     /**
@@ -44079,6 +46935,15 @@ export type ProjectResourceBookingsData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_resource_bookings/{project_id}/{resource_id}';
 };
+
+export type ProjectResourceBookingsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourceBookingsError = ProjectResourceBookingsErrors[keyof ProjectResourceBookingsErrors];
 
 export type ProjectResourceBookingsResponses = {
     /**
@@ -44138,6 +47003,15 @@ export type ProjectResourceCostsData = {
     url: '/api/v1/{tenant_path}/project_resource_costs/{project_id}/{resource_id}';
 };
 
+export type ProjectResourceCostsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourceCostsError = ProjectResourceCostsErrors[keyof ProjectResourceCostsErrors];
+
 export type ProjectResourceCostsResponses = {
     /**
      * OK
@@ -44166,6 +47040,15 @@ export type ProjectResourceExpensesData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_resource_expenses/{project_id}/{resource_id}';
 };
+
+export type ProjectResourceExpensesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourceExpensesError = ProjectResourceExpensesErrors[keyof ProjectResourceExpensesErrors];
 
 export type ProjectResourceExpensesResponses = {
     /**
@@ -44196,6 +47079,15 @@ export type ProjectResourceActivityData = {
     url: '/api/v1/{tenant_path}/project_resource_activity/{project_id}/{resource_id}';
 };
 
+export type ProjectResourceActivityErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourceActivityError = ProjectResourceActivityErrors[keyof ProjectResourceActivityErrors];
+
 export type ProjectResourceActivityResponses = {
     /**
      * OK
@@ -44224,6 +47116,15 @@ export type ProjectResourceActivityHistogramData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_resource_activity_histogram/{project_id}/{resource_id}';
 };
+
+export type ProjectResourceActivityHistogramErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectResourceActivityHistogramError = ProjectResourceActivityHistogramErrors[keyof ProjectResourceActivityHistogramErrors];
 
 export type ProjectResourceActivityHistogramResponses = {
     /**
@@ -44304,6 +47205,15 @@ export type ProjectProductResourceUsagesData = {
     url: '/api/v1/{tenant_path}/project_product_resource_usages/{project_id}/{product_id}';
 };
 
+export type ProjectProductResourceUsagesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectProductResourceUsagesError = ProjectProductResourceUsagesErrors[keyof ProjectProductResourceUsagesErrors];
+
 export type ProjectProductResourceUsagesResponses = {
     /**
      * OK
@@ -44332,6 +47242,15 @@ export type ProjectProductWorkItemsData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_product_work_items/{project_id}/{product_id}';
 };
+
+export type ProjectProductWorkItemsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectProductWorkItemsError = ProjectProductWorkItemsErrors[keyof ProjectProductWorkItemsErrors];
 
 export type ProjectProductWorkItemsResponses = {
     /**
@@ -44391,6 +47310,15 @@ export type ProjectProductCostsData = {
     url: '/api/v1/{tenant_path}/project_product_costs/{project_id}/{product_id}';
 };
 
+export type ProjectProductCostsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectProductCostsError = ProjectProductCostsErrors[keyof ProjectProductCostsErrors];
+
 export type ProjectProductCostsResponses = {
     /**
      * OK
@@ -44419,6 +47347,15 @@ export type ProjectProductExpensesData = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_product_expenses/{project_id}/{product_id}';
 };
+
+export type ProjectProductExpensesErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectProductExpensesError = ProjectProductExpensesErrors[keyof ProjectProductExpensesErrors];
 
 export type ProjectProductExpensesResponses = {
     /**
@@ -44469,6 +47406,15 @@ export type ProjectCashBalanceChartData2 = {
     query?: never;
     url: '/api/v1/{tenant_path}/project_cash_balance_chart/{project_id}';
 };
+
+export type ProjectCashBalanceChartErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ProjectCashBalanceChartError = ProjectCashBalanceChartErrors[keyof ProjectCashBalanceChartErrors];
 
 export type ProjectCashBalanceChartResponses = {
     /**
@@ -44832,6 +47778,15 @@ export type ListProjectsData = {
     url: '/api/v1/{tenant_path}/projects';
 };
 
+export type ListProjectsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ListProjectsError = ListProjectsErrors[keyof ListProjectsErrors];
+
 export type ListProjectsResponses = {
     /**
      * OK
@@ -45007,6 +47962,15 @@ export type OrgProjectsData = {
     };
     url: '/api/v1/{tenant_path}/org_projects/{org_id}';
 };
+
+export type OrgProjectsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type OrgProjectsError = OrgProjectsErrors[keyof OrgProjectsErrors];
 
 export type OrgProjectsResponses = {
     /**
@@ -45186,6 +48150,100 @@ export type MarkTenantBrandingAsDeletedResponses = {
 };
 
 export type MarkTenantBrandingAsDeletedResponse = MarkTenantBrandingAsDeletedResponses[keyof MarkTenantBrandingAsDeletedResponses];
+
+export type GenerateUploadUrlBrandCoverData = {
+    body: RequestUploadUrlGcs;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/generate_upload_url_brand_cover';
+};
+
+export type GenerateUploadUrlBrandCoverErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: ApiResponse;
+};
+
+export type GenerateUploadUrlBrandCoverError = GenerateUploadUrlBrandCoverErrors[keyof GenerateUploadUrlBrandCoverErrors];
+
+export type GenerateUploadUrlBrandCoverResponses = {
+    /**
+     * OK
+     */
+    200: UploadUrlGcs;
+};
+
+export type GenerateUploadUrlBrandCoverResponse = GenerateUploadUrlBrandCoverResponses[keyof GenerateUploadUrlBrandCoverResponses];
+
+export type MarkBrandCoverAsDeletedData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/mark_brand_cover_as_deleted';
+};
+
+export type MarkBrandCoverAsDeletedErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+};
+
+export type MarkBrandCoverAsDeletedError = MarkBrandCoverAsDeletedErrors[keyof MarkBrandCoverAsDeletedErrors];
+
+export type MarkBrandCoverAsDeletedResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type MarkBrandCoverAsDeletedResponse = MarkBrandCoverAsDeletedResponses[keyof MarkBrandCoverAsDeletedResponses];
+
+export type EditBrandCoverFocusData = {
+    body: EditBrandCoverFocus;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_brand_cover_focus';
+};
+
+export type EditBrandCoverFocusErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: ApiResponse;
+};
+
+export type EditBrandCoverFocusError = EditBrandCoverFocusErrors[keyof EditBrandCoverFocusErrors];
+
+export type EditBrandCoverFocusResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditBrandCoverFocusResponse = EditBrandCoverFocusResponses[keyof EditBrandCoverFocusResponses];
 
 export type GenerateUploadUrlCatalogPictureData = {
     body: RequestUploadUrlGcs;
@@ -46737,6 +49795,10 @@ export type AddCostTypeData = {
 
 export type AddCostTypeErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -46779,6 +49841,10 @@ export type EditCostTypeErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -46816,6 +49882,10 @@ export type ReorderCostTypeUpErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -46858,6 +49928,10 @@ export type ReorderCostTypeDownErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -46909,6 +49983,10 @@ export type DeleteCostTypeErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -47150,6 +50228,10 @@ export type ReorderResourceUpData = {
 
 export type ReorderResourceUpErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -47187,6 +50269,10 @@ export type ReorderResourceDownData = {
 };
 
 export type ReorderResourceDownErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -47239,6 +50325,10 @@ export type DeleteResourceErrors = {
      */
     400: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -47272,6 +50362,10 @@ export type AddResourceCostData = {
 };
 
 export type AddResourceCostErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Unprocessable Entity
      */
@@ -47365,6 +50459,10 @@ export type ResourceCostCorrectionData = {
 
 export type ResourceCostCorrectionErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -47407,6 +50505,10 @@ export type DeactivateResourceCostData = {
 
 export type DeactivateResourceCostErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -47444,6 +50546,10 @@ export type DeleteResourceCostData = {
 };
 
 export type DeleteResourceCostErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -47603,6 +50709,10 @@ export type AddExchangeErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -48042,6 +51152,10 @@ export type DeleteHolidayData = {
 
 export type DeleteHolidayErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -48075,6 +51189,10 @@ export type EditHolidayData = {
 };
 
 export type EditHolidayErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Unprocessable Entity
      */
@@ -48355,6 +51473,10 @@ export type AddTeamBookingData = {
 
 export type AddTeamBookingErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -48393,6 +51515,10 @@ export type EditTeamBookingData = {
 
 export type EditTeamBookingErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -48430,6 +51556,10 @@ export type DeleteTeamBookingData = {
 };
 
 export type DeleteTeamBookingErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -48486,6 +51616,10 @@ export type AddResourceBookingData = {
 
 export type AddResourceBookingErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -48524,6 +51658,10 @@ export type EditResourceBookingData = {
 
 export type EditResourceBookingErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -48561,6 +51699,10 @@ export type DeleteResourceBookingData = {
 };
 
 export type DeleteResourceBookingErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -48676,6 +51818,10 @@ export type EditSupportRequestTypeData = {
 
 export type EditSupportRequestTypeErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -48713,6 +51859,10 @@ export type DeleteSupportRequestTypeData = {
 };
 
 export type DeleteSupportRequestTypeErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -48832,6 +51982,10 @@ export type EditSupportRequestSeverityData = {
 
 export type EditSupportRequestSeverityErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -48869,6 +52023,10 @@ export type DeleteSupportRequestSeverityData = {
 };
 
 export type DeleteSupportRequestSeverityErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -48992,6 +52150,10 @@ export type EditSupportRequestStatusData = {
 
 export type EditSupportRequestStatusErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -49033,6 +52195,10 @@ export type DeleteSupportRequestStatusData = {
 };
 
 export type DeleteSupportRequestStatusErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -49089,6 +52255,10 @@ export type AddSupportRequestQueueData = {
 
 export type AddSupportRequestQueueErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -49126,6 +52296,10 @@ export type EditSupportRequestQueueData = {
 };
 
 export type EditSupportRequestQueueErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -49165,6 +52339,10 @@ export type DeleteSupportRequestQueueData = {
 
 export type DeleteSupportRequestQueueErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -49198,6 +52376,10 @@ export type AddInternalSupportRequestData = {
 };
 
 export type AddInternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -49237,6 +52419,10 @@ export type AddInternalSupportRequestForOrgData = {
 
 export type AddInternalSupportRequestForOrgErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -49274,6 +52460,10 @@ export type AddInternalSupportRequestForProposalData = {
 };
 
 export type AddInternalSupportRequestForProposalErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -49313,6 +52503,10 @@ export type AddInternalSupportRequestForResourceData = {
 
 export type AddInternalSupportRequestForResourceErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -49350,6 +52544,10 @@ export type AddInternalSupportRequestForWorkItemData = {
 };
 
 export type AddInternalSupportRequestForWorkItemErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -50399,6 +53597,10 @@ export type CloseInternalSupportRequestNoLongerRequiredData = {
 
 export type CloseInternalSupportRequestNoLongerRequiredErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -50436,6 +53638,10 @@ export type ReopenInternalSupportRequestData = {
 };
 
 export type ReopenInternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -50529,9 +53735,21 @@ export type ChangeExternalSupportRequestStatusData = {
 
 export type ChangeExternalSupportRequestStatusErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
     /**
      * Internal Server Error
      */
@@ -50566,6 +53784,10 @@ export type ReassignExternalSupportRequestData = {
 };
 
 export type ReassignExternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -50605,9 +53827,21 @@ export type CloseExternalSupportRequestData = {
 
 export type CloseExternalSupportRequestErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
     /**
      * Internal Server Error
      */
@@ -50681,6 +53915,10 @@ export type EditExternalSupportRequestData = {
 
 export type EditExternalSupportRequestErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -50718,6 +53956,10 @@ export type ReopenExternalSupportRequestData = {
 };
 
 export type ReopenExternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -50761,6 +54003,10 @@ export type RejectSolutionExternalSupportRequestData = {
 
 export type RejectSolutionExternalSupportRequestErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -50798,6 +54044,10 @@ export type AcceptSolutionExternalSupportRequestData = {
 };
 
 export type AcceptSolutionExternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -50837,6 +54087,10 @@ export type CloseExternalSupportRequestNoLongerRequiredData = {
 
 export type CloseExternalSupportRequestNoLongerRequiredErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -50874,6 +54128,10 @@ export type EditOwnExternalSupportRequestData = {
 };
 
 export type EditOwnExternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -50913,6 +54171,10 @@ export type TransferExternalSupportRequestQueueData = {
 
 export type TransferExternalSupportRequestQueueErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -50947,6 +54209,10 @@ export type AddExternalSupportRequestCommentData = {
 
 export type AddExternalSupportRequestCommentErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -50954,6 +54220,10 @@ export type AddExternalSupportRequestCommentErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
     /**
      * Internal Server Error
      */
@@ -50985,6 +54255,10 @@ export type AddOwnExternalSupportRequestCommentData = {
 
 export type AddOwnExternalSupportRequestCommentErrors = {
     /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
      * Not Found
      */
     404: ApiResponse;
@@ -50992,6 +54266,10 @@ export type AddOwnExternalSupportRequestCommentErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
     /**
      * Internal Server Error
      */
@@ -51196,6 +54474,10 @@ export type ChangeInternalSupportRequestStatusData = {
 
 export type ChangeInternalSupportRequestStatusErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -51233,6 +54515,10 @@ export type ReassignInternalSupportRequestData = {
 };
 
 export type ReassignInternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -51272,6 +54558,10 @@ export type AssignToMeInternalSupportRequestData = {
 
 export type AssignToMeInternalSupportRequestErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -51309,6 +54599,10 @@ export type RejectSolutionInternalSupportRequestData = {
 };
 
 export type RejectSolutionInternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -51348,6 +54642,10 @@ export type AcceptSolutionInternalSupportRequestData = {
 
 export type AcceptSolutionInternalSupportRequestErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -51385,6 +54683,10 @@ export type CloseInternalSupportRequestData = {
 };
 
 export type CloseInternalSupportRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -51424,6 +54726,10 @@ export type EditInternalSupportRequestData = {
 
 export type EditInternalSupportRequestErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -51462,6 +54768,10 @@ export type EditOwnInternalSupportRequestData = {
 
 export type EditOwnInternalSupportRequestErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -51498,6 +54808,15 @@ export type InternalSupportRequestTimelineData = {
     url: '/api/v1/{tenant_path}/internal_support_request_timeline/{support_request_id}';
 };
 
+export type InternalSupportRequestTimelineErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type InternalSupportRequestTimelineError = InternalSupportRequestTimelineErrors[keyof InternalSupportRequestTimelineErrors];
+
 export type InternalSupportRequestTimelineResponses = {
     /**
      * OK
@@ -51522,6 +54841,15 @@ export type InternalSupportRequestTimelineOwnData = {
     query?: never;
     url: '/api/v1/{tenant_path}/internal_support_request_timeline_own/{support_request_id}';
 };
+
+export type InternalSupportRequestTimelineOwnErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type InternalSupportRequestTimelineOwnError = InternalSupportRequestTimelineOwnErrors[keyof InternalSupportRequestTimelineOwnErrors];
 
 export type InternalSupportRequestTimelineOwnResponses = {
     /**
@@ -51548,6 +54876,15 @@ export type ExternalSupportRequestTimelineData = {
     url: '/api/v1/{tenant_path}/external_support_request_timeline/{support_request_id}';
 };
 
+export type ExternalSupportRequestTimelineErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ExternalSupportRequestTimelineError = ExternalSupportRequestTimelineErrors[keyof ExternalSupportRequestTimelineErrors];
+
 export type ExternalSupportRequestTimelineResponses = {
     /**
      * OK
@@ -51572,6 +54909,15 @@ export type ExternalSupportRequestTimelineOwnData = {
     query?: never;
     url: '/api/v1/{tenant_path}/external_support_request_timeline_own/{support_request_id}';
 };
+
+export type ExternalSupportRequestTimelineOwnErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ExternalSupportRequestTimelineOwnError = ExternalSupportRequestTimelineOwnErrors[keyof ExternalSupportRequestTimelineOwnErrors];
 
 export type ExternalSupportRequestTimelineOwnResponses = {
     /**
@@ -51921,6 +55267,10 @@ export type AddQueueRuleData = {
 
 export type AddQueueRuleErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -51958,6 +55308,10 @@ export type DeleteQueueRuleData = {
 };
 
 export type DeleteQueueRuleErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -51997,6 +55351,10 @@ export type EditQueueRuleData = {
 
 export type EditQueueRuleErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -52034,6 +55392,10 @@ export type TransferInternalSupportRequestQueueData = {
 };
 
 export type TransferInternalSupportRequestQueueErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -52241,6 +55603,15 @@ export type ListQueueInternalSupportRequestsData = {
     url: '/api/v1/{tenant_path}/queue/{queue_id}/internal_support_requests';
 };
 
+export type ListQueueInternalSupportRequestsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ListQueueInternalSupportRequestsError = ListQueueInternalSupportRequestsErrors[keyof ListQueueInternalSupportRequestsErrors];
+
 export type ListQueueInternalSupportRequestsResponses = {
     /**
      * OK
@@ -52362,6 +55733,15 @@ export type QueueInternalSupportRequestsData = {
     };
     url: '/api/v1/{tenant_path}/queue_internal_support_requests/{queue_id}';
 };
+
+export type QueueInternalSupportRequestsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type QueueInternalSupportRequestsError = QueueInternalSupportRequestsErrors[keyof QueueInternalSupportRequestsErrors];
 
 export type QueueInternalSupportRequestsResponses = {
     /**
@@ -52485,6 +55865,15 @@ export type QueueClosedInternalSupportRequestsData = {
     url: '/api/v1/{tenant_path}/queue_closed_internal_support_requests/{queue_id}';
 };
 
+export type QueueClosedInternalSupportRequestsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type QueueClosedInternalSupportRequestsError = QueueClosedInternalSupportRequestsErrors[keyof QueueClosedInternalSupportRequestsErrors];
+
 export type QueueClosedInternalSupportRequestsResponses = {
     /**
      * OK
@@ -52607,6 +55996,15 @@ export type QueueExternalSupportRequestsData = {
     url: '/api/v1/{tenant_path}/queue_external_support_requests/{queue_id}';
 };
 
+export type QueueExternalSupportRequestsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type QueueExternalSupportRequestsError = QueueExternalSupportRequestsErrors[keyof QueueExternalSupportRequestsErrors];
+
 export type QueueExternalSupportRequestsResponses = {
     /**
      * OK
@@ -52728,6 +56126,15 @@ export type QueueClosedExternalSupportRequestsData = {
     };
     url: '/api/v1/{tenant_path}/queue_closed_external_support_requests/{queue_id}';
 };
+
+export type QueueClosedExternalSupportRequestsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type QueueClosedExternalSupportRequestsError = QueueClosedExternalSupportRequestsErrors[keyof QueueClosedExternalSupportRequestsErrors];
 
 export type QueueClosedExternalSupportRequestsResponses = {
     /**
@@ -53232,6 +56639,10 @@ export type DeleteProcessDefinitionData = {
 
 export type DeleteProcessDefinitionErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -53295,6 +56706,10 @@ export type EditProcessDefinitionData = {
 
 export type EditProcessDefinitionErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -53354,6 +56769,10 @@ export type AddProcessStageData = {
 
 export type AddProcessStageErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -53396,6 +56815,10 @@ export type DeleteProcessStageData = {
 
 export type DeleteProcessStageErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -53433,6 +56856,10 @@ export type EditProcessStageData = {
 };
 
 export type EditProcessStageErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -53472,6 +56899,10 @@ export type AddProcessLinkData = {
 
 export type AddProcessLinkErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -53509,6 +56940,10 @@ export type DeleteProcessLinkData = {
 };
 
 export type DeleteProcessLinkErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -53565,6 +57000,10 @@ export type AddProcessParticipationData = {
 
 export type AddProcessParticipationErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -53602,6 +57041,10 @@ export type DeleteProcessParticipationData = {
 };
 
 export type DeleteProcessParticipationErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -53908,6 +57351,10 @@ export type DeleteTaskErrors = {
      */
     403: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -53971,6 +57418,10 @@ export type EditTaskErrors = {
      */
     403: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -54008,6 +57459,10 @@ export type AddTaskErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -54055,6 +57510,10 @@ export type MoveTaskErrors = {
      */
     403: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -54096,6 +57555,10 @@ export type ApproveTaskErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -54143,6 +57606,10 @@ export type RejectTaskErrors = {
      */
     403: ApiResponse;
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -54184,6 +57651,10 @@ export type ReassignTaskErrors = {
      * Forbidden
      */
     403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -54299,6 +57770,10 @@ export type DeleteTimerData = {
 
 export type DeleteTimerErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Internal Server Error
      */
     500: ApiResponse;
@@ -54332,6 +57807,10 @@ export type EditTimerData = {
 };
 
 export type EditTimerErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -55515,6 +58994,250 @@ export type DeleteOwnOperationalWorkItemCommentResponses = {
 
 export type DeleteOwnOperationalWorkItemCommentResponse = DeleteOwnOperationalWorkItemCommentResponses[keyof DeleteOwnOperationalWorkItemCommentResponses];
 
+export type ListFeedPostCommentsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Feed Post Id
+         */
+        feed_post_id: string;
+        /**
+         * Page Number
+         */
+        page_number: number;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/feed_post_comments/{feed_post_id}/{page_number}';
+};
+
+export type ListFeedPostCommentsErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type ListFeedPostCommentsError = ListFeedPostCommentsErrors[keyof ListFeedPostCommentsErrors];
+
+export type ListFeedPostCommentsResponses = {
+    /**
+     * OK
+     */
+    200: OutputCommentsFeed;
+};
+
+export type ListFeedPostCommentsResponse = ListFeedPostCommentsResponses[keyof ListFeedPostCommentsResponses];
+
+export type AddFeedPostCommentData = {
+    body: AddFeedPostComment;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/feed_post_comment';
+};
+
+export type AddFeedPostCommentErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type AddFeedPostCommentError = AddFeedPostCommentErrors[keyof AddFeedPostCommentErrors];
+
+export type AddFeedPostCommentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddFeedPostCommentResponse = AddFeedPostCommentResponses[keyof AddFeedPostCommentResponses];
+
+export type EditFeedPostCommentData = {
+    body: EditComment;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Comment Id
+         */
+        comment_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_feed_post_comment/{comment_id}';
+};
+
+export type EditFeedPostCommentErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type EditFeedPostCommentError = EditFeedPostCommentErrors[keyof EditFeedPostCommentErrors];
+
+export type EditFeedPostCommentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditFeedPostCommentResponse = EditFeedPostCommentResponses[keyof EditFeedPostCommentResponses];
+
+export type EditOwnFeedPostCommentData = {
+    body: EditComment;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Comment Id
+         */
+        comment_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_own_feed_post_comment/{comment_id}';
+};
+
+export type EditOwnFeedPostCommentErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type EditOwnFeedPostCommentError = EditOwnFeedPostCommentErrors[keyof EditOwnFeedPostCommentErrors];
+
+export type EditOwnFeedPostCommentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditOwnFeedPostCommentResponse = EditOwnFeedPostCommentResponses[keyof EditOwnFeedPostCommentResponses];
+
+export type DeleteFeedPostCommentData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Comment Id
+         */
+        comment_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_feed_post_comment/{comment_id}';
+};
+
+export type DeleteFeedPostCommentErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type DeleteFeedPostCommentError = DeleteFeedPostCommentErrors[keyof DeleteFeedPostCommentErrors];
+
+export type DeleteFeedPostCommentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteFeedPostCommentResponse = DeleteFeedPostCommentResponses[keyof DeleteFeedPostCommentResponses];
+
+export type DeleteOwnFeedPostCommentData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Comment Id
+         */
+        comment_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_own_feed_post_comment/{comment_id}';
+};
+
+export type DeleteOwnFeedPostCommentErrors = {
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ApiResponse;
+};
+
+export type DeleteOwnFeedPostCommentError = DeleteOwnFeedPostCommentErrors[keyof DeleteOwnFeedPostCommentErrors];
+
+export type DeleteOwnFeedPostCommentResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteOwnFeedPostCommentResponse = DeleteOwnFeedPostCommentResponses[keyof DeleteOwnFeedPostCommentResponses];
+
 export type ListAssetCategoriesData = {
     body?: never;
     path: {
@@ -55588,6 +59311,10 @@ export type EditAssetCategoryData = {
 
 export type EditAssetCategoryErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -55625,6 +59352,10 @@ export type DeleteAssetCategoryData = {
 };
 
 export type DeleteAssetCategoryErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -55685,6 +59416,10 @@ export type AddCustomerLocationData = {
 
 export type AddCustomerLocationErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -55722,6 +59457,10 @@ export type EditCustomerLocationData = {
 };
 
 export type EditCustomerLocationErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Unprocessable Entity
      */
@@ -55806,6 +59545,10 @@ export type DeleteCustomerLocationData = {
 };
 
 export type DeleteCustomerLocationErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -55992,6 +59735,10 @@ export type AddCustomerAssetData = {
 
 export type AddCustomerAssetErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -56029,6 +59776,10 @@ export type EditCustomerAssetData = {
 };
 
 export type EditCustomerAssetErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Unprocessable Entity
      */
@@ -56080,6 +59831,10 @@ export type DeleteCustomerAssetErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -56387,6 +60142,10 @@ export type ReorderLocationUpData = {
 
 export type ReorderLocationUpErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Conflict
      */
     409: ApiResponse;
@@ -56424,6 +60183,10 @@ export type ReorderLocationDownData = {
 };
 
 export type ReorderLocationDownErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -56475,6 +60238,10 @@ export type DeleteLocationErrors = {
      * Bad Request
      */
     400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Conflict
      */
@@ -61800,6 +65567,36 @@ export type AnalyticsSalesForecastResponses = {
 
 export type AnalyticsSalesForecastResponse = AnalyticsSalesForecastResponses[keyof AnalyticsSalesForecastResponses];
 
+export type AnalyticsSalesLeadsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: {
+        /**
+         * Period
+         */
+        period?: 'YTD' | 'QTD' | 'MTD' | 'R12' | 'Q1' | 'Q2' | 'Q3' | 'Q4';
+        /**
+         * Split By
+         */
+        split_by?: 'list' | 'source';
+    };
+    url: '/api/v1/{tenant_path}/analytics/sales/leads';
+};
+
+export type AnalyticsSalesLeadsResponses = {
+    /**
+     * OK
+     */
+    200: AnalyticsSalesLeads;
+};
+
+export type AnalyticsSalesLeadsResponse = AnalyticsSalesLeadsResponses[keyof AnalyticsSalesLeadsResponses];
+
 export type AnalyticsFinancialKpisData = {
     body?: never;
     path: {
@@ -62444,6 +66241,253 @@ export type ResourcesLoadResponses = {
 
 export type ResourcesLoadResponse = ResourcesLoadResponses[keyof ResourcesLoadResponses];
 
+export type TenantBeliefsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/beliefs';
+};
+
+export type TenantBeliefsResponses = {
+    /**
+     * OK
+     */
+    200: OutputBeliefs;
+};
+
+export type TenantBeliefsResponse = TenantBeliefsResponses[keyof TenantBeliefsResponses];
+
+export type TenantBeliefData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Belief Id
+         */
+        belief_id: string;
+    };
+    query?: {
+        /**
+         * Include Items
+         */
+        include_items?: boolean;
+    };
+    url: '/api/v1/{tenant_path}/belief/{belief_id}';
+};
+
+export type TenantBeliefErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type TenantBeliefError = TenantBeliefErrors[keyof TenantBeliefErrors];
+
+export type TenantBeliefResponses = {
+    /**
+     * OK
+     */
+    200: OutputBeliefDetail;
+};
+
+export type TenantBeliefResponse = TenantBeliefResponses[keyof TenantBeliefResponses];
+
+export type TenantBeliefOverTimeData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Belief Id
+         */
+        belief_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/belief_over_time/{belief_id}';
+};
+
+export type TenantBeliefOverTimeErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type TenantBeliefOverTimeError = TenantBeliefOverTimeErrors[keyof TenantBeliefOverTimeErrors];
+
+export type TenantBeliefOverTimeResponses = {
+    /**
+     * OK
+     */
+    200: OutputBeliefOverTime;
+};
+
+export type TenantBeliefOverTimeResponse = TenantBeliefOverTimeResponses[keyof TenantBeliefOverTimeResponses];
+
+export type AddBeliefData = {
+    body: AddBelief;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_belief';
+};
+
+export type AddBeliefErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddBeliefError = AddBeliefErrors[keyof AddBeliefErrors];
+
+export type AddBeliefResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddBeliefResponse = AddBeliefResponses[keyof AddBeliefResponses];
+
+export type EditBeliefData = {
+    body: EditBelief;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Belief Id
+         */
+        belief_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_belief/{belief_id}';
+};
+
+export type EditBeliefErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditBeliefError = EditBeliefErrors[keyof EditBeliefErrors];
+
+export type EditBeliefResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditBeliefResponse = EditBeliefResponses[keyof EditBeliefResponses];
+
+export type DeleteBeliefData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Belief Id
+         */
+        belief_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_belief/{belief_id}';
+};
+
+export type DeleteBeliefErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type DeleteBeliefError = DeleteBeliefErrors[keyof DeleteBeliefErrors];
+
+export type DeleteBeliefResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeleteBeliefResponse = DeleteBeliefResponses[keyof DeleteBeliefResponses];
+
+export type TenantChainData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Pipeline
+         */
+        pipeline: string;
+    };
+    query?: {
+        /**
+         * Scope
+         */
+        scope?: string;
+        /**
+         * Period
+         */
+        period?: string;
+    };
+    url: '/api/v1/{tenant_path}/chain/{pipeline}';
+};
+
+export type TenantChainErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+};
+
+export type TenantChainError = TenantChainErrors[keyof TenantChainErrors];
+
+export type TenantChainResponses = {
+    /**
+     * OK
+     */
+    200: OutputChain;
+};
+
+export type TenantChainResponse = TenantChainResponses[keyof TenantChainResponses];
+
 export type MyProfileData = {
     body?: never;
     path?: never;
@@ -62734,6 +66778,10 @@ export type EditWebhookData = {
 
 export type EditWebhookErrors = {
     /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
      * Unprocessable Entity
      */
     422: PydanticDetail;
@@ -62771,6 +66819,10 @@ export type DeleteWebhookData = {
 };
 
 export type DeleteWebhookErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
     /**
      * Internal Server Error
      */
@@ -64567,6 +68619,120 @@ export type PartnerSubmitPartnerFormResponses = {
 
 export type PartnerSubmitPartnerFormResponse = PartnerSubmitPartnerFormResponses[keyof PartnerSubmitPartnerFormResponses];
 
+export type AddPublicFormData = {
+    body: AddPublicForm;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_public_form';
+};
+
+export type AddPublicFormErrors = {
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddPublicFormError = AddPublicFormErrors[keyof AddPublicFormErrors];
+
+export type AddPublicFormResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddPublicFormResponse = AddPublicFormResponses[keyof AddPublicFormResponses];
+
+export type EditPublicFormData = {
+    body: EditPublicForm;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Link Id
+         */
+        link_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_public_form/{link_id}';
+};
+
+export type EditPublicFormErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditPublicFormError = EditPublicFormErrors[keyof EditPublicFormErrors];
+
+export type EditPublicFormResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditPublicFormResponse = EditPublicFormResponses[keyof EditPublicFormResponses];
+
+export type DeletePublicFormData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Link Id
+         */
+        link_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/delete_public_form/{link_id}';
+};
+
+export type DeletePublicFormErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type DeletePublicFormError = DeletePublicFormErrors[keyof DeletePublicFormErrors];
+
+export type DeletePublicFormResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeletePublicFormResponse = DeletePublicFormResponses[keyof DeletePublicFormResponses];
+
 export type TenantDocumentTemplatesListData = {
     body?: never;
     path: {
@@ -64733,6 +68899,77 @@ export type EditDocumentTemplateResponses = {
 };
 
 export type EditDocumentTemplateResponse = EditDocumentTemplateResponses[keyof EditDocumentTemplateResponses];
+
+export type EmailTemplateDefaultsData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/email_template_defaults';
+};
+
+export type EmailTemplateDefaultsResponses = {
+    /**
+     * OK
+     */
+    200: OutputEmailTemplateDefaults;
+};
+
+export type EmailTemplateDefaultsResponse = EmailTemplateDefaultsResponses[keyof EmailTemplateDefaultsResponses];
+
+export type SetEmailTemplateDefaultData = {
+    body: SetEmailTemplateDefault;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Purpose
+         */
+        purpose: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/set_email_template_default/{purpose}';
+};
+
+export type SetEmailTemplateDefaultErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SetEmailTemplateDefaultError = SetEmailTemplateDefaultErrors[keyof SetEmailTemplateDefaultErrors];
+
+export type SetEmailTemplateDefaultResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SetEmailTemplateDefaultResponse = SetEmailTemplateDefaultResponses[keyof SetEmailTemplateDefaultResponses];
 
 export type TenantDocumentSeriesListData = {
     body?: never;
@@ -65297,6 +69534,210 @@ export type GenerateProposalDocumentResponses = {
 
 export type GenerateProposalDocumentResponse = GenerateProposalDocumentResponses[keyof GenerateProposalDocumentResponses];
 
+export type SendProposalByEmailData = {
+    body: SendProposalByEmail;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/send_proposal_by_email/{proposal_id}';
+};
+
+export type SendProposalByEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SendProposalByEmailError = SendProposalByEmailErrors[keyof SendProposalByEmailErrors];
+
+export type SendProposalByEmailResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SendProposalByEmailResponse = SendProposalByEmailResponses[keyof SendProposalByEmailResponses];
+
+export type SendProposalByEmailAndMoveData = {
+    body: SendProposalByEmailAndMove;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Proposal Id
+         */
+        proposal_id: string;
+        /**
+         * Stage Id
+         */
+        stage_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/send_proposal_by_email_and_move/{proposal_id}/{stage_id}';
+};
+
+export type SendProposalByEmailAndMoveErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SendProposalByEmailAndMoveError = SendProposalByEmailAndMoveErrors[keyof SendProposalByEmailAndMoveErrors];
+
+export type SendProposalByEmailAndMoveResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SendProposalByEmailAndMoveResponse = SendProposalByEmailAndMoveResponses[keyof SendProposalByEmailAndMoveResponses];
+
+export type SendDocumentByEmailData = {
+    body: SendDocumentByEmail;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Document Id
+         */
+        document_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/send_document_by_email/{document_id}';
+};
+
+export type SendDocumentByEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SendDocumentByEmailError = SendDocumentByEmailErrors[keyof SendDocumentByEmailErrors];
+
+export type SendDocumentByEmailResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SendDocumentByEmailResponse = SendDocumentByEmailResponses[keyof SendDocumentByEmailResponses];
+
+export type SendShareByEmailData = {
+    body: SendDocumentByEmail;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Share Id
+         */
+        share_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/send_share_by_email/{share_id}';
+};
+
+export type SendShareByEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Forbidden
+     */
+    403: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type SendShareByEmailError = SendShareByEmailErrors[keyof SendShareByEmailErrors];
+
+export type SendShareByEmailResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type SendShareByEmailResponse = SendShareByEmailResponses[keyof SendShareByEmailResponses];
+
 export type EditDocumentData = {
     body: EditDocument;
     path: {
@@ -65843,6 +70284,156 @@ export type ProposalMessagesResponses = {
 
 export type ProposalMessagesResponse = ProposalMessagesResponses[keyof ProposalMessagesResponses];
 
+export type CustomerAssetMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Asset Id
+         */
+        asset_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/customer_asset_messages/{asset_id}';
+};
+
+export type CustomerAssetMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type CustomerAssetMessagesResponse = CustomerAssetMessagesResponses[keyof CustomerAssetMessagesResponses];
+
+export type LocationMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Location Id
+         */
+        location_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/location_messages/{location_id}';
+};
+
+export type LocationMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type LocationMessagesResponse = LocationMessagesResponses[keyof LocationMessagesResponses];
+
+export type InternalSupportRequestMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Support Request Id
+         */
+        support_request_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/internal_support_request_messages/{support_request_id}';
+};
+
+export type InternalSupportRequestMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type InternalSupportRequestMessagesResponse = InternalSupportRequestMessagesResponses[keyof InternalSupportRequestMessagesResponses];
+
+export type ExternalSupportRequestMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Support Request Id
+         */
+        support_request_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/external_support_request_messages/{support_request_id}';
+};
+
+export type ExternalSupportRequestMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type ExternalSupportRequestMessagesResponse = ExternalSupportRequestMessagesResponses[keyof ExternalSupportRequestMessagesResponses];
+
+export type OperationalWorkItemMessagesData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Work Item Id
+         */
+        work_item_id: string;
+    };
+    query?: {
+        /**
+         * Page
+         */
+        page?: number;
+    };
+    url: '/api/v1/{tenant_path}/operational_work_item_messages/{work_item_id}';
+};
+
+export type OperationalWorkItemMessagesResponses = {
+    /**
+     * OK
+     */
+    200: OutputSentMessages;
+};
+
+export type OperationalWorkItemMessagesResponse = OperationalWorkItemMessagesResponses[keyof OperationalWorkItemMessagesResponses];
+
 export type OrgMessagesData = {
     body?: never;
     path: {
@@ -65943,6 +70534,48 @@ export type AddShareResponses = {
 };
 
 export type AddShareResponse = AddShareResponses[keyof AddShareResponses];
+
+export type AddPublicShareData = {
+    body: AddShare;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/add_public_share';
+};
+
+export type AddPublicShareErrors = {
+    /**
+     * Bad Request
+     */
+    400: ApiResponse;
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type AddPublicShareError = AddPublicShareErrors[keyof AddPublicShareErrors];
+
+export type AddPublicShareResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AddPublicShareResponse = AddPublicShareResponses[keyof AddPublicShareResponses];
 
 export type EditShareData = {
     body: EditShare;
@@ -66799,3 +71432,163 @@ export type RemoveShareLinkResponses = {
 };
 
 export type RemoveShareLinkResponse = RemoveShareLinkResponses[keyof RemoveShareLinkResponses];
+
+export type EditMyMeetingPageData = {
+    body: EditMyMeetingPage;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/edit_my_meeting_page';
+};
+
+export type EditMyMeetingPageErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type EditMyMeetingPageError = EditMyMeetingPageErrors[keyof EditMyMeetingPageErrors];
+
+export type EditMyMeetingPageResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type EditMyMeetingPageResponse = EditMyMeetingPageResponses[keyof EditMyMeetingPageResponses];
+
+export type AcceptMeetingRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Req Id
+         */
+        req_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/accept_meeting_request/{req_id}';
+};
+
+export type AcceptMeetingRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+};
+
+export type AcceptMeetingRequestError = AcceptMeetingRequestErrors[keyof AcceptMeetingRequestErrors];
+
+export type AcceptMeetingRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type AcceptMeetingRequestResponse = AcceptMeetingRequestResponses[keyof AcceptMeetingRequestResponses];
+
+export type DeclineMeetingRequestData = {
+    body: AnswerMeetingRequest;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Req Id
+         */
+        req_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/decline_meeting_request/{req_id}';
+};
+
+export type DeclineMeetingRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type DeclineMeetingRequestError = DeclineMeetingRequestErrors[keyof DeclineMeetingRequestErrors];
+
+export type DeclineMeetingRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type DeclineMeetingRequestResponse = DeclineMeetingRequestResponses[keyof DeclineMeetingRequestResponses];
+
+export type CancelMeetingRequestData = {
+    body: AnswerMeetingRequest;
+    path: {
+        /**
+         * Tenant Path
+         */
+        tenant_path: string;
+        /**
+         * Req Id
+         */
+        req_id: string;
+    };
+    query?: never;
+    url: '/api/v1/{tenant_path}/cancel_meeting_request/{req_id}';
+};
+
+export type CancelMeetingRequestErrors = {
+    /**
+     * Not Found
+     */
+    404: ApiResponse;
+    /**
+     * Conflict
+     */
+    409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
+};
+
+export type CancelMeetingRequestError = CancelMeetingRequestErrors[keyof CancelMeetingRequestErrors];
+
+export type CancelMeetingRequestResponses = {
+    /**
+     * OK
+     */
+    200: ApiResponse;
+};
+
+export type CancelMeetingRequestResponse = CancelMeetingRequestResponses[keyof CancelMeetingRequestResponses];

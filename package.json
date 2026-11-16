@@ -1,6 +1,6 @@
 {
   "name": "proiectro",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Official TypeScript/JavaScript SDK for the Proiect.ro API",
   "author": {
     "name": "Proiect.ro",
@@ -56,6 +56,6 @@
     "project-management"
   ],
   "proiectro": {
-    "apiVersion": "3.0.0"
+    "apiVersion": "3.2.0"
   }
 }

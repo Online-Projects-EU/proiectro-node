@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.6.0
+
+1041 operations across 45 namespaces.
+
+### New namespaces
+
+- `meetings` - accept, decline or cancel a meeting request, and edit your own meeting page
+  (`accept_meeting_request`, `decline_meeting_request`, `cancel_meeting_request`,
+  `edit_my_meeting_page`).
+- `experiments` - beliefs and how they changed over time (`tenant_beliefs`, `tenant_belief`,
+  `tenant_belief_over_time`, `add_belief`, `edit_belief`, `delete_belief`, `tenant_chain`).
+
+### Other new operations
+
+- Feed posts: `feed_post`, `add_feed_post`, `edit_own_feed_post`, `delete_own_feed_post`, and for feed
+  moderators `edit_feed_post`, `delete_feed_post`.
+- Feed post comments: `list_feed_post_comments`, `add_feed_post_comment`, `edit_own_feed_post_comment`,
+  `delete_own_feed_post_comment`, and for feed moderators `edit_feed_post_comment`,
+  `delete_feed_post_comment`.
+- Public page: `edit_tenant_public_page_settings`, `publish_public_pages`, web links
+  (`add_web_link`, `edit_web_link`, `delete_web_link`, `reorder_web_links`), public forms
+  (`add_public_form`, `edit_public_form`, `delete_public_form`), `add_public_share`, and the brand
+  cover (`generate_upload_url_brand_cover`, `edit_brand_cover_focus`, `mark_brand_cover_as_deleted`).
+- `edit_tenant_meetings_settings`.
+- Messages sent about a record: `customer_asset_messages`, `location_messages`,
+  `operational_work_item_messages`, `external_support_request_messages`,
+  `internal_support_request_messages`.
+- `email_template_defaults`, `set_email_template_default`.
+- `lead_history`, `proposal_lead_history`, `analytics_sales_leads`.
+
+### Changes
+
+- `send_email` on accepting, rejecting and delivering portal orders, on changing or closing an external
+  support request and on its comments; `mark_project_delivered` takes an optional body with
+  `send_email`.
+- `record_activity` when sending a document or a proposal by email.
+- Processes have `allow_take_over`, and task `actions` report `can_claim`.
+- Feed events carry `comment_count`, `edited`, `can_edit` and `can_delete`; the feed says `can_post`.
+- Catalog items have `available_on_public_page`; legal info has `legal_brand_name`,
+  `legal_contact_email` and `legal_contact_phone`.
+- Sales analytics report deals and value slower than usual and what the forecast is waiting on.
+  `probability_percent` on a pipeline stage can be fractional or empty.
+- `EditLead.status` may be left empty.
+
 ## 0.5.0
 
 990 operations across 43 namespaces.
