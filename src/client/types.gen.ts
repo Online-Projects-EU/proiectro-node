@@ -54,7 +54,7 @@ export type PlanInfo = {
      * Limits
      */
     limits: {
-        [key: string]: number;
+        [key: string]: number | null;
     };
 };
 
@@ -352,6 +352,10 @@ export type EditTenant = {
      * Time Off Requires Approval
      */
     time_off_requires_approval?: boolean | null;
+    /**
+     * Llm May Change Data
+     */
+    llm_may_change_data?: boolean | null;
 };
 
 /**
@@ -813,6 +817,50 @@ export type BusinessProcessArtifact = {
      * Source Process
      */
     source_process?: string | null;
+    /**
+     * Sources
+     */
+    sources?: Array<BusinessProcessLink>;
+};
+
+/**
+ * BusinessProcessDependency
+ *
+ * A process that creates something this process uses
+ */
+export type BusinessProcessDependency = {
+    /**
+     * Process Key
+     */
+    process_key: string;
+    /**
+     * Process Name
+     */
+    process_name: string;
+    /**
+     * Group Name
+     */
+    group_name: string;
+    /**
+     * Is Setup
+     */
+    is_setup: boolean;
+};
+
+/**
+ * BusinessProcessLink
+ *
+ * Another business process, to open from this one
+ */
+export type BusinessProcessLink = {
+    /**
+     * Process Key
+     */
+    process_key: string;
+    /**
+     * Process Name
+     */
+    process_name: string;
 };
 
 /**
@@ -861,6 +909,19 @@ export type OutputBusinessProcess = {
      * Tasks
      */
     tasks: Array<BusinessProcessTask>;
+    /**
+     * Dependencies
+     */
+    dependencies?: Array<BusinessProcessDependency>;
+    /**
+     * Enabled
+     */
+    enabled?: Array<BusinessProcessDependency>;
+    /**
+     * Process Key
+     */
+    process_key?: string;
+    back?: BusinessProcessLink | null;
     /**
      * Input Artifacts
      */
@@ -3560,10 +3621,6 @@ export type OutputCsvImportSummary = {
  */
 export type AddSubtenant = {
     /**
-     * Parent Id
-     */
-    parent_id: string;
-    /**
      * Name
      */
     name: string;
@@ -3741,10 +3798,6 @@ export type EditSubtenantLegalInfo = {
      * Legal Postal Code
      */
     legal_postal_code?: string | null;
-    /**
-     * Tenant
-     */
-    tenant: string;
 };
 
 /**
@@ -3848,10 +3901,6 @@ export type ResourceAvailability = {
  * AddAvailability
  */
 export type AddAvailability = {
-    /**
-     * Tenant
-     */
-    tenant: string;
     /**
      * Day Of Week
      */
@@ -4979,6 +5028,11 @@ export type OutputLead = {
      */
     company_url?: string;
     /**
+     * Company Domain
+     */
+    company_domain?: string;
+    company?: OutputLeadCompany | null;
+    /**
      * Country
      */
     country?: string | null;
@@ -5010,6 +5064,66 @@ export type OutputLead = {
      * Created By Name
      */
     created_by_name?: string | null;
+};
+
+/**
+ * OutputLeadAtCompany
+ *
+ * Another open lead at the same company, one the caller may open.
+ */
+export type OutputLeadAtCompany = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Company Name
+     */
+    company_name?: string;
+    /**
+     * Status Label
+     */
+    status_label: string;
+    /**
+     * Owner Name
+     */
+    owner_name?: string | null;
+};
+
+/**
+ * OutputLeadCompany
+ *
+ * What the workspace already has at a lead's company, which its domain identifies.
+ */
+export type OutputLeadCompany = {
+    /**
+     * Domain
+     */
+    domain: string;
+    /**
+     * Customer Id
+     */
+    customer_id?: string | null;
+    /**
+     * Customer Name
+     */
+    customer_name?: string | null;
+    /**
+     * Leads
+     */
+    leads?: Array<OutputLeadAtCompany>;
+    /**
+     * More
+     */
+    more?: number;
+    /**
+     * Hidden
+     */
+    hidden?: boolean;
 };
 
 /**
@@ -5816,6 +5930,10 @@ export type OutputLeadImportPreview = {
      */
     estimated_duplicates?: number;
     /**
+     * Company Matches
+     */
+    company_matches?: number;
+    /**
      * Assigned List Name
      */
     assigned_list_name?: string;
@@ -5861,6 +5979,10 @@ export type OutputLeadImportSummary = {
      * Error Count
      */
     error_count: number;
+    /**
+     * Company Matches
+     */
+    company_matches?: number;
     /**
      * Lead List Id
      */
@@ -33095,6 +33217,10 @@ export type TenantBusinessProcessData = {
          * Highlight Task
          */
         highlight_task?: number | null;
+        /**
+         * Back
+         */
+        back?: string | null;
     };
     url: '/api/v1/{tenant_path}/business_process/{process_name}';
 };

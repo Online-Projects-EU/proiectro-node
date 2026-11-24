@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.7.0
+
+1041 operations across 45 namespaces.
+
+### Changes
+
+- A lead carries `company_domain` (the domain of its email or of its website), and `tenant_lead`
+  returns `company`: the customer and the other open leads at the same company, as far as the caller
+  may see them (`leads`, `more`, `hidden`).
+- `import_leads_preview` and `import_leads` report `company_matches`, the rows at a company that
+  already has a lead or is already a customer.
+- `tenant_business_process` returns `dependencies` and `enabled` (the processes it depends on and the
+  ones it enables) and takes `back`, the process it was opened from. An artifact lists its `sources`.
+- `edit_tenant` takes `llm_may_change_data`.
+
+### Removed
+
+- `add_subtenant` no longer takes `parent_id`, and `add_member_availability`,
+  `add_resource_availability` and `edit_subtenant_legal_info` no longer take `tenant`: the workspace
+  in the path already says it.
+
 ## 0.6.0
 
 1041 operations across 45 namespaces.

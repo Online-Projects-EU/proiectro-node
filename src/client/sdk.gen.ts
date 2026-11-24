@@ -305,7 +305,8 @@ export const reorderWebLinks = <ThrowOnError extends boolean = false>(options: O
  * Tenant Business Process
  *
  * Get detailed information about a business process.
- * Shows all tasks in order with optional highlighting of the current task.
+ * Shows all tasks in order with optional highlighting of the current task, the processes it
+ * depends on and the ones it enables. `back` names the process this one was opened from.
  */
 export const tenantBusinessProcess = <ThrowOnError extends boolean = false>(options: Options<TenantBusinessProcessData, ThrowOnError>) => (options.client ?? client).get<TenantBusinessProcessResponses, unknown, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }, {
