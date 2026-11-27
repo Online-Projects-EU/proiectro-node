@@ -92,8 +92,9 @@ export const tenantPortalSettings = <ThrowOnError extends boolean = false>(optio
  * to timezone impact scheduling and reporting timestamps. Currency modifications affect
  * financial calculations and default pricing. Country settings influence tax calculations
  * and regulatory compliance. Minimum margin thresholds enforce profitability controls
- * on all proposals. Exercise caution as these changes have workspace-wide impact on
- * all transactions and reports.
+ * on all proposals. The intake settings name who owns new leads from the public page and
+ * public forms, which role is told and which list they go to, unless one has its own.
+ * Exercise caution as these changes have workspace-wide impact on all transactions and reports.
  */
 export const editTenant = <ThrowOnError extends boolean = false>(options: Options<EditTenantData, ThrowOnError>) => (options.client ?? client).patch<EditTenantResponses, EditTenantErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }, {
@@ -16946,7 +16947,7 @@ export const partnerSubmitPartnerForm = <ThrowOnError extends boolean = false>(o
  * Add Public Form
  *
  * Publish a custom form at its own address, for anyone to fill in without an account.
- * Each answer becomes a website inquiry on the matching contact or lead, or a new lead for the member you choose.
+ * Each answer becomes a website inquiry on the matching contact or lead, or a new lead with the owner, role and list the form or the workspace sets.
  */
 export const addPublicForm = <ThrowOnError extends boolean = false>(options: Options<AddPublicFormData, ThrowOnError>) => (options.client ?? client).post<AddPublicFormResponses, AddPublicFormErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }, {
@@ -16965,7 +16966,7 @@ export const addPublicForm = <ThrowOnError extends boolean = false>(options: Opt
 /**
  * Edit Public Form
  *
- * Change a public form: its form, address, texts, who new leads go to, or switch it on or off.
+ * Change a public form: its form, address, texts, who owns and hears of its new leads, or switch it on or off.
  */
 export const editPublicForm = <ThrowOnError extends boolean = false>(options: Options<EditPublicFormData, ThrowOnError>) => (options.client ?? client).patch<EditPublicFormResponses, EditPublicFormErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }, {

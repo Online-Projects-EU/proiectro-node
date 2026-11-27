@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.8.0
+
+1041 operations across 45 namespaces.
+
+### Changes
+
+- `edit_tenant` takes `intake_owner`, `intake_role` and `intake_lead_list`: who owns a new lead from
+  the public page or a public form, which role is told and which list it goes to, unless that page or
+  form has its own. It answers 422 when one of them is not an active member, role or open list of the
+  workspace.
+- `edit_tenant_public_page_settings` takes `lead_role` and `inherits_default`, and `lead_owner: ''` now
+  clears the owner; leave the key out to keep it.
+- `add_public_form` and `edit_public_form` take `role` and `inherits_default`. `owner` is optional on
+  `add_public_form`: a form added without choices uses the workspace's. `owner: ''` clears it.
+
 ## 0.7.0
 
 1041 operations across 45 namespaces.

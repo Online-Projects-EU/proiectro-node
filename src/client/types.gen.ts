@@ -305,6 +305,38 @@ export type ApiResponse = {
 };
 
 /**
+ * PydanticDetail
+ *
+ * Field-level validation errors: one entry per field that was refused.
+ */
+export type PydanticDetail = {
+    /**
+     * Detail
+     */
+    detail: Array<PydanticDetailItem>;
+};
+
+/**
+ * PydanticDetailItem
+ *
+ * One per-field error inside a 422 ``detail`` array.
+ */
+export type PydanticDetailItem = {
+    /**
+     * Type
+     */
+    type: string;
+    /**
+     * Loc
+     */
+    loc: Array<string>;
+    /**
+     * Msg
+     */
+    msg: string;
+};
+
+/**
  * EditTenant
  */
 export type EditTenant = {
@@ -356,6 +388,18 @@ export type EditTenant = {
      * Llm May Change Data
      */
     llm_may_change_data?: boolean | null;
+    /**
+     * Intake Owner
+     */
+    intake_owner?: string | null;
+    /**
+     * Intake Role
+     */
+    intake_role?: string | null;
+    /**
+     * Intake Lead List
+     */
+    intake_lead_list?: string | null;
 };
 
 /**
@@ -523,38 +567,6 @@ export type EditTenantProjectDefaults = {
 };
 
 /**
- * PydanticDetail
- *
- * Field-level validation errors: one entry per field that was refused.
- */
-export type PydanticDetail = {
-    /**
-     * Detail
-     */
-    detail: Array<PydanticDetailItem>;
-};
-
-/**
- * PydanticDetailItem
- *
- * One per-field error inside a 422 ``detail`` array.
- */
-export type PydanticDetailItem = {
-    /**
-     * Type
-     */
-    type: string;
-    /**
-     * Loc
-     */
-    loc: Array<string>;
-    /**
-     * Msg
-     */
-    msg: string;
-};
-
-/**
  * EditTenantPortalSettings
  *
  * Schema for updating customer portal customization settings.
@@ -674,7 +686,9 @@ export type EditTenantPortalSettings = {
  * EditTenantPublicPageSettings
  *
  * The workspace's public page (plans/PUBLIC_INBOUND.md C3). An omitted key keeps the stored
- * value; an empty lead list or questions form means none.
+ * value; an empty owner, role, lead list or questions form means none. `inherits_default` makes the
+ * page use the workspace's intake settings instead of its own owner, role and list; sending one of
+ * those three gives the page its own, starting from the workspace's.
  */
 export type EditTenantPublicPageSettings = {
     /**
@@ -694,9 +708,17 @@ export type EditTenantPublicPageSettings = {
      */
     show_forms?: boolean | null;
     /**
+     * Inherits Default
+     */
+    inherits_default?: boolean | null;
+    /**
      * Lead Owner
      */
     lead_owner?: string | null;
+    /**
+     * Lead Role
+     */
+    lead_role?: string | null;
     /**
      * Lead List
      */
@@ -31427,7 +31449,8 @@ export type AttachPartnerPortalForm = {
  *
  * A custom form published at its own address (PUBLIC_INBOUND.md Part E). The address is the last
  * part of the link, lowercase letters, digits and dashes; left empty, it is made from the title.
- * `lead_list` empty means no list.
+ * Without an owner, role or lead list the form uses the workspace's intake settings; sending one of
+ * them gives the form its own, starting from the workspace's, where an empty one means none.
  */
 export type AddPublicForm = {
     /**
@@ -31447,9 +31470,17 @@ export type AddPublicForm = {
      */
     intro?: string | null;
     /**
+     * Inherits Default
+     */
+    inherits_default?: boolean | null;
+    /**
      * Owner
      */
-    owner: string;
+    owner?: string | null;
+    /**
+     * Role
+     */
+    role?: string | null;
     /**
      * Lead List
      */
@@ -31475,7 +31506,8 @@ export type AddPublicForm = {
 /**
  * EditPublicForm
  *
- * Every field may be left out to keep its stored value. `lead_list` empty means no list.
+ * Every field may be left out to keep its stored value. An empty owner, role or lead list means
+ * none; `inherits_default` makes the form use the workspace's intake settings.
  */
 export type EditPublicForm = {
     /**
@@ -31495,9 +31527,17 @@ export type EditPublicForm = {
      */
     intro?: string | null;
     /**
+     * Inherits Default
+     */
+    inherits_default?: boolean | null;
+    /**
      * Owner
      */
     owner?: string | null;
+    /**
+     * Role
+     */
+    role?: string | null;
     /**
      * Lead List
      */
@@ -32852,6 +32892,10 @@ export type EditTenantErrors = {
      * Conflict
      */
     409: ApiResponse;
+    /**
+     * Unprocessable Entity
+     */
+    422: PydanticDetail;
 };
 
 export type EditTenantError = EditTenantErrors[keyof EditTenantErrors];
